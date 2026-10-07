@@ -1,5 +1,5 @@
-from config import Config
-from game import Game
+from src.config import Config
+from src.game import Game
 import pygame as pg
 
 

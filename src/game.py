@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Field, ConfigDict
+from src.obj import GameObject
 from typing import Any
-from obj import GameObject
 import pygame as pg
 
 
