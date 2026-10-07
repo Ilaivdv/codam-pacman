@@ -1,12 +1,12 @@
-from .config import Config
-from .game import Game
+from config import Config
+from game import Game
 import pygame as pg
 
 
 def main() -> None:
     try:
         pg.init()
-        Game(context=Config.parse("config.json"))
+        Game(context=Game.validate_config(Config.parse("config.json")))
     except Exception as e:
         print(e)
 

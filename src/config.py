@@ -37,4 +37,4 @@ class Config(BaseModel):
                     k = line[0:start]
                     line = k
                 lines.append(line)
-        return json.loads("".join(lines))
+        return dict(json.loads("".join(lines)))

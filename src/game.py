@@ -1,5 +1,6 @@
 from pydantic import BaseModel, Field, ConfigDict
-from .obj import GameObject
+from typing import Any
+from obj import GameObject
 import pygame as pg
 
 
@@ -42,6 +43,10 @@ class Game(BaseModel):
     model_config = ConfigDict(arbitrary_types_allowed=True)
     process: Process = Process()
     context: Context
+
+    @staticmethod
+    def validate_config(config: dict[str, Any]) -> Context:
+        return Context.model_validate(config)
 
     def add_to_tree(self, obj: GameObject) -> None:
         self.process.tree.append(obj)
