@@ -1,5 +1,6 @@
-from pydantic import BaseModel, Field
-from .obj import GameObject
+from pydantic import BaseModel, Field, ConfigDict
+from src.obj import GameObject
+from typing import Any
 import pygame as pg
 
 
@@ -10,16 +11,17 @@ class Process(GameObject):
         self._start_process_loop()
 
     def _start_process_loop(self) -> None:
-        while True:
-            # for event in pg.event.get():
-            #     if event.type == pg.QUIT:
-            #         pg.quit()
-
-            self.process()
-            for p in self.tree:
-                p.process()
-
-            self.clock.tick(60)
+        ...
+        # while True:
+        #     # for event in pg.event.get():
+        #     #     if event.type == pg.QUIT:
+        #     #         pg.quit()
+        #
+        #     self.process()
+        #     for p in self.tree:
+        #         p.process()
+        #
+        #     self.clock.tick(60)
 
     def process(self) -> None:
         ...
@@ -38,8 +40,13 @@ class Context(BaseModel):
 
 
 class Game(BaseModel):
+    model_config = ConfigDict(arbitrary_types_allowed=True)
     process: Process = Process()
-    context: Context = Field(default_factory=...)  # TODO Add config parser function to default_factory
+    context: Context
+
+    @staticmethod
+    def validate_config(config: dict[str, Any]) -> Context:
+        return Context.model_validate(config)
 
     def add_to_tree(self, obj: GameObject) -> None:
         self.process.tree.append(obj)

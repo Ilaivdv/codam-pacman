@@ -1,11 +1,12 @@
+from src.config import Config
+from src.game import Game
 import pygame as pg
-from .game import Game
 
 
 def main() -> None:
     try:
         pg.init()
-        Game()
+        Game(context=Game.validate_config(Config.parse("config.json")))
     except Exception as e:
         print(e)
 
