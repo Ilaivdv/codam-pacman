@@ -8,8 +8,8 @@ def main() -> None:
     try:
         pg.init()
         global settings
-        settings = GameSettings()
-        Game(context=Game.validate_config(Config.parse("config.json")))
+        settings = GameSettings.model_validate(Config.parse("config.json"))
+        Game()
     except Exception as e:
         print(e)
 
