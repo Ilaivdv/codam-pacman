@@ -1,5 +1,5 @@
-from pydantic import (BaseModel, PrivateAttr, Field, ConfigDict,
-                      model_validator)
+from pydantic import (BaseModel, PrivateAttr, Field,
+                      ConfigDict, model_validator)
 from typing import Self
 import pygame as pg
 from src.config import Config
@@ -31,5 +31,6 @@ class GameSettings(BaseModel):
             model_dump[k] = v
 
         return self
+
 
 settings: GameSettings | None = None
