@@ -5,7 +5,6 @@ import sys
 from enum import Enum
 from pathlib import Path
 
-#init game
 pg.init()
 screen = pg.display.set_mode((500, 500))
 screen_rect = screen.get_rect
@@ -21,12 +20,13 @@ class Color(Enum):
     DARK = (100, 100, 100)
     BG = (60, 25, 60)
 
+
 class UIElement(GameObject):
     x: int
     y: int
 
     def process(self) -> None:
-        return super().process()
+        ...
 
 
 class Text(UIElement):
@@ -34,7 +34,8 @@ class Text(UIElement):
     color: tuple[int, int, int] = Field(default=Color.WHITE.value)
     font_size: int = Field(default=40)
 
-    def process(self, screen: pg.Surface, font: pg.font.Font, center: bool) -> None:
+    def draw(self, screen: pg.Surface,
+             font: pg.font.Font, center: bool) -> None:
         surface = font.render(self.text, True, self.color)
         if center:
             rect = surface.get_rect(center=(self.x, self.y))
@@ -53,7 +54,7 @@ class Button(UIElement):
     def rect(self) -> pg.Rect:
         return pg.Rect(self.x, self.y, self.width, self.height)
 
-    def process(self, screen: pg.surface, mouse: tuple) -> None:
+    def draw(self, screen: pg.Surface, mouse: tuple) -> None:
         """Draw the text on the button, change color when mouse on the button
 
         Args:
