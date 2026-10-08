@@ -1,7 +1,7 @@
 import pytest
-from config import Config
+from src.config import Config
 
-def test_config():
+def test_config() -> None:
     assert Config.parse("config.json") == {'highscore_filename': 'hello.json',
                                            'level': [{'width': 5, 'length': 5}, 
                                                      {'width': 10, 'length': 10},
