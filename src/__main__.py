@@ -1,4 +1,4 @@
-from src.config import Config
+from src.settings import settings, GameSettings  # noqa: F401
 from src.game import Game
 import pygame as pg
 
@@ -6,8 +6,11 @@ import pygame as pg
 def main() -> None:
     try:
         pg.init()
-        Game(context=Game.validate_config(Config.parse("config.json")))
-    except Exception as e:
+        global settings
+        settings = GameSettings()
+
+        Game()
+    except KeyError as e:
         print(e)
 
 
