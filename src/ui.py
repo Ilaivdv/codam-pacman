@@ -54,7 +54,7 @@ class Button(UIElement):
     def rect(self) -> pg.Rect:
         return pg.Rect(self.x, self.y, self.width, self.height)
 
-    def draw(self, screen: pg.Surface, mouse: tuple) -> None:
+    def draw(self, screen: pg.Surface, mouse: tuple[int, int]) -> None:
         """Draw the text on the button, change color when mouse on the button
 
         Args:
@@ -76,7 +76,7 @@ class Button(UIElement):
 class Image(UIElement):
     path: str
 
-    def process(self, screen):
+    def draw(self, screen: pg.Surface) -> None:
         img = pg.image.load(self.path).convert_alpha()
         img_small = pg.transform.scale(img, (500, 1000))
         screen.blit(img_small, (0, 0))
@@ -85,7 +85,7 @@ class Image(UIElement):
 class UI(GameObject):
 
     @staticmethod
-    def process():
+    def process() -> None:
         while True:
             for event in pg.event.get():
                 if event.type == pg.QUIT:
@@ -93,10 +93,10 @@ class UI(GameObject):
                     sys.exit()
             screen.fill(Color.DARK.value)
             bu = Text(x=250, y=250, text="Game Started!")
-            bu.process(screen, font, center=True)
+            bu.draw(screen, font, center=True)
             pg.display.update()
 
-    def start_menu(self):
+    def start_menu(self) -> None:
         while True:
             mouse = pg.mouse.get_pos()
             screen.fill(Color.LIGHT.value)
@@ -106,9 +106,9 @@ class UI(GameObject):
             play_bu = Button(x=300, y=300, width=140, height=50, text="Play")
             quit_bu = Button(x=300, y=380, width=140, height=50, text="Quit")
 
-            start_im.process(screen)
-            play_bu.process(screen, mouse)
-            quit_bu.process(screen, mouse)
+            start_im.draw(screen)
+            play_bu.draw(screen, mouse)
+            quit_bu.draw(screen, mouse)
 
             for event in pg.event.get():
                 if event.type == pg.QUIT:
