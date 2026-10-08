@@ -21,7 +21,7 @@ jobs:
         pip install mypy
     - name: Analysing the code with flake8 and mypy strict
       run: |
-        flake8 $(git ls-files '*.py')
+        flake8 $(git ls-files '*.py') --exclude=.venv/
         mypy --strict $(git ls-files '*.py')
     # Cache setup
     - uses: actions/cache@v6
