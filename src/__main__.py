@@ -1,6 +1,5 @@
-from src.obj.settings import GameSettings
+from src.settings import settings, GameSettings  # noqa: F401
 from src.config import Config
-from src.obj import settings  # noqa: F401
 from src.game import Game
 import pygame as pg
 
