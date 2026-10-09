@@ -1,6 +1,6 @@
 from mazegenerator import MazeGenerator  # type: ignore
 from src.obj import GameObject
-from src.game import game
+from src.game import game  # noqa: F401
 import pygame as pg
 
 
@@ -11,7 +11,6 @@ class Level(GameObject):
                 pg.image.load("assets/tileset.png"), 6.0)
 
     def process(self) -> None:
-        global game
         if not game:
             raise ValueError("ERROR: Game is not initialized!")
         game.display.blit(self.tileset)
