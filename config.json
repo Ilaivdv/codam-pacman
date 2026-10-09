@@ -2,7 +2,7 @@
   "highscore_filename": "hello.json",
   "level": [
     {
-      "width": 5,/*dashk*/
+      "width": 5,/*dash*/
       "length": 5
     },
     {
@@ -27,7 +27,7 @@
     }
   ],
   "lives": 3,
-  "pacgum": 42,//fsak
+  "pacgum": 42,//fsa k
   "points_per_pacgum": 10,
   "points_per_super_pacgum": 50,
   "points_per_ghost": 200,
