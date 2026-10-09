@@ -1,6 +1,21 @@
 from pydantic import BaseModel, Field
 from src.obj import GameObject
+from src.config import Config
 import pygame as pg
+
+
+def start_game(config_file: str) -> None:
+    global settings, game
+
+    if game is not None and game.running:
+        return
+    try:
+        pg.init()
+        settings = GameSettings.model_validate(Config.parse(config_file))
+    except Exception as e:
+        print(e)
+    else:
+        game = Game()
 
 
 class Game:
@@ -9,16 +24,17 @@ class Game:
         self._display: pg.Surface = pg.display.set_mode()
         self._resolution: tuple[int, int] = pg.display.get_desktop_sizes()[0]
         self._clock: pg.time.Clock = pg.time.Clock()
+        self._running: bool = False
 
         self._start_process()
 
     def _start_process(self) -> None:
-        running = True
-        while running:
+        self._running = True
+        while self._running:
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     pg.quit()
-                    running = False
+                    self._running = False
 
             for p in self._process_tree:
                 p.process()
@@ -42,6 +58,10 @@ class Game:
     @property
     def resolution(self) -> tuple[int, int]:
         return self._resolution
+
+    @property
+    def running(self) -> bool:
+        return self._running
 
 
 class GameSettings(BaseModel):
