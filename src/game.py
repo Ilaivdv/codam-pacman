@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field, ConfigDict
+from pydantic import BaseModel, Field
 from src.obj import GameObject
 from src.config import Config
 import pygame as pg
@@ -35,7 +35,7 @@ class Game:
     @property
     def process_tree(self) -> list[GameObject]:
         return self._process_tree
-    
+
     @property
     def display(self) -> pg.Surface:
         return self._display
