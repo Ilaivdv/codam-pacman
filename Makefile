@@ -8,23 +8,24 @@ MYPYFLAGS = --warn-return-any \
 	--warn-unused-ignores --ignore-missing-imports \
 	--disallow-untyped-defs --check-untyped-defs \
 	--disallow-subclassing-any
+FORCE_MAZEGEN = UV_SKIP_WHEEL_FILENAME_CHECK=1 
 
 run: install
-	@uv run --quiet $(PY) -m src
+	@$(FORCE_MAZEGEN) uv run --quiet $(PY) -m src
 
 debug: install
-	uv run $(PY) -m pdb -m src -v
+	$(FORCE_MAZEGEN) uv run $(PY) -m pdb -m src -v
 
 install:
-	@UV_SKIP_WHEEL_FILENAME_CHECK=1 uv sync
+	@$(FORCE_MAZEGEN) uv sync
 
 lint:
-	-@$(FLAKE8)
-	-@$(MYPY) $(MYPYFLAGS)
+	-@$(FORCE_MAZEGEN) $(FLAKE8)
+	-@$(FORCE_MAZEGEN) $(MYPY) $(MYPYFLAGS)
 
 lint-strict:
-	-@$(FLAKE8)
-	-@$(MYPY) --strict
+	-@$(FORCE_MAZEGEN) $(FLAKE8)
+	-@$(FORCE_MAZEGEN) $(MYPY) --strict
 
 clean:
 	-find . -type d -name "__pycache__" -exec rm -rf {} +
