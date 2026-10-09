@@ -1,5 +1,5 @@
 import pygame as pg
-from obj.game_object import GameObject
+from .obj import GameObject
 from pydantic import ConfigDict, Field
 import sys
 from enum import Enum
