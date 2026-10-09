@@ -16,6 +16,7 @@ def start_game(config_file: str) -> None:
         print(e)
     else:
         game = Game()
+        game.start_process()
 
 
 class Game:
@@ -26,20 +27,20 @@ class Game:
         self._clock: pg.time.Clock = pg.time.Clock()
         self._running: bool = False
 
-        self._start_process()
-
-    def _start_process(self) -> None:
+    def start_process(self) -> None:
         self._running = True
         while self._running:
-            for event in pg.event.get():
-                if event.type == pg.QUIT:
-                    pg.quit()
-                    self._running = False
-
             for p in self._process_tree:
                 p.process()
 
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    self._running = False
+
+            pg.display.update()
             self._clock.tick(60)
+
+        pg.quit()
 
     def add_to_tree(self, obj: GameObject) -> None:
         self._process_tree.append(obj)

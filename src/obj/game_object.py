@@ -1,8 +1,7 @@
 from abc import ABC, abstractmethod
-from pydantic import BaseModel
 
 
-class GameObject(BaseModel, ABC):
+class GameObject(ABC):
     @abstractmethod
     def process(self) -> None:
         ...
