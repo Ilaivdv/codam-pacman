@@ -4,14 +4,14 @@ from src.config import Config
 import pygame as pg
 
 
-def start_game() -> None:
+def start_game(config_file: str) -> None:
     global settings, game
 
     if game is not None and game.running:
         return
     try:
         pg.init()
-        settings = GameSettings.model_validate(Config.parse("config.json"))
+        settings = GameSettings.model_validate(Config.parse(config_file))
     except Exception as e:
         print(e)
     else:
