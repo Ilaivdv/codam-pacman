@@ -20,9 +20,9 @@ jobs:
 
     - name: Analysing the code with flake8 and mypy strict through uv
       run: |
-        uv sync
-        uv run flake8 $(git ls-files '*.py') --exclude=.venv/
-        uv run mypy --strict $(git ls-files '*.py')
+        UV_SKIP_WHEEL_FILENAME_CHECK=1 uv sync
+        UV_SKIP_WHEEL_FILENAME_CHECK=1 uv run flake8 $(git ls-files '*.py') --exclude=.venv/
+        UV_SKIP_WHEEL_FILENAME_CHECK=1 uv run mypy --strict $(git ls-files '*.py')
 
     # Cache setup
     - uses: actions/cache@v6
