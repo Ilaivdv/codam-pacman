@@ -2,7 +2,7 @@
 .DEFAULT_GOAL: run
 PY = python3
 
-FLAKE8 = uv run $(PY) -m flake8 src
+FLAKE8 = uv run $(PY) -m flake8 . --exclude=.venv/
 MYPY = uv run $(PY) -m mypy .
 MYPYFLAGS = --warn-return-any \
 	--warn-unused-ignores --ignore-missing-imports \
