@@ -1,6 +1,5 @@
 from pydantic import BaseModel, Field
 from src.obj import GameObject
-from src.config import Config
 import pygame as pg
 
 
@@ -53,6 +52,5 @@ class GameSettings(BaseModel):
     level_max_time: int = Field(gt=0, frozen=True)
 
 
-settings: GameSettings = GameSettings.model_validate(
-        Config.parse("config.json"))
-game: Game = Game()
+settings: GameSettings | None = None
+game: Game | None = None
