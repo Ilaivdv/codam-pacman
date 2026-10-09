@@ -16,7 +16,8 @@ else:
                         f"Error: {sys.argv[1]} is not a valid config file")
             elif not os.access(sys.argv[1], os.R_OK):
                 raise ValueError(
-                        f"Error: no permission to read file at path {sys.argv[1]}")
+                        ("Error: no permission to read "
+                         f"file at path {sys.argv[1]}"))
         except ValueError as e:
             print(e)
         else:
