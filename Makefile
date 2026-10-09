@@ -16,7 +16,7 @@ debug: install
 	uv run $(PY) -m pdb -m src -v
 
 install:
-	@uv sync
+	@UV_SKIP_WHEEL_FILENAME_CHECK=1 uv sync
 
 lint:
 	-@$(FLAKE8)
