@@ -39,6 +39,10 @@ class Game:
     def display(self) -> pg.Surface:
         return self._display
 
+    @property
+    def resolution(self) -> tuple[int, int]:
+        return self._resolution
+
 
 class GameSettings(BaseModel):
     highscore_filename: str = Field(frozen=True)
