@@ -5,6 +5,7 @@ import pygame as pg
 
 
 def start_game(config_file: str) -> None:
+
     global settings, game
 
     if game is not None and game.running:
@@ -12,11 +13,14 @@ def start_game(config_file: str) -> None:
     try:
         pg.init()
         settings = GameSettings.model_validate(Config.parse(config_file))
+        print(settings.model_dump())
     except Exception as e:
         print(e)
     else:
+        from src.obj.menu import Menu
         game = Game()
-        game.start_process()
+        game.add_to_tree(Menu(game))
+        game._start_process()
 
 
 class Game:
@@ -27,19 +31,15 @@ class Game:
         self._clock: pg.time.Clock = pg.time.Clock()
         self._running: bool = False
 
-    def start_process(self) -> None:
+    def _start_process(self) -> None:
         self._running = True
         while self._running:
-            for p in self._process_tree:
-                p.process()
-
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     self._running = False
-
-            pg.display.update()
+            for p in self._process_tree:
+                p.process()
             self._clock.tick(60)
-
         pg.quit()
 
     def add_to_tree(self, obj: GameObject) -> None:
