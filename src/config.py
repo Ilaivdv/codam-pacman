@@ -39,8 +39,8 @@ class Config(BaseModel):
                     k = line[0:start]
                     line = k
                 lines.append(line)
-        config_dict: dict = dict(json.loads("".join(lines)))
-        game_set: dict = {
+        config_dict: dict[str, Any] = dict(json.loads("".join(lines)))
+        game_set: dict[str, Any] = {
                     'highscore_filename': "highscore.json",
                     'level': [
                         {"width": 5, "length": 5},

@@ -4,6 +4,7 @@ import sys
 from src.obj import GameObject
 from src.ui import Button, Image
 from src.ui.color import LIGHT
+from typing import Any
 
 
 class Menu(GameObject):
@@ -16,7 +17,7 @@ class Menu(GameObject):
         area = self.game.display.get_rect()
         path = "assets/pacman-outfit-0.jpg"
         start_im = Image(path, None, area.midtop, "midtop")
-        elements: list = [start_im]
+        elements: list[Any] = [start_im]
         labels = ["Play", "Rank", "Quit"]
         Gap = 50
         y = area.centery

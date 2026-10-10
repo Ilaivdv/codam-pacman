@@ -1,4 +1,4 @@
-from mazegenerator import MazeGenerator
+from mazegenerator import MazeGenerator  # type: ignore[import-untyped]
 from src.obj import GameObject
 from src.game import game  # noqa: F401
 import pygame as pg
