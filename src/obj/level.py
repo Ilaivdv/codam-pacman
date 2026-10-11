@@ -11,8 +11,16 @@ class Level(GameObject):
         self.tileset: Tileset = Tileset(image=pg.image.load(
             "assets/tileset.png").convert())
 
+        self.mazegen.generate()
+        self.maze: list[list[int]] = self.mazegen.maze
+        self.scale: int = 4
+
     def process(self) -> None:
         if not game:
             raise ValueError("ERROR: Game is not initialized!")
-        game.display.blit(pg.transform.scale_by(self.tileset.tiles[0], 5.0),
-                          (0,0))
+        for y in range(0, len(self.maze)):
+            for x, i in enumerate(self.maze[y]):
+                game.display.blit(pg.transform.scale_by(
+                    self.tileset.tiles[i], self.scale),
+                                  (x * self.tileset.tile_size[0] * self.scale,
+                                   y * self.tileset.tile_size[1] * self.scale))

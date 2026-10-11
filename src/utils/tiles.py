@@ -18,6 +18,7 @@ class Tileset(BaseModel):
             for y in range(0, h, self.tile_size[1]):
                 new_tile = pg.Surface(self.tile_size).convert()
                 new_tile.blit(self.image, (0, 0), (x, y, *self.tile_size))
+                new_tile = pg.transform.flip(new_tile, True, True)
                 self.tiles.append(new_tile)
 
         return self
