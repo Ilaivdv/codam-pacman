@@ -5,10 +5,12 @@ import os
 
 
 class Config(BaseModel):
+
     @staticmethod
     def parse(filename: str) -> dict[str, Any]:
         """
         Get dict from config file, ignore #, /**/, //
+        checking the keys and fill in default value
 
         Args:
             filename: The relative file path to config json file
@@ -37,4 +39,27 @@ class Config(BaseModel):
                     k = line[0:start]
                     line = k
                 lines.append(line)
-        return dict(json.loads("".join(lines)))
+        config_dict: dict[str, Any] = dict(json.loads("".join(lines)))
+        game_set: dict[str, Any] = {
+                    'highscore_filename': "highscore.json",
+                    'level': [
+                        {"width": 5, "length": 5},
+                        {"width": 10, "length": 10},
+                        {"width": 15, "length": 15},
+                        {"width": 20, "length": 20},
+                        {"width": 25, "length": 25},
+                        {"width": 30, "length": 30}],
+                    'lives': 3, 'pacgum': 42,
+                    'points_per_pacgum': 10,
+                    'points_per_super_pacgum': 50,
+                    'points_per_ghost': 200,
+                    'seed': 42,
+                    'level_max_time': 90
+                }
+        for key in game_set.keys():
+            if key in config_dict.keys():
+                game_set[key] = config_dict[key]
+            else:
+                print(f"NOTICE: Missing {key} in config.json,"
+                      "using a default value.")
+        return game_set
