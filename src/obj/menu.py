@@ -1,20 +1,18 @@
-import pygame as pg
-from src.game import Game
-import sys
 from src.obj import GameObject
 from src.ui import Button, Image
 from src.ui.color import LIGHT
+from src.game import game
 from typing import Any
+import pygame as pg
+import sys
 
 
 class Menu(GameObject):
-    def __init__(self, game: Game) -> None:
-        super().__init__(game)
-
     def process(self) -> None:
-        pg.init()
-        self.game.display.fill(LIGHT)
-        area = self.game.display.get_rect()
+        assert game is not None
+
+        game.display.fill(LIGHT)
+        area = game.display.get_rect()
         path = "assets/pacman-outfit-0.jpg"
         start_im = Image(path, None, area.midtop, "midtop")
         elements: list[Any] = [start_im]
@@ -27,7 +25,7 @@ class Menu(GameObject):
             y = bu.rect.bottom + Gap
 
         for element in elements:
-            element.draw(self.game.display)
+            element.draw(game.display)
 
         for event in pg.event.get():
             if event.type == pg.QUIT:
