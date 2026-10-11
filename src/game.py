@@ -16,6 +16,8 @@ def start_game(config_file: str) -> None:
         print(e)
     else:
         game = Game()
+        from src.obj.menu import Menu
+        game.add_to_tree(Menu())
         game.start_process()
 
 
@@ -36,6 +38,9 @@ class Game:
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     self._running = False
+                else:
+                    for p in self._process_tree:
+                        p.handle_events(event)
 
             pg.display.update()
             self._clock.tick(60)
