@@ -1,4 +1,5 @@
 from mazegenerator import MazeGenerator  # type: ignore[import-untyped]
+from src.utils.colors import BLACK, DARK_GRAY
 from src.obj import GameObject
 from src.utils import Tileset
 from src.game import game  # noqa: F401
@@ -19,7 +20,7 @@ class Level(GameObject):
         self.screen: pg.Surface = pg.Surface(
                 (len(self.maze[0]) * self.tileset.tile_size[0],
                  len(self.maze) * self.tileset.tile_size[1]))
-        self.scale: int = 5
+        self.scale: int = 6
         self.pos: tuple[int, int] = (
                 game.display.get_rect().centerx -
                 self.screen.get_rect().centerx * self.scale,
@@ -29,6 +30,8 @@ class Level(GameObject):
 
     def process(self) -> None:
         assert game is not None
+
+        game.display.fill(BLACK)
 
         # Draw the maze
         for y in range(0, len(self.maze)):
