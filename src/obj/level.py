@@ -1,5 +1,5 @@
 from mazegenerator import MazeGenerator  # type: ignore[import-untyped]
-from src.utils.colors import BLACK, DARK_GRAY
+from src.utils.colors import BLACK
 from src.obj import GameObject
 from src.utils import Tileset
 from src.game import game  # noqa: F401
