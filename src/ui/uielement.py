@@ -1,4 +1,4 @@
-from .color import WHITE, DARK, LIGHT
+from .color import WHITE, DARK, LIGHT, BG
 import pygame as pg
 from typing import Callable
 
@@ -51,3 +51,42 @@ class Image:
 
     def draw(self, screen: pg.Surface) -> None:
         screen.blit(self.surface, self.rect)
+
+
+class InputBox:
+    def __init__(self, pos: tuple[int, int], align: str = "center",
+                 color: tuple[int, int, int] = BG, text: str = ""):
+        self.color = color
+        self.text = text
+        self.text_surface = FONT_DEFAULT.render(text, True, WHITE)
+        self.rect = pg.Rect((0, 0), (400, 80))
+        setattr(self.rect, align, pos)
+        self.active = False
+
+    def draw(self, screen: pg.Surface) -> None:
+        screen.blit(self.text_surface, self.rect)
+        pg.draw.rect(screen, self.color, self.rect, 2)
+
+    def handle_event(self, event: pg.event.Event) -> None:
+        if (event.type == pg.MOUSEBUTTONDOWN and event.button == 1):
+            if self.rect.collidepoint(event.pos):
+                self.active = not self.active
+                if self.active == True:
+                    self.text = ""
+                else:
+                    self.text = "Click to enter your name"
+                self.text_surface = FONT_DEFAULT.render(self.text, True, WHITE)
+            else:
+                self.text = "Click to enter your name"
+                self.text_surface = FONT_DEFAULT.render(self.text, True, WHITE)
+        if event.type == pg.KEYDOWN:
+            if self.active:
+                if event.key == pg.K_RETURN:
+                    #store the name in the file
+                    print(self.text)
+                    self.text = ""
+                elif event.key == pg.K_BACKSPACE:
+                    self.text = self.text[:-1]
+                else:
+                    self.text += event.unicode
+                self.text_surface = FONT_DEFAULT.render(self.text, True, WHITE)
