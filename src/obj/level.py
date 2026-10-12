@@ -14,13 +14,27 @@ class Level(GameObject):
         self.mazegen.generate()
         self.maze: list[list[int]] = self.mazegen.maze
         self.scale: int = 4
+        self.screen: pg.Surface = pg.Surface(
+                (len(self.maze) * self.tileset.tile_size[0],
+                 len(self.maze[0]) * self.tileset.tile_size[1]))
+        assert game is not None
+        self.pos: tuple[int, int] = (game.display.get_rect().centerx -
+                                     self.screen.get_rect().centerx *
+                                     self.scale,
+                                     game.display.get_rect().centery -
+                                     self.screen.get_rect().centery *
+                                     self.scale)
 
     def process(self) -> None:
         if not game:
             raise ValueError("ERROR: Game is not initialized!")
+
+        # Draw the maze
         for y in range(0, len(self.maze)):
             for x, i in enumerate(self.maze[y]):
-                game.display.blit(pg.transform.scale_by(
-                    self.tileset.tiles[i], self.scale),
-                                  (x * self.tileset.tile_size[0] * self.scale,
-                                   y * self.tileset.tile_size[1] * self.scale))
+                self.screen.blit(self.tileset.tiles[i],
+                                 (x * self.tileset.tile_size[0],
+                                  y * self.tileset.tile_size[1]))
+
+        game.display.blit(pg.transform.scale_by(self.screen, self.scale),
+                          self.pos)
