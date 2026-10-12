@@ -7,7 +7,6 @@ class Tileset(BaseModel):
     model_config = ConfigDict(arbitrary_types_allowed=True)
     image: pg.Surface = Field()
     tile_size: tuple[int, int] = Field(gt=(0, 0), default=(16, 16))
-    margin: int = Field(ge=0, default=0)
     tiles: list[pg.Surface] = Field(default=list())
 
     @model_validator(mode="after")
