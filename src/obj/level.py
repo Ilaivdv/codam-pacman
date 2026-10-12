@@ -9,7 +9,7 @@ class Level(GameObject):
     def __init__(self) -> None:
         assert game is not None
 
-        self.mazegen: MazeGenerator = MazeGenerator((21,21))
+        self.mazegen: MazeGenerator = MazeGenerator()
         self.tileset: Tileset = Tileset(image=pg.image.load(
             "assets/tileset.png").convert())
 
