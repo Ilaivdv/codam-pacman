@@ -25,7 +25,7 @@ class Menu(GameObject):
         self.buttons: list[Button] = []
         y: int = area.centery
         for label, method in defs:
-            bu = Button(label, BUTTON_SZ, (area.centerx, y), "midtop", method)
+            bu = Button(label, (area.centerx, y), "midtop", method)
             self.buttons.append(bu)
             self.elements.append(bu)
             y += bu.rect.height + BUTTON_GAP

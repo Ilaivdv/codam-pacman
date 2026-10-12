@@ -2,14 +2,15 @@ from .color import WHITE, DARK, LIGHT
 import pygame as pg
 from typing import Callable
 
-font = pg.font.SysFont("Arial", 40)
+FONT_DEFAULT = pg.font.SysFont("Arial", 40)
 
 
 class Text:
     def __init__(self, text: str,  pos: tuple[int, int],
-                 font: pg.font.Font = font,
+                 font: pg.font.Font = FONT_DEFAULT,
                  align: str = "center",
                  color: tuple[int, int, int] = WHITE):
+        self.font = font
         self.surface = font.render(text, True, color)
         self.rect = self.surface.get_rect(**{align: pos})
 
@@ -18,12 +19,11 @@ class Text:
 
 
 class Button:
-    def __init__(self, text: str, size: tuple[int, int],
-                 pos: tuple[int, int], align: str = "center",
+    def __init__(self, text: str, pos: tuple[int, int], align: str = "center",
                  on_click: Callable[[], None] | None = None):
-        self.rect = pg.Rect((0, 0), size)
-        setattr(self.rect, align, pos)
         self.color = DARK
+        self.rect = pg.Rect((0, 0), FONT_DEFAULT.size(text))
+        setattr(self.rect, align, pos)
         self.text = Text(text, self.rect.center)
         self.on_click = on_click
 

@@ -63,3 +63,27 @@ class Config(BaseModel):
                 print(f"NOTICE: Missing {key} in config.json,"
                       "using a default value.")
         return game_set
+
+    @staticmethod
+    def parse_highscore(filename: str) -> list[tuple[str, int]]:
+        data_path: str = os.path.dirname(os.getcwd() + "/")
+        file_path: str = data_path + "/" + filename
+        try:
+            with open(file_path, "r") as f:
+                highscore_dict: list[dict[str, str | int]] = json.load(f)
+        except Exception as e:
+            print(e)
+        result: dict[str, int] = {}
+        for data in highscore_dict:
+            try:
+                name: str = str(data["name"])
+                score: int = int(data["score"])
+            except Exception as e:
+                print(e)
+            if len(name) > 10:
+                raise ValueError(f"Error: username({data['name']}) is "
+                                 "too long")
+            if score < 0:
+                raise ValueError(f"Error: score({data['score']}) is negative")
+            result[name] = score
+        return (sorted(result.items(), key=lambda x: x[1]))
