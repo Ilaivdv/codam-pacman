@@ -22,7 +22,7 @@ class Menu(GameObject):
             ("Quit", self.quit_game)
         ]
         self.elements: list[Any] = [start_im]
-        self.buttons: list[Any] = []
+        self.buttons: list[Button] = []
         y: int = area.centery
         for label, method in defs:
             bu = Button(label, BUTTON_SZ, (area.centerx, y), "midtop", method)
@@ -45,7 +45,6 @@ class Menu(GameObject):
         game.display.fill(LIGHT)
         for element in self.elements:
             element.draw(game.display)
-
-    def handle_events(self, event: pg.event.Event) -> None:
-        for bu in self.buttons:
-            bu.handle_event(event)
+        for event in pg.event.get():
+            for bu in self.buttons:
+                bu.handle_event(event)
