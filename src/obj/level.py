@@ -7,27 +7,28 @@ import pygame as pg
 
 class Level(GameObject):
     def __init__(self) -> None:
-        self.mazegen: MazeGenerator = MazeGenerator()
+        assert game is not None
+
+        self.mazegen: MazeGenerator = MazeGenerator((21,21))
         self.tileset: Tileset = Tileset(image=pg.image.load(
             "assets/tileset.png").convert())
 
         self.mazegen.generate()
         self.maze: list[list[int]] = self.mazegen.maze
-        self.scale: int = 4
+
         self.screen: pg.Surface = pg.Surface(
-                (len(self.maze) * self.tileset.tile_size[0],
-                 len(self.maze[0]) * self.tileset.tile_size[1]))
-        assert game is not None
-        self.pos: tuple[int, int] = (game.display.get_rect().centerx -
-                                     self.screen.get_rect().centerx *
-                                     self.scale,
-                                     game.display.get_rect().centery -
-                                     self.screen.get_rect().centery *
-                                     self.scale)
+                (len(self.maze[0]) * self.tileset.tile_size[0],
+                 len(self.maze) * self.tileset.tile_size[1]))
+        self.scale: int = 5
+        self.pos: tuple[int, int] = (
+                game.display.get_rect().centerx -
+                self.screen.get_rect().centerx * self.scale,
+                game.display.get_rect().centery -
+                (self.screen.get_rect().centery +
+                 self.tileset.tile_size[1] // 2) * self.scale)
 
     def process(self) -> None:
-        if not game:
-            raise ValueError("ERROR: Game is not initialized!")
+        assert game is not None
 
         # Draw the maze
         for y in range(0, len(self.maze)):
