@@ -2,11 +2,9 @@ import pygame as pg
 from src.game import game
 import sys
 from src.obj import GameObject
-from src.ui import Button
+from src.ui.uielement import Button, GAP_DEFAULT, add_gap
 from src.utils.colors import DARK_GRAY
 from typing import Callable
-
-BUTTON_GAP = 50
 
 
 class Pause(GameObject):
@@ -19,11 +17,11 @@ class Pause(GameObject):
             ("Quit", self.quit_game)
         ]
         self.buttons: list[Button] = []
-        y: int = area.centery
+        x, y = area.center
         for label, method in defs:
-            bu = Button(label, (area.centerx, y), "center", method)
+            bu = Button(label, (x, y), "midbottom", on_click=method)
             self.buttons.append(bu)
-            y += bu.rect.height + BUTTON_GAP
+            x, y = add_gap(bu.rect.midbottom, GAP_DEFAULT)
 
     def continue_game(self) -> None:
         ...

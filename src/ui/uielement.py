@@ -2,16 +2,32 @@ from src.utils.colors import YELLOW, DARK_GRAY, LIGHT_GRAY, GRAY
 import pygame as pg
 from typing import Callable
 
+GAP_DEFAULT = (0, 50)
+GAP_MID = (0, 100)
 FONT_DEFAULT = pg.font.SysFont("Arial", 40)
+FONT_TITLE = pg.font.SysFont("Arial", 80)
+GAP_BIG = (0, 150)
+
+
+def add_gap(pos: tuple[int, int], gap: tuple[int, int]) -> tuple[int, int]:
+    """Add a gap to the refer pos
+
+    Returns:
+        tuple[int, int]: new pos
+    """
+    return (pos[0] + gap[0], pos[1] + gap[1])
 
 
 class Text:
     def __init__(self, text: str,  pos: tuple[int, int],
                  font: pg.font.Font = FONT_DEFAULT,
                  align: str = "center",
+                 gap: tuple[int, int] | None = (0, 50),
                  color: tuple[int, int, int] = YELLOW):
         self.font = font
         self.surface = font.render(text, True, color)
+        if gap is not None:
+            pos = add_gap(pos, gap)
         self.rect = self.surface.get_rect(**{align: pos})
 
     def draw(self, screen: pg.Surface) -> None:
@@ -20,11 +36,14 @@ class Text:
 
 class Button:
     def __init__(self, text: str, pos: tuple[int, int], align: str = "center",
+                 gap: tuple[int, int] | None = (0, 50),
                  on_click: Callable[[], None] | None = None):
         self.color = DARK_GRAY
         self.rect = pg.Rect((0, 0), FONT_DEFAULT.size(text))
+        if gap is not None:
+            pos = add_gap(pos, gap)
         setattr(self.rect, align, pos)
-        self.text = Text(text, self.rect.center)
+        self.text = Text(text, self.rect.center, gap=None)
         self.on_click = on_click
 
     def draw(self, screen: pg.Surface) -> None:
@@ -54,16 +73,19 @@ class Image:
 
 
 class InputBox:
-    def __init__(self, pos: tuple[int, int], text: str, align: str = "center",
-                 color: tuple[int, int, int] = GRAY, ):
+    def __init__(self, text: str, pos: tuple[int, int], align: str = "center",
+                 gap: tuple[int, int] | None = (0, 50),
+                 color: tuple[int, int, int] = GRAY):
         self.color = color
         self.text = text
-        self.text_surface = FONT_DEFAULT.render(text, True, YELLOW)
-        self.rect = pg.Rect((0, 0), (900, 50))
+        self.text_surface = FONT_DEFAULT.render(text, True, color)
+        self.rect = pg.Rect((0, 0), (800, 50))
+        if gap is not None:
+            pos = add_gap(pos, gap)
         setattr(self.rect, align, pos)
         self.active = False
         self.button = Button("Enter", self.rect.midright,
-                             "midleft", self.name_check)
+                             "midleft", None, self.name_check)
 
     def draw(self, screen: pg.Surface) -> None:
         screen.blit(self.text_surface, self.rect)
@@ -98,7 +120,8 @@ class InputBox:
                 self.text = ""
             else:
                 self.active = False
-            self.text_surface = FONT_DEFAULT.render(self.text, True, YELLOW)
+            self.text_surface = FONT_DEFAULT.render(self.text,
+                                                    True, self.color)
         if event.type == pg.KEYDOWN:
             if self.active:
                 if event.key == pg.K_RETURN:
@@ -108,4 +131,4 @@ class InputBox:
                 else:
                     self.text += event.unicode
                 self.text_surface = FONT_DEFAULT.render(self.text,
-                                                        True, YELLOW)
+                                                        True, self.color)

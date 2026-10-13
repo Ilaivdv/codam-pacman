@@ -2,12 +2,9 @@ import pygame as pg
 from src.game import game
 import sys
 from src.obj import GameObject
-from src.ui import Button, Image
+from src.ui.uielement import Button, Image, add_gap, GAP_DEFAULT
 from src.utils.colors import DARK_GRAY
 from typing import Callable, Any
-
-BUTTON_SZ = (140, 50)
-BUTTON_GAP = 50
 
 
 class Menu(GameObject):
@@ -23,12 +20,12 @@ class Menu(GameObject):
         ]
         self.elements: list[Any] = [start_im]
         self.buttons: list[Button] = []
-        y: int = area.centery
+        x, y = area.center
         for label, method in defs:
-            bu = Button(label, (area.centerx, y), "midtop", method)
+            bu = Button(label, (x, y), "midbottom", on_click=method)
             self.buttons.append(bu)
             self.elements.append(bu)
-            y += bu.rect.height + BUTTON_GAP
+            x, y = add_gap(bu.rect.midbottom, GAP_DEFAULT)
 
     def start_game(self) -> None:
         ...

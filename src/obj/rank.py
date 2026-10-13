@@ -2,37 +2,33 @@ import pygame as pg
 from src.game import game
 import sys
 from src.obj import GameObject
-from src.ui import Button, Text
+from src.ui.uielement import (Button, Text, add_gap,
+                              FONT_TITLE, GAP_BIG, GAP_DEFAULT)
 from src.utils.colors import DARK_GRAY, YELLOW
 from typing import Any
 from src.config import Config
-
-TEXT_GAP = 50
-FONT_TITLE = pg.font.SysFont("Arial", 80)
 
 
 class Rank(GameObject):
     def __init__(self) -> None:
         assert game is not None
         area = game.display.get_rect()
-        bx, by = area.bottomright
-        bu: Button = Button("Back to menu", (bx - 100, by - 100),
-                            "bottomright", self.back_to_menu)
-        y: int = area.centery
-        _, font_height = FONT_TITLE.size("Pac-Man")
-        title: Text = Text("Pac-Man",
-                           (area.centerx, y - font_height - TEXT_GAP),
-                           FONT_TITLE, color=YELLOW)
-        hint: Text = Text("press SPACE to play",
-                          (area.centerx, y - font_height))
-        self.buttons: list[Button] = [bu]
-        self.elements: list[Any] = [bu, title, hint]
+        title: Text = Text("Pac-Man", area.center, FONT_TITLE, gap=(0, -200),
+                           color=YELLOW)
+        hint: Text = Text("press SPACE to play", pos=title.rect.midbottom,
+                          align="center")
+        self.elements: list[Any] = [title, hint]
+        x, y = add_gap(hint.rect.midbottom, GAP_DEFAULT)
         highscore = Config().parse_highscore("highscore.json")
         for index, data in enumerate(highscore, 1):
             name, score = data
-            text = Text(f"{index}.{name} - {score}pts", (area.centerx, y))
+            text = Text(f"{index}.{name} - {score}pts", (x, y))
+            x, y = text.rect.midbottom
             self.elements.append(text)
-            y += bu.rect.height + TEXT_GAP
+        bu: Button = Button("Back to menu", (x, y),
+                            "midbottom", GAP_BIG, self.back_to_menu)
+        self.buttons: list[Button] = [bu]
+        self.elements.append(bu)
 
     def back_to_menu(self) -> None:
         ...
