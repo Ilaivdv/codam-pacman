@@ -35,7 +35,8 @@ class Level(GameObject):
                 "enemy": pg.sprite.Group(),
                 "interactable": pg.sprite.Group(),
                 }
-        # self.enemy: Enemy = Enemy(collides_with="player")
+        # self.enemy: Enemy = Enemy(**{k: self.sprite_groups[k] for k in [
+        #     "player"]})
 
     def process(self) -> None:
         assert game is not None
