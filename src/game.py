@@ -1,6 +1,7 @@
 from pydantic import BaseModel, Field
 from src.obj import GameObject
 from src.config import Config
+from src.utils import Assets
 import pygame as pg
 
 
@@ -11,17 +12,19 @@ def start_game(config_file: str) -> None:
         return
     try:
         pg.init()
+        loaded_assets: Assets = Assets.validate_assets()
         settings = GameSettings.model_validate(Config.parse(config_file))
     except Exception as e:
         print(e)
     else:
-        game = Game()
+        game = Game(assets=loaded_assets)
         game.start_process()
 
 
 class Game:
-    def __init__(self) -> None:
+    def __init__(self, assets: Assets) -> None:
         self._process_tree: list[GameObject] = []
+        self._assets: Assets = assets
         self._display: pg.Surface = pg.display.set_mode()
         self._resolution: tuple[int, int] = pg.display.get_desktop_sizes()[0]
         self._clock: pg.time.Clock = pg.time.Clock()
@@ -51,6 +54,10 @@ class Game:
     @property
     def process_tree(self) -> list[GameObject]:
         return self._process_tree
+
+    @property
+    def assets(self) -> Assets:
+        return self._assets
 
     @property
     def display(self) -> pg.Surface:
