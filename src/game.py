@@ -16,8 +16,6 @@ def start_game(config_file: str) -> None:
         print(e)
     else:
         game = Game()
-        from src.obj.lose import Lose
-        game.add_to_tree(Lose())
         game.start_process()
 
 

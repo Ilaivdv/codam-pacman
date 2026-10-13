@@ -3,7 +3,7 @@ from src.game import game
 import sys
 from src.obj import GameObject
 from src.ui import Button, Text
-from src.ui.color import DARK, WHITE
+from src.utils.colors import DARK_GRAY, YELLOW
 from typing import Any
 from src.config import Config
 
@@ -22,7 +22,7 @@ class Rank(GameObject):
         _, font_height = FONT_TITLE.size("Pac-Man")
         title: Text = Text("Pac-Man",
                            (area.centerx, y - font_height - TEXT_GAP),
-                           FONT_TITLE, color=WHITE)
+                           FONT_TITLE, color=YELLOW)
         hint: Text = Text("press SPACE to play",
                           (area.centerx, y - font_height))
         self.buttons: list[Button] = [bu]
@@ -42,7 +42,7 @@ class Rank(GameObject):
 
     def process(self) -> None:
         assert game is not None
-        game.display.fill(DARK)
+        game.display.fill(DARK_GRAY)
         for element in self.elements:
             element.draw(game.display)
         for event in pg.event.get():

@@ -3,7 +3,7 @@ from src.game import game
 import sys
 from src.obj import GameObject
 from src.ui import Button, Image
-from src.ui.color import LIGHT
+from src.utils.colors import DARK_GRAY
 from typing import Callable, Any
 
 BUTTON_SZ = (140, 50)
@@ -42,9 +42,11 @@ class Menu(GameObject):
 
     def process(self) -> None:
         assert game is not None
-        game.display.fill(LIGHT)
+        game.display.fill(DARK_GRAY)
         for element in self.elements:
             element.draw(game.display)
         for event in pg.event.get():
+            if event.type == pg.QUIT:
+                self.quit_game()
             for bu in self.buttons:
                 bu.handle_event(event)

@@ -1,4 +1,4 @@
-from .color import WHITE, DARK, LIGHT, BG
+from src.utils.colors import YELLOW, DARK_GRAY, LIGHT_GRAY, GRAY
 import pygame as pg
 from typing import Callable
 
@@ -9,7 +9,7 @@ class Text:
     def __init__(self, text: str,  pos: tuple[int, int],
                  font: pg.font.Font = FONT_DEFAULT,
                  align: str = "center",
-                 color: tuple[int, int, int] = WHITE):
+                 color: tuple[int, int, int] = YELLOW):
         self.font = font
         self.surface = font.render(text, True, color)
         self.rect = self.surface.get_rect(**{align: pos})
@@ -21,7 +21,7 @@ class Text:
 class Button:
     def __init__(self, text: str, pos: tuple[int, int], align: str = "center",
                  on_click: Callable[[], None] | None = None):
-        self.color = DARK
+        self.color = DARK_GRAY
         self.rect = pg.Rect((0, 0), FONT_DEFAULT.size(text))
         setattr(self.rect, align, pos)
         self.text = Text(text, self.rect.center)
@@ -29,7 +29,7 @@ class Button:
 
     def draw(self, screen: pg.Surface) -> None:
         hovered = self.rect.collidepoint(pg.mouse.get_pos())
-        pg.draw.rect(screen, LIGHT if hovered else DARK, self.rect)
+        pg.draw.rect(screen, LIGHT_GRAY if hovered else DARK_GRAY, self.rect)
         self.text.draw(screen)
 
     def handle_event(self, event: pg.event.Event) -> None:
@@ -55,10 +55,10 @@ class Image:
 
 class InputBox:
     def __init__(self, pos: tuple[int, int], text: str, align: str = "center",
-                 color: tuple[int, int, int] = BG, ):
+                 color: tuple[int, int, int] = GRAY, ):
         self.color = color
         self.text = text
-        self.text_surface = FONT_DEFAULT.render(text, True, WHITE)
+        self.text_surface = FONT_DEFAULT.render(text, True, YELLOW)
         self.rect = pg.Rect((0, 0), (900, 50))
         setattr(self.rect, align, pos)
         self.active = False
@@ -98,7 +98,7 @@ class InputBox:
                 self.text = ""
             else:
                 self.active = False
-            self.text_surface = FONT_DEFAULT.render(self.text, True, WHITE)
+            self.text_surface = FONT_DEFAULT.render(self.text, True, YELLOW)
         if event.type == pg.KEYDOWN:
             if self.active:
                 if event.key == pg.K_RETURN:
@@ -107,4 +107,5 @@ class InputBox:
                     self.text = self.text[:-1]
                 else:
                     self.text += event.unicode
-                self.text_surface = FONT_DEFAULT.render(self.text, True, WHITE)
+                self.text_surface = FONT_DEFAULT.render(self.text,
+                                                        True, YELLOW)

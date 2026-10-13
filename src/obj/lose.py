@@ -3,7 +3,7 @@ from src.game import game
 import sys
 from src.obj import GameObject
 from src.ui import Button, Text, InputBox
-from src.ui.color import DARK, WHITE
+from src.utils.colors import DARK_GRAY, YELLOW
 from typing import Any
 
 TEXT_GAP = 50
@@ -22,7 +22,7 @@ class Lose(GameObject):
         _, font_height = FONT_TITLE.size("GAME OVER")
         title: Text = Text("GAME OVER",
                            (area.centerx, y),
-                           FONT_TITLE, color=WHITE)
+                           FONT_TITLE, color=YELLOW)
         self.input_box: InputBox = InputBox((area.centerx, y + font_height),
                                             "Click to enter your name here")
         self.buttons: list[Button] = [bu]
@@ -33,7 +33,7 @@ class Lose(GameObject):
 
     def process(self) -> None:
         assert game is not None
-        game.display.fill(DARK)
+        game.display.fill(DARK_GRAY)
         for element in self.elements:
             element.draw(game.display)
         for event in pg.event.get():
