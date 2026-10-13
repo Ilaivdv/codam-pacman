@@ -1,5 +1,7 @@
 from mazegenerator import MazeGenerator  # type: ignore[import-untyped]
 from src.utils.colors import BLACK
+from src.obj.player import Player
+from src.obj.enemy import Enemy
 from src.obj import GameObject
 from src.utils import Tileset
 from src.game import game  # noqa: F401
@@ -27,6 +29,14 @@ class Level(GameObject):
                 game.display.get_rect().centery -
                 (self.screen.get_rect().centery +
                  self.tileset.tile_size[1] // 2) * self.scale)
+
+        self.sprite_groups: dict[str, pg.sprite.Group[Player | Enemy]] = {
+                "player": pg.sprite.Group(),
+                "enemy": pg.sprite.Group(),
+                "interactable": pg.sprite.Group(),
+                }
+        # self.enemy: Enemy = Enemy(**{k: self.sprite_groups[k] for k in [
+        #     "player"]})
 
     def process(self) -> None:
         assert game is not None
