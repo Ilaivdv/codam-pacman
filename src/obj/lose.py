@@ -5,20 +5,10 @@ from src.obj import GameObject
 from src.ui import Button, Text, InputBox
 from src.ui.color import DARK, WHITE
 from typing import Any
-from src.config import Config
 
 TEXT_GAP = 50
 FONT_TITLE = pg.font.SysFont("Arial", 80)
 FONT_DEFAULT = pg.font.SysFont("Arial", 40)
-
-def get_lower_pos(button: Button) -> tuple[int, int]:
-    """return the lower pos
-    """
-    x, y = button.pos
-    height = button.rect.height
-    y += height + TEXT_GAP
-    return (x, y)
-    
 
 
 class Lose(GameObject):
@@ -31,16 +21,12 @@ class Lose(GameObject):
         y: int = area.centery
         _, font_height = FONT_TITLE.size("GAME OVER")
         title: Text = Text("GAME OVER",
-                           (area.centerx, y - font_height - TEXT_GAP),
+                           (area.centerx, y),
                            FONT_TITLE, color=WHITE)
-        # hint: Text = Text("Enter your name",
-        #                   (area.centerx, y - font_height))
-        # _, font_height2 = FONT_DEFAULT.size("Click to enter your name")
-        self.input_box: InputBox = InputBox((area.centerx, y - font_height), text="Click to enter your name")
+        self.input_box: InputBox = InputBox((area.centerx, y + font_height),
+                                            "Click to enter your name here")
         self.buttons: list[Button] = [bu]
         self.elements: list[Any] = [bu, title, self.input_box]
-
-        
 
     def back_to_menu(self) -> None:
         ...
