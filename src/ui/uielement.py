@@ -1,6 +1,8 @@
 from src.utils.colors import YELLOW, DARK_GRAY, LIGHT_GRAY, GRAY
 import pygame as pg
 from typing import Callable
+import os
+import json
 
 GAP_DEFAULT = (0, 50)
 GAP_MID = (0, 100)
@@ -92,11 +94,19 @@ class InputBox:
         self.button.draw(screen)
         pg.draw.rect(screen, self.color, self.rect, 2)
 
+    def update_highscore_file(self, rank: dict[str, int]) -> None:
+        path = os.path.expanduser("~/.local/share/highscore.json")
+        try:
+            with open(path, "w") as f:
+                json.dump(rank, f)
+        except Exception as e:
+            print(e)
+
     def create_new_score(self) -> None:
-        """[TO DO]store the name and the score.
-        and output a local file at .local/share
-        """
-        ...
+        from src.game import game
+        assert game is not None
+        game._rank[self.text] = game._current_score
+        self.update_highscore_file(game._rank)
 
     def name_check(self) -> None:
         result: bool = (self.text != " "
@@ -106,7 +116,7 @@ class InputBox:
                 self.text = "Please enter a shorter name"
             else:
                 self.create_new_score()
-                self.text = "Saved!"
+                self.text = "Your record has been saved!"
         else:
             self.text = "Only alphanumeric and space are allowed!"
         self.active = False

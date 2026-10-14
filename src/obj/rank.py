@@ -6,7 +6,6 @@ from src.ui.uielement import (Button, Text, add_gap,
                               FONT_TITLE, GAP_BIG, GAP_DEFAULT)
 from src.utils.colors import DARK_GRAY, YELLOW
 from typing import Any
-from src.config import Config
 
 
 class Rank(GameObject):
@@ -19,9 +18,8 @@ class Rank(GameObject):
                           align="center")
         self.elements: list[Any] = [title, hint]
         x, y = add_gap(hint.rect.midbottom, GAP_DEFAULT)
-        highscore = Config().parse_highscore("highscore.json")
-        for index, data in enumerate(highscore, 1):
-            name, score = data
+        for index, name in enumerate(game._rank, 1):
+            score: int = game._rank[name]
             text = Text(f"{index}.{name} - {score}pts", (x, y))
             x, y = text.rect.midbottom
             self.elements.append(text)
