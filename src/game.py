@@ -18,6 +18,8 @@ def start_game(config_file: str) -> None:
         print(e)
     else:
         game = Game(assets=loaded_assets)
+        from src.obj.lose import(Lose)
+        game.add_to_tree(Lose())
         game.start_process()
 
 
@@ -29,6 +31,8 @@ class Game:
         self._resolution: tuple[int, int] = pg.display.get_desktop_sizes()[0]
         self._clock: pg.time.Clock = pg.time.Clock()
         self._running: bool = False
+        self._rank: dict[str, int] = Config.parse_highscore()
+        self._current_score: int = 0
 
     def start_process(self) -> None:
         self._running = True

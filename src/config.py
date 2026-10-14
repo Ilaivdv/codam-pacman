@@ -65,25 +65,19 @@ class Config(BaseModel):
         return game_set
 
     @staticmethod
-    def parse_highscore(filename: str) -> list[tuple[str, int]]:
-        data_path: str = os.path.dirname(os.getcwd() + "/")
-        file_path: str = data_path + "/" + filename
+    def parse_highscore() -> dict[str, int]:
+        file_path: str = os.path.expanduser("~/.local/share/highscore.json")
         try:
             with open(file_path, "r") as f:
-                highscore_dict: list[dict[str, str | int]] = json.load(f)
+                highscore_dict: dict[str, int] = json.load(f)
         except Exception as e:
             print(e)
         result: dict[str, int] = {}
-        for data in highscore_dict:
-            try:
+        try:
+            for data in highscore_dict:
                 name: str = str(data["name"])
                 score: int = int(data["score"])
-            except Exception as e:
-                print(e)
-            if len(name) > 10:
-                raise ValueError(f"Error: username({data['name']}) is "
-                                 "too long")
-            if score < 0:
-                raise ValueError(f"Error: score({data['score']}) is negative")
-            result[name] = score
-        return (sorted(result.items(), key=lambda x: x[1]))
+                result[name] = score
+        except Exception as e:
+            print(e)
+        return (dict(sorted(result.items(), key=lambda x: x[1])))
