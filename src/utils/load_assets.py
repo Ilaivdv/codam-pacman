@@ -12,6 +12,8 @@ class Assets:
     def __init__(self) -> None:
         self._tileset: pg.Surface = pg.image.load(
                 ASSET_LIST["tileset"])
+        self._player: pg.Surface = pg.image.load(
+                ASSET_LIST["player"])
 
     @classmethod
     def validate_assets(cls) -> Assets:
@@ -25,4 +27,8 @@ class Assets:
 
     @property
     def tileset(self) -> pg.Surface:
-        return self._tileset.convert()
+        return self._tileset.convert_alpha()
+
+    @property
+    def player(self) -> pg.Surface:
+        return self._player.convert_alpha()
