@@ -29,6 +29,8 @@ class Game:
         self._resolution: tuple[int, int] = pg.display.get_desktop_sizes()[0]
         self._clock: pg.time.Clock = pg.time.Clock()
         self._running: bool = False
+        self._rank: dict[str, int] = Config.parse_highscore()
+        self._current_score: int = 0
 
     def start_process(self) -> None:
         self._running = True
