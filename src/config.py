@@ -72,12 +72,5 @@ class Config(BaseModel):
                 highscore_dict: dict[str, int] = json.load(f)
         except Exception as e:
             print(e)
-        result: dict[str, int] = {}
-        try:
-            for data in highscore_dict:
-                name: str = str(data["name"])
-                score: int = int(data["score"])
-                result[name] = score
-        except Exception as e:
-            print(e)
-        return (dict(sorted(result.items(), key=lambda x: x[1])))
+        return (dict(sorted(highscore_dict.items(), key=lambda x: x[1],
+                            reverse=True)))
