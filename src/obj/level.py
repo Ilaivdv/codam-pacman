@@ -13,8 +13,7 @@ class Level(GameObject):
         assert game is not None
 
         self.mazegen: MazeGenerator = MazeGenerator()
-        self.tileset: Tileset = Tileset(image=pg.image.load(
-            "assets/tileset.png").convert())
+        self.tileset: Tileset = Tileset(image=game.assets.tileset)
 
         self.mazegen.generate()
         self.maze: list[list[int]] = self.mazegen.maze
