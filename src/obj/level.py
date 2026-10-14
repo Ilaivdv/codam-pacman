@@ -34,8 +34,10 @@ class Level(GameObject):
                 "enemy": pg.sprite.Group(),
                 "interactable": pg.sprite.Group(),
                 }
-        # self.enemy: Enemy = Enemy(**{k: self.sprite_groups[k] for k in [
-        #     "player"]})
+        self.player: Player = Player(game.assets.player, (0, 0),
+                                     **{k: self.sprite_groups[k] for k in [
+                                         "enemy", "interactable"]})
+        self.sprite_groups["player"].add(self.player)
 
     def process(self) -> None:
         assert game is not None
@@ -48,6 +50,9 @@ class Level(GameObject):
                 self.screen.blit(self.tileset.tiles[i],
                                  (x * self.tileset.tile_size[0],
                                   y * self.tileset.tile_size[1]))
+
+        for group in self.sprite_groups.values():
+            group.draw(self.screen)
 
         game.display.blit(pg.transform.scale_by(self.screen, self.scale),
                           self.pos)

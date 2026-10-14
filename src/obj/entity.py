@@ -4,11 +4,16 @@ import pygame as pg
 
 
 class Entity(GameObject, pg.sprite.Sprite, ABC):
-    def __init__(self, image: pg.Surface,
+    def __init__(self, image: pg.Surface, pos: pg.Vector2,
+                 speed: int = 1.0,
                  **collides_with: pg.sprite.Group[Entity]) -> None:
         super().__init__()
 
+        self.image: pg.Surface = image
+        self.rect: pg.Rect = self.image.get_rect()
+        self.rect.topleft = pos
         self.collides_with: dict[str, pg.sprite.Group[Entity]] = collides_with
+        self.speed: int = speed
 
     @abstractmethod
     def process(self) -> None:
