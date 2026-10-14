@@ -4,7 +4,7 @@ import os
 
 ASSET_LIST: dict[str, str] = {
         "tileset": "assets/tileset.png",
-        # "player": "assets/",
+        "player": "assets/player.png",
         }
 
 
