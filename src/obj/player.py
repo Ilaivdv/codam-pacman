@@ -21,7 +21,7 @@ class Player(Entity):
     def process(self) -> None:
         super().process()
         key_pressed = pg.key.get_just_pressed()
-        key_just_pressed = pg.key.get_just_pressed()
+        # key_just_pressed = pg.key.get_just_pressed()
         # self.current_speed = not self.current_speed
 
         if key_pressed[pg.K_w] or key_pressed[pg.K_UP]:
@@ -32,7 +32,6 @@ class Player(Entity):
             self.move_to_pos(Direction.DOWN)
         if key_pressed[pg.K_d] or key_pressed[pg.K_RIGHT]:
             self.move_to_pos(Direction.RIGHT)
-
 
     def on_collide(self, group_name: str) -> None:
         ...

@@ -21,8 +21,8 @@ class Assets:
             if not os.path.exists(path):
                 raise FileNotFoundError(f"Invalid asset path for '{name}'")
             elif not os.access(path, os.R_OK):
-                raise FileNotFoundError((f"No permission to read "
-                                         "asset path for '{name}'"))
+                raise FileNotFoundError(("No permission to read "
+                                         f"asset path for '{name}'"))
             elif not path.endswith(".png"):
                 raise ValueError(
                         f"Asset path for '{name}' is not a png")

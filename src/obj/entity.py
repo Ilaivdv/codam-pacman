@@ -30,7 +30,7 @@ class Entity(GameObject, pg.sprite.Sprite, ABC):
         self.image: pg.Surface = image
         self.rect: pg.Rect = self.image.get_rect()
         self.rect.topleft = pos
-        
+
         self.maze: list[list[int]] = maze
         self.current_maze_position: tuple[int, int] = pos
         self.target_position: pg.Vector2 = pg.Vector2(pos)
@@ -38,7 +38,7 @@ class Entity(GameObject, pg.sprite.Sprite, ABC):
         self.speed: int = speed
 
     def target_reached(self) -> bool:
-        if self.rect.topleft == self.target_position:
+        if pg.Vector2(self.rect.topleft) == self.target_position:
             self.current_maze_position = (int(self.target_position.x //
                                               self.rect.width),
                                           int(self.target_position.y //
@@ -48,11 +48,6 @@ class Entity(GameObject, pg.sprite.Sprite, ABC):
             return False
 
     def move_to_pos(self, direction: Direction) -> None:
-        print(self.maze[self.current_maze_position[1]][self.current_maze_position[0]]
-              & direction,
-              direction,
-              self.maze[self.current_maze_position[1]][self.current_maze_position[0]],
-              self.current_maze_position)
         if not self.target_reached() or self.maze[
                 self.current_maze_position[1]][
                         self.current_maze_position[0]] & direction:
