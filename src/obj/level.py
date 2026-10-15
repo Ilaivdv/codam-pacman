@@ -34,7 +34,7 @@ class Level(GameObject):
                 "enemy": pg.sprite.Group(),
                 "interactable": pg.sprite.Group(),
                 }
-        self.player: Player = Player(game.assets.player, (0, 0),
+        self.player: Player = Player(game.assets.player, (0, 0), self.maze,
                                      **{k: self.sprite_groups[k] for k in [
                                          "enemy", "interactable"]})
         self.sprite_groups["player"].add(self.player)
