@@ -21,13 +21,13 @@ class Level(GameObject):
         self.screen: pg.Surface = pg.Surface(
                 (len(self.maze[0]) * self.tileset.tile_size[0],
                  len(self.maze) * self.tileset.tile_size[1]))
-        self.scale: int = 6
+        self.scale: int = self._get_display_maze_scale()
+
         self.pos: tuple[int, int] = (
                 game.display.get_rect().centerx -
                 self.screen.get_rect().centerx * self.scale,
                 game.display.get_rect().centery -
-                (self.screen.get_rect().centery +
-                 self.tileset.tile_size[1] // 2) * self.scale)
+                self.screen.get_rect().centery * self.scale)
 
         self.sprite_groups: dict[str, pg.sprite.Group[Entity]] = {
                 "player": pg.sprite.Group(),
@@ -39,6 +39,16 @@ class Level(GameObject):
                                      **{k: self.sprite_groups[k] for k in [
                                          "enemy", "interactable"]})
         self.sprite_groups["player"].add(self.player)
+
+    def _get_display_maze_scale(self) -> int:
+        assert game is not None
+        screen_size: tuple[int, int] = self.screen.get_rect().size
+        scale: int = 1
+
+        while screen_size[0] * (scale + 1) < game.resolution[0] and \
+                screen_size[1] * (scale + 1) < game.resolution[1]:
+            scale += 1
+        return scale
 
     def process(self) -> None:
         assert game is not None
