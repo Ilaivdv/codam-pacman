@@ -37,6 +37,8 @@ class Entity(GameObject, pg.sprite.Sprite, ABC):
         self.move_direction: Direction = Direction.NONE
         self.speed: int = speed
 
+        self.stop_at_target: bool = True
+
     def target_reached(self) -> bool:
         if pg.Vector2(self.rect.topleft) == self.target_position:
             self.current_maze_position = (int(self.target_position.x //
@@ -47,11 +49,18 @@ class Entity(GameObject, pg.sprite.Sprite, ABC):
         else:
             return False
 
-    def move_to_pos(self, direction: Direction) -> None:
-        if not self.target_reached() or self.maze[
-                self.current_maze_position[1]][
-                        self.current_maze_position[0]] & direction:
-            return
+    def _validate_direction(self, direction: Direction) -> bool:
+        if self.maze[self.current_maze_position[1]][
+                self.current_maze_position[0]] & direction:
+            return False
+        else:
+            return True
+
+    def move_to_pos(self, direction: Direction) -> bool:
+        if not self.target_reached() or \
+                not self._validate_direction(direction):
+            return False
+
         self.move_direction = direction
         match direction:
             case Direction.NONE:
@@ -64,6 +73,7 @@ class Entity(GameObject, pg.sprite.Sprite, ABC):
                 self.target_position.y += self.rect.height
             case Direction.LEFT:
                 self.target_position.x -= self.rect.width
+        return True
 
     @abstractmethod
     def process(self) -> None:
@@ -71,7 +81,7 @@ class Entity(GameObject, pg.sprite.Sprite, ABC):
             if pg.sprite.spritecollide(self, group, False):
                 self.on_collide(name)
 
-        if self.target_reached():
+        if self.target_reached() and self.stop_at_target:
             self.move_direction = Direction.NONE
         match self.move_direction:
             case Direction.NONE:
