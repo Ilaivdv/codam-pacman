@@ -1,7 +1,7 @@
 from mazegenerator import MazeGenerator  # type: ignore[import-untyped]
 from src.utils.colors import BLACK
 from src.obj.player import Player
-from src.obj.enemy import Enemy
+from src.obj.entity import Entity
 from src.obj import GameObject
 from src.utils import Tileset
 from src.game import game  # noqa: F401
@@ -29,13 +29,16 @@ class Level(GameObject):
                 (self.screen.get_rect().centery +
                  self.tileset.tile_size[1] // 2) * self.scale)
 
-        self.sprite_groups: dict[str, pg.sprite.Group[Player | Enemy]] = {
+        self.sprite_groups: dict[str, pg.sprite.Group[Entity]] = {
                 "player": pg.sprite.Group(),
                 "enemy": pg.sprite.Group(),
                 "interactable": pg.sprite.Group(),
                 }
-        # self.enemy: Enemy = Enemy(**{k: self.sprite_groups[k] for k in [
-        #     "player"]})
+        self.player: Player = Player(game.assets.player, (0, 0),
+                                     self.maze, speed=1,
+                                     **{k: self.sprite_groups[k] for k in [
+                                         "enemy", "interactable"]})
+        self.sprite_groups["player"].add(self.player)
 
     def process(self) -> None:
         assert game is not None
@@ -48,6 +51,9 @@ class Level(GameObject):
                 self.screen.blit(self.tileset.tiles[i],
                                  (x * self.tileset.tile_size[0],
                                   y * self.tileset.tile_size[1]))
+
+        for group in self.sprite_groups.values():
+            group.draw(self.screen)
 
         game.display.blit(pg.transform.scale_by(self.screen, self.scale),
                           self.pos)
