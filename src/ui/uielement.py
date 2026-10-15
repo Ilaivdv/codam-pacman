@@ -1,14 +1,9 @@
 from src.utils.colors import YELLOW, DARK_GRAY, LIGHT_GRAY, GRAY
 import pygame as pg
 from typing import Callable
+from src.ui import FONT_DEFAULT
 import os
 import json
-
-GAP_DEFAULT = (0, 50)
-GAP_MID = (0, 100)
-FONT_DEFAULT = pg.font.SysFont("Arial", 40)
-FONT_TITLE = pg.font.SysFont("Arial", 80)
-GAP_BIG = (0, 150)
 
 
 def add_gap(pos: tuple[int, int], gap: tuple[int, int]) -> tuple[int, int]:
@@ -96,11 +91,12 @@ class InputBox:
 
     def update_highscore_file(self, rank: dict[str, int]) -> None:
         path = os.path.expanduser("~/.local/share/highscore.json")
-        try:
-            with open(path, "w") as f:
-                json.dump(rank, f)
-        except Exception as e:
-            print(e)
+        if os.access(path, os.W_OK):
+            try:
+                with open(path, "w") as f:
+                    json.dump(rank, f)
+            except Exception as e:
+                print(e)
 
     def create_new_score(self) -> None:
         from src.game import game

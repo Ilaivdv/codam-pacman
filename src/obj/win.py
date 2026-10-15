@@ -2,7 +2,8 @@ import pygame as pg
 from src.game import game
 import sys
 from src.obj import GameObject
-from src.ui.uielement import Button, Text, InputBox, GAP_MID, FONT_TITLE
+from src.ui.uielement import Button, Text, InputBox
+from src.ui import GAP_MID, FONT_TITLE
 from src.utils.colors import DARK_GRAY, YELLOW, LIGHT_GRAY
 from typing import Any
 
