@@ -1,3 +1,4 @@
+from src.obj.consumables import Consumable
 from mazegenerator import MazeGenerator  # type: ignore[import-untyped]
 from src.utils.colors import BLACK
 from src.obj.player import Player
@@ -31,14 +32,18 @@ class Level(GameObject):
 
         self.sprite_groups: dict[str, pg.sprite.Group[Entity]] = {
                 "player": pg.sprite.Group(),
+                "consumable": pg.sprite.Group(),
                 "enemy": pg.sprite.Group(),
-                "interactable": pg.sprite.Group(),
                 }
-        self.player: Player = Player(game.assets.player, (0, 0),
-                                     self.maze, speed=1,
-                                     **{k: self.sprite_groups[k] for k in [
-                                         "enemy", "interactable"]})
+        self.player: Player = Player(self.sprite_groups,
+                                     game.assets.player,
+                                     self.maze, (0, 0), 1)
         self.sprite_groups["player"].add(self.player)
+        self.pacgum: Consumable = Consumable(self.sprite_groups,
+                                             game.assets.pacgum,
+                                             self.maze, (16, 0), 1)
+        self.sprite_groups["consumable"].add(self.pacgum)
+
 
     def _get_display_maze_scale(self) -> int:
         assert game is not None

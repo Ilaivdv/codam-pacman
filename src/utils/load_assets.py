@@ -5,6 +5,7 @@ import os
 ASSET_LIST: dict[str, str] = {
         "tileset": "assets/tileset.png",
         "player": "assets/player.png",
+        "pacgum": "assets/pacgum.png",
         }
 
 
@@ -14,6 +15,8 @@ class Assets:
                 ASSET_LIST["tileset"])
         self._player: pg.Surface = pg.image.load(
                 ASSET_LIST["player"])
+        self._pacgum: pg.Surface = pg.image.load(
+                ASSET_LIST["pacgum"])
 
     @classmethod
     def validate_assets(cls) -> Assets:
@@ -35,3 +38,7 @@ class Assets:
     @property
     def player(self) -> pg.Surface:
         return self._player.convert_alpha()
+
+    @property
+    def pacgum(self) -> pg.Surface:
+        return self._pacgum.convert_alpha()

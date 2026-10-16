@@ -19,14 +19,16 @@ class Direction(IntEnum):
 
 class Entity(GameObject, pg.sprite.Sprite, ABC):
     def __init__(self,
+                 sprite_groups: dict[str, pg.sprite.Group[Entity]],
                  image: pg.Surface,
-                 pos: tuple[int, int],
                  maze: list[list[int]],
-                 speed: int = 1,
-                 **collides_with: pg.sprite.Group[Entity]) -> None:
+                 pos: tuple[int, int],
+                 speed: int = 1
+                 ) -> None:
         super().__init__()
 
-        self.collides_with: dict[str, pg.sprite.Group[Entity]] = collides_with
+        self.sprite_groups: dict[str, pg.sprite.Group[Entity]] = sprite_groups
+        self.collides_with: dict[str, pg.sprite.Group[Entity]] = {}
         self.image: pg.Surface = image
         self.rect: pg.Rect = self.image.get_rect()
         self.rect.topleft = pos
