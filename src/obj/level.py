@@ -36,13 +36,11 @@ class Level(GameObject):
                 "enemy": pg.sprite.Group(),
                 }
         self.player: Player = Player(self.sprite_groups,
-                                     game.assets.player,
+                                     self.tileset.tile_size,
                                      self.maze, (0, 0), 1)
-        self.sprite_groups["player"].add(self.player)
         self.pacgum: Consumable = Consumable(self.sprite_groups,
-                                             game.assets.pacgum,
-                                             self.maze, (16, 0), 1)
-        self.sprite_groups["consumable"].add(self.pacgum)
+                                             self.tileset.tile_size,
+                                             self.maze, (2, 0), 1)
 
     def _get_display_maze_scale(self) -> int:
         assert game is not None
@@ -53,12 +51,6 @@ class Level(GameObject):
                 screen_size[1] * (scale + 1) < game.resolution[1]:
             scale += 1
         return scale
-
-    def _to_global_pos(self, pos: tuple[int, int],
-                       rect_size: tuple[int, int]) -> tuple[int, int]:
-        offset_x, offset_y = self.tileset.tile_size
-        return ((pos[0] * offset_x) + (offset_x - rect_size[0]) // 2,
-                (pos[1] * offset_y) + (offset_y - rect_size[1]) // 2)
 
     def process(self) -> None:
         assert game is not None

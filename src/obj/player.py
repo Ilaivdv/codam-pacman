@@ -6,18 +6,20 @@ import pygame as pg
 class Player(Entity):
     def __init__(self,
                  sprite_groups: dict[str, pg.sprite.Group[Entity]],
-                 image: pg.Surface,
+                 tile_size: tuple[int, int],
                  maze: list[list[int]],
                  pos: tuple[int, int],
                  speed: int = 1
                  ) -> None:
-        super().__init__(sprite_groups, image, maze, pos, speed)
-        self.stop_at_target: bool = False
-        self.collides_with: dict[str, pg.sprite.Group[Entity]] = {
-                k: self.sprite_groups[k] for k in [
-                    "enemy"
-                    ]}
         assert game is not None
+
+        sprite: pg.Surface = game.assets.player
+        super().__init__(sprite_groups, tile_size, sprite, maze, pos, speed)
+
+        self.stop_at_target: bool = False
+        self.sprite_groups["player"].add(self)
+        self.collides_with: dict[str, pg.sprite.Group[Entity]] = {
+                k: self.sprite_groups[k] for k in ["enemy"]}
 
         self.current_speed: int = self.speed
         self.is_flipped: bool = False

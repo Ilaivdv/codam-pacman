@@ -4,11 +4,6 @@ from enum import IntEnum
 import pygame as pg
 
 
-class error(Exception):
-    def __init__(self, *args: object) -> None:
-        super().__init__(*args)
-
-
 class Direction(IntEnum):
     NONE = 0
     UP = 1
@@ -20,6 +15,7 @@ class Direction(IntEnum):
 class Entity(GameObject, pg.sprite.Sprite, ABC):
     def __init__(self,
                  sprite_groups: dict[str, pg.sprite.Group[Entity]],
+                 tile_size: tuple[int, int],
                  image: pg.Surface,
                  maze: list[list[int]],
                  pos: tuple[int, int],
@@ -27,13 +23,14 @@ class Entity(GameObject, pg.sprite.Sprite, ABC):
                  ) -> None:
         super().__init__()
 
+        self.maze: list[list[int]] = maze
+        self.tile_size: tuple[int, int] = tile_size
         self.sprite_groups: dict[str, pg.sprite.Group[Entity]] = sprite_groups
         self.collides_with: dict[str, pg.sprite.Group[Entity]] = {}
         self.image: pg.Surface = image
         self.rect: pg.Rect = self.image.get_rect()
-        self.rect.topleft = pos
+        self.rect.topleft = self._to_global_pos(pos)
 
-        self.maze: list[list[int]] = maze
         self.current_maze_position: tuple[int, int] = pos
         self.target_position: pg.Vector2 = pg.Vector2(pos)
         self.move_direction: Direction = Direction.NONE
@@ -41,12 +38,17 @@ class Entity(GameObject, pg.sprite.Sprite, ABC):
 
         self.stop_at_target: bool = True
 
+    def _to_global_pos(self, pos: tuple[int, int]) -> tuple[int, int]:
+        offset_x, offset_y = self.tile_size
+        return ((pos[0] * offset_x) + (offset_x - self.rect.width) // 2,
+                (pos[1] * offset_y) + (offset_y - self.rect.height) // 2)
+
     def target_reached(self) -> bool:
         if pg.Vector2(self.rect.topleft) == self.target_position:
             self.current_maze_position = (int(self.target_position.x //
-                                              self.rect.width),
+                                              self.tile_size[0]),
                                           int(self.target_position.y //
-                                              self.rect.height))
+                                              self.tile_size[1]))
             return True
         else:
             return False
