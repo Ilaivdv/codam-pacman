@@ -36,8 +36,10 @@ class Level(GameObject):
                 "enemy": pg.sprite.Group(),
                 }
         self.player: Player = Player(self.sprite_groups,
+                                     self.tileset.tile_size,
                                      self.maze, (0, 0), 1)
         self.pacgum: Consumable = Consumable(self.sprite_groups,
+                                             self.tileset.tile_size,
                                              self.maze, (16, 0), 1)
 
     def _get_display_maze_scale(self) -> int:

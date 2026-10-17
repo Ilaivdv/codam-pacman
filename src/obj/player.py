@@ -6,6 +6,7 @@ import pygame as pg
 class Player(Entity):
     def __init__(self,
                  sprite_groups: dict[str, pg.sprite.Group[Entity]],
+                 tile_size: tuple[int, int],
                  maze: list[list[int]],
                  pos: tuple[int, int],
                  speed: int = 1
@@ -13,7 +14,7 @@ class Player(Entity):
         assert game is not None
 
         sprite: pg.Surface = game.assets.player
-        super().__init__(sprite_groups, sprite, maze, pos, speed)
+        super().__init__(sprite_groups, tile_size, sprite, maze, pos, speed)
 
         self.stop_at_target: bool = False
         self.sprite_groups["player"].add(self)

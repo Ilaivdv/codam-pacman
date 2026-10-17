@@ -6,6 +6,7 @@ import pygame as pg
 class Consumable(Entity):
     def __init__(self,
                  sprite_groups: dict[str, pg.sprite.Group[Entity]],
+                 tile_size: tuple[int, int],
                  maze: list[list[int]],
                  pos: tuple[int, int],
                  speed: int = 1
@@ -13,7 +14,7 @@ class Consumable(Entity):
         assert game is not None
 
         sprite: pg.Surface = game.assets.pacgum
-        super().__init__(sprite_groups, sprite, maze, pos, speed)
+        super().__init__(sprite_groups, tile_size, sprite, maze, pos, speed)
 
         self.sprite_groups["consumable"].add(self)
         self.collides_with: dict[str, pg.sprite.Group[Entity]] = {
