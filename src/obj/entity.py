@@ -4,11 +4,6 @@ from enum import IntEnum
 import pygame as pg
 
 
-class error(Exception):
-    def __init__(self, *args: object) -> None:
-        super().__init__(*args)
-
-
 class Direction(IntEnum):
     NONE = 0
     UP = 1
