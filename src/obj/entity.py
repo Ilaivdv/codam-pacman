@@ -32,7 +32,8 @@ class Entity(GameObject, pg.sprite.Sprite, ABC):
         self.rect.topleft = self._to_global_pos(pos)
 
         self.current_maze_position: tuple[int, int] = pos
-        self.target_position: pg.Vector2 = pg.Vector2(pos)
+        self.target_position: pg.Vector2 = pg.Vector2(
+                self._to_global_pos(pos))
         self.move_direction: Direction = Direction.NONE
         self.speed: int = speed
 
