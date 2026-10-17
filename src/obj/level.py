@@ -5,6 +5,7 @@ from src.obj.player import Player
 from src.obj.entity import Entity
 from src.obj import GameObject
 from src.utils import Tileset
+from random import randint
 from src.game import game  # noqa: F401
 import pygame as pg
 
@@ -35,12 +36,13 @@ class Level(GameObject):
                 "consumable": pg.sprite.Group(),
                 "enemy": pg.sprite.Group(),
                 }
+        self.player_spawn_pos: tuple[int, int] = self._get_maze_center()
         self.player: Player = Player(self.sprite_groups,
                                      self.tileset.tile_size,
-                                     self.maze, (0, 0), 1)
-        self.pacgum: Consumable = Consumable(self.sprite_groups,
-                                             self.tileset.tile_size,
-                                             self.maze, (2, 0), 1)
+                                     self.maze,
+                                     self.player_spawn_pos, 1)
+        self.pacgums: list[Consumable] = []
+        self._spawn_pacgums(30, 0)
 
     def _get_display_maze_scale(self) -> int:
         assert game is not None
@@ -51,6 +53,42 @@ class Level(GameObject):
                 screen_size[1] * (scale + 1) < game.resolution[1]:
             scale += 1
         return scale
+
+    def _get_maze_center(self) -> tuple[int, int]:
+        pos: tuple[int, int] = (
+                (len(self.maze[0]) - 1) // 2, (len(self.maze) - 1) // 2)
+        while self.maze[pos[1]][pos[0]] == 15:
+            pos = (pos[0] + 1, pos[1])
+        return pos
+
+    def _spawn_pacgums(self, pacgum_amount: int,
+                       super_pacgum_amount: int) -> None:
+        if pacgum_amount + super_pacgum_amount >= \
+                len(self.maze[0]) * len(self.maze):
+            # TODO Add warning log here
+            print("Too many pacgums! Falling back to defaults")
+            max_capacity: int = len(self.maze[0]) * len(self.maze)
+            pacgum_amount = max_capacity // 4
+            super_pacgum_amount = 4
+
+        is_available: list[list[bool]] = [
+                [True if self.maze[y][x] != 15 else False
+                 for x in range(len(self.maze[0]))]
+                for y in range(len(self.maze))]
+        is_available[self.player_spawn_pos[1]][
+                self.player_spawn_pos[0]] = False
+
+        spawn_pos: tuple[int, int] = (
+                randint(0, len(self.maze[0]) - 1),
+                randint(0, len(self.maze) - 1))
+        for _ in range(pacgum_amount):
+            while not is_available[spawn_pos[1]][spawn_pos[0]]:
+                spawn_pos = (randint(0, len(self.maze[0]) - 1),
+                             randint(0, len(self.maze) - 1))
+            self.pacgums.append(Consumable(self.sprite_groups,
+                                           self.tileset.tile_size,
+                                           self.maze, spawn_pos, 1))
+            is_available[spawn_pos[1]][spawn_pos[0]] = False
 
     def process(self) -> None:
         assert game is not None
