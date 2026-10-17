@@ -6,20 +6,18 @@ import pygame as pg
 class Consumable(Entity):
     def __init__(self,
                  sprite_groups: dict[str, pg.sprite.Group[Entity]],
-                 image: pg.Surface,
                  maze: list[list[int]],
                  pos: tuple[int, int],
                  speed: int = 1
                  ) -> None:
-        super().__init__(sprite_groups, image, maze, pos, speed)
-        self.rect.update(
-                pos[0], pos[1],
-                self.rect.width // 2, self.rect.height // 2)
-        self.collides_with: dict[str, pg.sprite.Group[Entity]] = {
-                k: self.sprite_groups[k] for k in [
-                    "player"
-                    ]}
         assert game is not None
+
+        sprite: pg.Surface = game.assets.pacgum
+        super().__init__(sprite_groups, sprite, maze, pos, speed)
+
+        self.sprite_groups["consumable"].add(self)
+        self.collides_with: dict[str, pg.sprite.Group[Entity]] = {
+                k: self.sprite_groups[k] for k in ["player"]}
 
         game.add_to_tree(self)
 

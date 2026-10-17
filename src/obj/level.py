@@ -36,13 +36,9 @@ class Level(GameObject):
                 "enemy": pg.sprite.Group(),
                 }
         self.player: Player = Player(self.sprite_groups,
-                                     game.assets.player,
                                      self.maze, (0, 0), 1)
-        self.sprite_groups["player"].add(self.player)
         self.pacgum: Consumable = Consumable(self.sprite_groups,
-                                             game.assets.pacgum,
                                              self.maze, (16, 0), 1)
-        self.sprite_groups["consumable"].add(self.pacgum)
 
     def _get_display_maze_scale(self) -> int:
         assert game is not None
