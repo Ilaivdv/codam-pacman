@@ -13,11 +13,11 @@ class SpriteSheet(BaseModel):
     def _load_frames(self) -> Self:
         w, h = self.image.get_rect().size
 
-        for x in range(0, w, self.frame_size[0]):
-            for y in range(0, h, self.frame_size[1]):
-                new_tile = pg.Surface(self.frame_size).convert()
+        for y in range(0, w, self.frame_size[0]):
+            for x in range(0, h, self.frame_size[1]):
+                new_tile = pg.Surface(self.frame_size)
                 new_tile.blit(self.image, (0, 0), (x, y, *self.frame_size))
-                new_tile = pg.transform.flip(new_tile, True, True)
+                new_tile.set_colorkey((0, 0, 0))
                 self.frames.append(new_tile)
 
         return self
