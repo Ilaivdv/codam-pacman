@@ -70,6 +70,10 @@ class Game:
         return self._resolution
 
     @property
+    def clock(self) -> pg.Clock:
+        return self._clock
+
+    @property
     def running(self) -> bool:
         return self._running
 
