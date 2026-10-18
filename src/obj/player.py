@@ -1,4 +1,5 @@
 from src.obj.entity import Entity, Direction
+from src.utils import SpriteSheet
 from src.game import game
 import pygame as pg
 
@@ -13,8 +14,10 @@ class Player(Entity):
                  ) -> None:
         assert game is not None
 
-        sprite: pg.Surface = game.assets.player
-        super().__init__(sprite_groups, tile_size, sprite, maze, pos, speed)
+        self.sprite: SpriteSheet = SpriteSheet(image=game.assets.player)
+        super().__init__(sprite_groups, tile_size,
+                         self.sprite.frames[0], maze,
+                         pos, speed)
 
         self.stop_at_target: bool = False
         self.sprite_groups["player"].add(self)
