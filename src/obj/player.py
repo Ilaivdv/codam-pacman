@@ -1,4 +1,5 @@
 from src.obj.entity import Entity, Direction
+from src.utils import SpriteSheet
 from src.game import game
 import pygame as pg
 
@@ -13,8 +14,10 @@ class Player(Entity):
                  ) -> None:
         assert game is not None
 
-        sprite: pg.Surface = game.assets.player
-        super().__init__(sprite_groups, tile_size, sprite, maze, pos, speed)
+        self.sprite: SpriteSheet = SpriteSheet(image=game.assets.player)
+        super().__init__(sprite_groups, tile_size,
+                         self.sprite.frames[0], maze,
+                         pos, speed)
 
         self.stop_at_target: bool = False
         self.sprite_groups["player"].add(self)
@@ -22,13 +25,20 @@ class Player(Entity):
                 k: self.sprite_groups[k] for k in ["enemy"]}
 
         self.current_speed: int = self.speed
-        self.is_flipped: bool = False
         self.input_buffer: Direction = Direction.NONE
+        self.sprite.animations = {
+                "idle": [3],
+                "moving": [0, 1, 3, 2, 1],
+                "dead": [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+                }
+        self.rotation: int = 0
+        self.flipped: bool = False
 
         game.add_to_tree(self)
 
     def process(self) -> None:
         super().process()
+        assert game is not None
         key_pressed = pg.key.get_just_pressed()
 
         if key_pressed[pg.K_w] or key_pressed[pg.K_UP]:
@@ -49,6 +59,25 @@ class Player(Entity):
                 self.move_to_pos(self.input_buffer)
             elif not self.move_to_pos(self.move_direction):
                 self.move_direction = Direction.NONE
+
+        curr_anim: str = "moving"
+        match self.move_direction:
+            case Direction.NONE:
+                curr_anim = "idle"
+            case Direction.UP:
+                self.rotation = 90
+            case Direction.RIGHT:
+                self.flipped = False
+                self.rotation = 0
+            case Direction.DOWN:
+                self.rotation = -90
+            case Direction.LEFT:
+                self.flipped = True
+                self.rotation = 0
+        self.image = self.sprite.process_animation(curr_anim,
+                                                   game.clock.get_time())
+        self.image = pg.transform.rotate(self.image, self.rotation)
+        self.image = pg.transform.flip(self.image, self.flipped, False)
 
     def on_collide(self, group_name: str) -> None:
         ...

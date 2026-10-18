@@ -3,8 +3,8 @@ from mazegenerator import MazeGenerator  # type: ignore[import-untyped]
 from src.utils.colors import BLACK
 from src.obj.player import Player
 from src.obj.entity import Entity
+from src.utils import SpriteSheet
 from src.obj import GameObject
-from src.utils import Tileset
 from random import randint
 from src.game import game  # noqa: F401
 import pygame as pg
@@ -15,14 +15,14 @@ class Level(GameObject):
         assert game is not None
 
         self.mazegen: MazeGenerator = MazeGenerator()
-        self.tileset: Tileset = Tileset(image=game.assets.tileset)
+        self.tileset: SpriteSheet = SpriteSheet(image=game.assets.tileset)
 
         self.mazegen.generate()
         self.maze: list[list[int]] = self.mazegen.maze
 
         self.screen: pg.Surface = pg.Surface(
-                (len(self.maze[0]) * self.tileset.tile_size[0],
-                 len(self.maze) * self.tileset.tile_size[1]))
+                (len(self.maze[0]) * self.tileset.frame_size[0],
+                 len(self.maze) * self.tileset.frame_size[1]))
         self.scale: int = self._get_display_maze_scale()
 
         self.pos: tuple[int, int] = (
@@ -38,7 +38,7 @@ class Level(GameObject):
                 }
         self.player_spawn_pos: tuple[int, int] = self._get_maze_center()
         self.player: Player = Player(self.sprite_groups,
-                                     self.tileset.tile_size,
+                                     self.tileset.frame_size,
                                      self.maze,
                                      self.player_spawn_pos, 1)
         self.pacgums: list[Consumable] = []
@@ -86,7 +86,7 @@ class Level(GameObject):
                 spawn_pos = (randint(0, len(self.maze[0]) - 1),
                              randint(0, len(self.maze) - 1))
             self.pacgums.append(Consumable(self.sprite_groups,
-                                           self.tileset.tile_size,
+                                           self.tileset.frame_size,
                                            self.maze, spawn_pos, 1))
             is_available[spawn_pos[1]][spawn_pos[0]] = False
 
@@ -98,9 +98,9 @@ class Level(GameObject):
         # Draw the maze
         for y in range(0, len(self.maze)):
             for x, i in enumerate(self.maze[y]):
-                self.screen.blit(self.tileset.tiles[i],
-                                 (x * self.tileset.tile_size[0],
-                                  y * self.tileset.tile_size[1]))
+                self.screen.blit(self.tileset.frames[i],
+                                 (x * self.tileset.frame_size[0],
+                                  y * self.tileset.frame_size[1]))
 
         for group in self.sprite_groups.values():
             group.draw(self.screen)

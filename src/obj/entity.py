@@ -71,13 +71,13 @@ class Entity(GameObject, pg.sprite.Sprite, ABC):
             case Direction.NONE:
                 pass
             case Direction.UP:
-                self.target_position.y -= self.rect.height
+                self.target_position.y -= self.tile_size[1]
             case Direction.RIGHT:
-                self.target_position.x += self.rect.width
+                self.target_position.x += self.tile_size[0]
             case Direction.DOWN:
-                self.target_position.y += self.rect.height
+                self.target_position.y += self.tile_size[1]
             case Direction.LEFT:
-                self.target_position.x -= self.rect.width
+                self.target_position.x -= self.tile_size[0]
         return True
 
     @abstractmethod

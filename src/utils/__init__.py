@@ -1,5 +1,5 @@
 from .state import State
-from .tiles import Tileset
+from .sprite_sheet import SpriteSheet
 from .load_assets import Assets
 
-__all__ = ["State", "Tileset", "Assets"]
+__all__ = ["State", "SpriteSheet", "Assets"]
