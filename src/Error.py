@@ -1,35 +1,23 @@
-from typing import Any
+
+class PacmanError(Exception):
+    """Base exception for the Pac-Man project."""
 
 
-class Error(Exception):
-    def __init__(self, *args: Any, msg: str):
-        super().__init__(*args)
-        self.msg = msg
+class AssetLoadError(PacmanError):
+    """An asset is missing or invalid."""
 
 
-class ConfigError(Error):
-    def __init__(self, *args: Any, msg: str):
-        if msg is None:
-            print("An error occured with conguration.")
-        super().__init__(*args, msg=msg)
+class ConfigError(PacmanError):
+    """An error occurred while loading or validating config."""
 
 
-class GameError(Error):
-    def __init__(self, *args: Any, msg: str):
-        if msg is None:
-            print("An error occured with game.")
-        super().__init__(*args, msg=msg)
+class GameError(PacmanError):
+    """An error occurred in game logic."""
 
 
-class UiError(Error):
-    def __init__(self, *args: Any, msg: str):
-        if msg is None:
-            print("An error occured with UI.")
-        super().__init__(*args, msg=msg)
+class UiError(PacmanError):
+    """An error occurred in the UI."""
 
 
-class HighscoreError(Error):
-    def __init__(self, *args: Any, msg: str):
-        if msg is None:
-            print("An error occured with UI.")
-        super().__init__(*args, msg=msg)
+class HighscoreError(PacmanError):
+    """An error occurred while handling high scores."""
