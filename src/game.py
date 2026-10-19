@@ -84,6 +84,7 @@ class GameSettings(BaseModel):
     points_per_ghost: int = Field(gt=0, frozen=True)
     seed: int = Field(frozen=True)
     level_max_time: int = Field(gt=0, frozen=True)
+    notification: list[str] | None = Field(frozen=True)
 
 
 settings: GameSettings | None = None

@@ -1,9 +1,9 @@
 from src.utils.colors import YELLOW, DARK_GRAY, LIGHT_GRAY, GRAY
 import pygame as pg
 from typing import Callable
-from src.ui import FONT_DEFAULT
 import os
 import json
+from .uiconstant import FONT_NOTI, GAP_NOTI, FONT_DEFAULT
 
 
 def add_gap(pos: tuple[int, int], gap: tuple[int, int]) -> tuple[int, int]:
@@ -31,12 +31,32 @@ class Text:
         screen.blit(self.surface, self.rect)
 
 
+class Noti:
+    def __init__(self, text: str, pos: tuple[int, int],
+                 align: str = "center",
+                 gap: tuple[int, int] | None = GAP_NOTI):
+        self.color = DARK_GRAY
+        lines = text.split("\n")
+        x, y = FONT_NOTI.size(lines[0])
+        self.rect = pg.Rect((0, 0), (x + 20, y * len(lines)))
+        if gap is not None:
+            pos = add_gap(pos, gap)
+        setattr(self.rect, align, pos)
+        self.text = Text(text, self.rect.center, font=FONT_NOTI, gap=None)
+
+    def draw(self, screen: pg.Surface) -> None:
+        pg.draw.rect(screen, LIGHT_GRAY, self.rect)
+        self.text.draw(screen)
+
+
 class Button:
-    def __init__(self, text: str, pos: tuple[int, int], align: str = "center",
+    def __init__(self, text: str, pos: tuple[int, int],
+                 align: str = "center",
                  gap: tuple[int, int] | None = (0, 50),
                  on_click: Callable[[], None] | None = None):
         self.color = DARK_GRAY
-        self.rect = pg.Rect((0, 0), FONT_DEFAULT.size(text))
+        size = FONT_DEFAULT.size(text)
+        self.rect = pg.Rect((0, 0), size)
         if gap is not None:
             pos = add_gap(pos, gap)
         setattr(self.rect, align, pos)
@@ -91,12 +111,11 @@ class InputBox:
 
     def update_highscore_file(self, rank: dict[str, int]) -> None:
         path = os.path.expanduser("~/.local/share/highscore.json")
-        if os.access(path, os.W_OK):
-            try:
-                with open(path, "w") as f:
-                    json.dump(rank, f)
-            except Exception as e:
-                print(e)
+        try:
+            with open(path, "w") as f:
+                json.dump(rank, f)
+        except Exception as e:
+            print(e)
 
     def create_new_score(self) -> None:
         from src.game import game

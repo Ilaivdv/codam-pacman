@@ -2,6 +2,7 @@ from pydantic import BaseModel
 from typing import Any
 import json
 import os
+from .error import ConfigError
 
 
 class Config(BaseModel):
@@ -40,6 +41,7 @@ class Config(BaseModel):
                     line = k
                 lines.append(line)
         config_dict: dict[str, Any] = dict(json.loads("".join(lines)))
+        notification: list[str] = []
         game_set: dict[str, Any] = {
                     'highscore_filename': "highscore.json",
                     'level': [
@@ -60,8 +62,12 @@ class Config(BaseModel):
             if key in config_dict.keys():
                 game_set[key] = config_dict[key]
             else:
-                print(f"NOTICE: Missing {key} in config.json,"
-                      "using a default value.")
+                notification.append("NOTICE: Missing KEY in config.json,"
+                                    f"using a default value: {key}")
+        if notification:
+            game_set["notification"] = notification
+        else:
+            game_set["notification"] = None
         return game_set
 
     @staticmethod
@@ -70,7 +76,7 @@ class Config(BaseModel):
         try:
             with open(file_path, "r") as f:
                 highscore_dict: dict[str, int] = json.load(f)
-        except Exception as e:
+        except ConfigError as e:
             print(e)
         return (dict(sorted(highscore_dict.items(), key=lambda x: x[1],
                             reverse=True)))
