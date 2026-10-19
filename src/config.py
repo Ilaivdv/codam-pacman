@@ -73,10 +73,15 @@ class Config(BaseModel):
     @staticmethod
     def parse_highscore() -> dict[str, int]:
         file_path: str = os.path.expanduser("~/.local/share/highscore.json")
-        try:
-            with open(file_path, "r") as f:
-                highscore_dict: dict[str, int] = json.load(f)
-        except ConfigError as e:
-            print(e)
-        return (dict(sorted(highscore_dict.items(), key=lambda x: x[1],
-                            reverse=True)))
+        if os.path.isfile(file_path):
+            try:
+                with open(file_path, "r") as f:
+                    highscore_dict: dict[str, int] = json.load(f)
+            except ConfigError as e:
+                print(e)
+            return (dict(sorted(highscore_dict.items(), key=lambda x: x[1],
+                         reverse=True)))
+        else:
+            with open(file_path, 'w') as f:
+                pass
+            return {}
