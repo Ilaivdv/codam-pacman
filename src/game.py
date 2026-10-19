@@ -18,6 +18,8 @@ def start_game(config_file: str) -> None:
         print(e)
     else:
         game = Game(assets=loaded_assets)
+        from obj.menu import Menu
+        game.add_to_tree(Menu)
         game.start_process()
 
 

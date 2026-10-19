@@ -3,6 +3,8 @@ from typing import Any
 import json
 import os
 from .error import ConfigError
+from json.decoder import JSONDecodeError
+
 
 
 class Config(BaseModel):
@@ -71,12 +73,14 @@ class Config(BaseModel):
         return game_set
 
     @staticmethod
-    def parse_highscore() -> dict[str, int]:
+    def parse_highscore() -> dict[str, int] :
         file_path: str = os.path.expanduser("~/.local/share/highscore.json")
         if os.path.isfile(file_path):
+            if os.stat(file_path).st_size == 0:
+                return {}
             try:
                 with open(file_path, "r") as f:
-                    highscore_dict: dict[str, int] = json.load(f)
+                    highscore_dict: Any = json.load(f)
             except ConfigError as e:
                 print(e)
             return (dict(sorted(highscore_dict.items(), key=lambda x: x[1],

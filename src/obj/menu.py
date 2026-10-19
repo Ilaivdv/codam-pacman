@@ -29,14 +29,15 @@ class Menu(GameObject):
             x, y = add_gap(bu.rect.midbottom, GAP_DEFAULT)
 
     def start_game(self) -> None:
-        ...
+        game.remove_from_tree(self)
 
     def quit_game(self) -> None:
         pg.quit()
         sys.exit()
 
     def show_rank(self) -> None:
-        ...
+        game.remove_from_tree(self)
+        game.add_to_tree(Rank())
 
     def process(self) -> None:
         assert game is not None
