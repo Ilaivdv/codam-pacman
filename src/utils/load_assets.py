@@ -9,7 +9,7 @@ ASSET_LIST: dict[str, str] = {
         "enemy0": "assets/enemy_00.png",
         "enemy1": "assets/enemy_01.png",
         "enemy2": "assets/enemy_02.png",
-        "enemy3": "assets/enemy_02.png",
+        "enemy3": "assets/enemy_03.png",
         }
 
 
