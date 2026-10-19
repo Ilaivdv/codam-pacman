@@ -3,7 +3,7 @@ gh auth refresh -s project
 OWNER=Ilaivdv       
 NUM=1   #project number                                 
 REPO=Ilaivdv/codam-pacman 
-N=103         #issuename                              
+N=103         #issuename, this is a test issue                           
 
 PID=$(gh project view $NUM --owner $OWNER --format json --jq .id)
 FIELDS=$(gh project field-list $NUM --owner $OWNER --format json)
@@ -22,7 +22,5 @@ E=$(gh issue view $N -R $REPO --json closedAt --jq '(.closedAt // "")[:10]')
 
 echo "ITEM=$ITEM  START_DATE=$S  END_DATE=$E"
 
-gh project list --owner $OWNER
-gh project field-list $NUM --owner $OWNER --format json --jq '.fields[] | "\(.name)  \(.id)"' | grep -i date
 gh project item-edit --id "$ITEM" --project-id "$PID" --field-id "$START" --date "$S"
 [ -n "$E" ] && gh project item-edit --id "$ITEM" --project-id "$PID" --field-id "$END" --date "$E"
