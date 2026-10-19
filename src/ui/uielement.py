@@ -3,12 +3,7 @@ import pygame as pg
 from typing import Callable
 import os
 import json
-
-GAP_DEFAULT = (0, 50)
-GAP_MID = (0, 100)
-FONT_DEFAULT = pg.font.SysFont("Arial", 40)
-FONT_TITLE = pg.font.SysFont("Arial", 80)
-GAP_BIG = (0, 150)
+from .uiconstant import FONT_NOTI, GAP_NOTI, FONT_DEFAULT
 
 
 def add_gap(pos: tuple[int, int], gap: tuple[int, int]) -> tuple[int, int]:
@@ -36,12 +31,32 @@ class Text:
         screen.blit(self.surface, self.rect)
 
 
+class Noti:
+    def __init__(self, text: str, pos: tuple[int, int],
+                 align: str = "center",
+                 gap: tuple[int, int] | None = GAP_NOTI):
+        self.color = DARK_GRAY
+        lines = text.split("\n")
+        x, y = FONT_NOTI.size(lines[0])
+        self.rect = pg.Rect((0, 0), (x + 20, y * len(lines)))
+        if gap is not None:
+            pos = add_gap(pos, gap)
+        setattr(self.rect, align, pos)
+        self.text = Text(text, self.rect.center, font=FONT_NOTI, gap=None)
+
+    def draw(self, screen: pg.Surface) -> None:
+        pg.draw.rect(screen, LIGHT_GRAY, self.rect)
+        self.text.draw(screen)
+
+
 class Button:
-    def __init__(self, text: str, pos: tuple[int, int], align: str = "center",
+    def __init__(self, text: str, pos: tuple[int, int],
+                 align: str = "center",
                  gap: tuple[int, int] | None = (0, 50),
                  on_click: Callable[[], None] | None = None):
         self.color = DARK_GRAY
-        self.rect = pg.Rect((0, 0), FONT_DEFAULT.size(text))
+        size = FONT_DEFAULT.size(text)
+        self.rect = pg.Rect((0, 0), size)
         if gap is not None:
             pos = add_gap(pos, gap)
         setattr(self.rect, align, pos)
