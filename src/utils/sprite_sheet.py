@@ -49,6 +49,5 @@ class SpriteSheet(BaseModel):
                 self.animations[self.current_animation]):
             self.animation_finished = True
 
-
         return self.frames[self.animations[self.current_animation][
             self.current_frame]]
