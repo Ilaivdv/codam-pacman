@@ -24,15 +24,24 @@ class Pause(GameObject):
             self.buttons.append(bu)
             x, y = add_gap(bu.rect.midbottom, GAP_DEFAULT)
 
+    def __str__(self) -> str:
+        return (self.__class__.__name__)
+
     def continue_game(self) -> None:
-        ...
+        assert game is not None
+        from src.obj.level import Level
+        game.remove_from_tree(self)
+        game.add_to_tree(Level())
 
     def quit_game(self) -> None:
         pg.quit()
         sys.exit()
 
     def show_rank(self) -> None:
-        ...
+        assert game is not None
+        game.remove_from_tree(self)
+        from src.obj.rank import Rank
+        game.add_to_tree(Rank())
 
     def process(self) -> None:
         assert game is not None

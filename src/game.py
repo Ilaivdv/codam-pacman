@@ -3,6 +3,8 @@ from src.obj import GameObject
 from src.config import Config
 from src.utils import Assets
 import pygame as pg
+from src.score import Score
+from typing import Any
 
 
 def start_game(config_file: str) -> None:
@@ -18,8 +20,11 @@ def start_game(config_file: str) -> None:
         print(e)
     else:
         game = Game(assets=loaded_assets)
-        from obj.menu import Menu
-        game.add_to_tree(Menu)
+        if settings.notification is not []:
+            from src.obj.notification import Notification
+            game.add_to_tree(Notification())
+        from src.obj.menu import Menu
+        game.add_to_tree(Menu())
         game.start_process()
 
 
@@ -31,8 +36,7 @@ class Game:
         self._resolution: tuple[int, int] = pg.display.get_desktop_sizes()[0]
         self._clock: pg.time.Clock = pg.time.Clock()
         self._running: bool = False
-        self._rank: dict[str, int] = Config.parse_highscore()
-        self._current_score: int = 0
+        self._score: Score = Score()
 
     def start_process(self) -> None:
         self._running = True
@@ -90,7 +94,7 @@ class GameSettings(BaseModel):
     points_per_ghost: int = Field(gt=0, frozen=True)
     seed: int = Field(frozen=True)
     level_max_time: int = Field(gt=0, frozen=True)
-    notification: list[str] | None = Field(frozen=True)
+    notification: list[str | Any] = Field(frozen=True)
 
 
 settings: GameSettings | None = None

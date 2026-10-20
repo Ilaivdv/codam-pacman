@@ -18,8 +18,8 @@ class Rank(GameObject):
                           align="center")
         self.elements: list[Any] = [title, hint]
         x, y = add_gap(hint.rect.midbottom, GAP_DEFAULT)
-        for index, name in enumerate(game._rank, 1):
-            score: int = game._rank[name]
+        for index, name in enumerate(game._score.rank, 1):
+            score: int = game._score.current
             text = Text(f"{index}.{name} - {score}pts", (x, y))
             x, y = text.rect.midbottom
             self.elements.append(text)
@@ -29,10 +29,19 @@ class Rank(GameObject):
         self.elements.append(bu)
 
     def back_to_menu(self) -> None:
-        ...
+        assert game is not None
+        from src.obj.menu import Menu
+        game.remove_from_tree(self)
+        game.add_to_tree(Menu())
+
+    def __str__(self) -> str:
+        return (self.__class__.__name__)
 
     def play(self) -> None:
-        ...
+        assert game is not None
+        from src.obj.level import Level
+        game.remove_from_tree(self)
+        game.add_to_tree(Level())
 
     def process(self) -> None:
         assert game is not None
@@ -45,3 +54,6 @@ class Rank(GameObject):
                 sys.exit()
             for bu in self.buttons:
                 bu.handle_event(event)
+            if event.type == pg.KEYDOWN:
+                if event.key == pg.K_SPACE:
+                    self.play()
