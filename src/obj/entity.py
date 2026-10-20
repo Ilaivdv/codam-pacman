@@ -103,3 +103,7 @@ class Entity(GameObject, pg.sprite.Sprite, ABC):
     @abstractmethod
     def on_collide(self, group_name: str) -> None:
         ...
+
+    def __str__(self) -> str:
+        """ Returns the name of parent class. """
+        return self.__class__.__name__

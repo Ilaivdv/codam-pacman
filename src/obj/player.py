@@ -15,15 +15,13 @@ class Player(Entity):
         assert game is not None
 
         self.sprite: SpriteSheet = SpriteSheet(image=game.assets.player)
-        super().__init__(sprite_groups, tile_size,
-                         self.sprite.frames[0], maze,
-                         pos, speed)
-
-        self.stop_at_target: bool = False
+        super().__init__(sprite_groups, tile_size, self.sprite.frames[0],
+                         maze, pos, speed)
         self.sprite_groups["player"].add(self)
         self.collides_with: dict[str, pg.sprite.Group[Entity]] = {
                 k: self.sprite_groups[k] for k in ["enemy"]}
 
+        self.stop_at_target: bool = False
         self.current_speed: int = self.speed
         self.input_buffer: Direction = Direction.NONE
         self.sprite.animations = {
@@ -80,4 +78,6 @@ class Player(Entity):
         self.image = pg.transform.flip(self.image, self.flipped, False)
 
     def on_collide(self, group_name: str) -> None:
-        ...
+        assert game is not None
+        game.remove_from_tree(self)
+        print("player dead")
