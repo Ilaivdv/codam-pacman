@@ -12,7 +12,6 @@ class Notification(GameObject):
         assert settings is not None
         self.hold = 2000
         self.fade = 2000
-        self.start = pg.time.get_ticks()
         area = game.display.get_rect()
         all_text: str = ""
         messages = settings.notification
@@ -22,25 +21,19 @@ class Notification(GameObject):
         self.noti: Noti = Noti(all_text,
                                add_gap(area.topright, GAP_DEFAULT),
                                "midright")
-
-    def init(self) -> None:
-        assert game is not None
-        game.remove_from_tree(self)
+        self.alpha: int = 255
+        self.elapsed: int = 0
 
     def __str__(self) -> str:
         return (self.__class__.__name__)
 
     def process(self) -> None:
         assert game is not None
-        progress: int = pg.time.get_ticks() - self.start
-        if self.hold + self.fade <= progress:
-            self.init()
-            pg.display.update()
-            return
-        if progress <= self.hold:
-            alpha: float | int = 1
-        else:
-            alpha = 1 - (progress - self.hold) / self.fade
-        self.noti.surface.set_alpha(int(alpha * 255))
-        self.noti.draw(game.display)
-        pg.display.update()
+        self.elapsed += pg.time.get_ticks()
+        if self.elapsed >= self.hold:
+            self.alpha -= 2
+            self.noti.surface.set_alpha(int(self.alpha))
+        if self.alpha < 0:
+            assert game is not None
+            game.remove_from_tree(self)
+        self.noti.draw()

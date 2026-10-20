@@ -54,7 +54,7 @@ class Game:
         pg.quit()
 
     def add_to_tree(self, obj: GameObject) -> None:
-        self._process_tree.append(obj)
+        self._process_tree.insert(0, obj)
 
     def remove_from_tree(self, obj: GameObject) -> None:
         self._process_tree.remove(obj)

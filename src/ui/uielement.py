@@ -45,8 +45,10 @@ class Noti:
         self.rect = self.surface.get_rect()
         setattr(self.rect, align, pos)
 
-    def draw(self, screen: pg.Surface) -> None:
-        screen.blit(self.surface, self.rect)
+    def draw(self) -> None:
+        from src.game import game
+        assert game is not None
+        game.display.blit(self.surface, self.rect)
 
 
 class Button:
