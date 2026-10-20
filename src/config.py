@@ -67,7 +67,7 @@ class Config(BaseModel):
         if notification:
             game_set["notification"] = notification
         else:
-            game_set["notification"] = None
+            game_set["notification"] = []
         return game_set
 
     @staticmethod
@@ -81,8 +81,12 @@ class Config(BaseModel):
                     highscore_dict: Any = json.load(f)
             except ConfigError as e:
                 print(e)
-            return (dict(sorted(highscore_dict.items(), key=lambda x: x[1],
-                         reverse=True)))
+            if len(highscore_dict) == 1:
+                return highscore_dict
+            else:
+                return (dict(sorted(highscore_dict.items(),
+                                    key=lambda x: x[1],
+                                    reverse=True)[:10]))
         else:
             with open(file_path, 'w') as f:
                 pass

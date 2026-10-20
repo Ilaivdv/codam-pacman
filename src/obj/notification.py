@@ -10,39 +10,30 @@ class Notification(GameObject):
     def __init__(self) -> None:
         assert game is not None
         assert settings is not None
-        self.duration = 4000
-        self.active = True
-        self.start = pg.time.get_ticks()
+        self.hold = 2000
+        self.fade = 2000
         area = game.display.get_rect()
         all_text: str = ""
-        self.notis: list[Noti] = []
-        if not settings.notification:
-            messages = ["NOTICE: Missing {key} in config.json,"
-                        "using a default value: points_per_super_pacgum",
-                        "NOTICE: Missing {key} in config.json, "
-                        "using a default value."]
-        else:
-            messages = settings.notification
+        messages = settings.notification
         for i in messages:
             all_text += "\n".join(textwrap.wrap(i, width=50))
             all_text += "\n"
-        bu = Noti(all_text,
-                  add_gap(area.topright, GAP_DEFAULT),
-                  "midright")
-        self.notis.append(bu)
+        self.noti: Noti = Noti(all_text,
+                               add_gap(area.topright, GAP_DEFAULT),
+                               "midright")
+        self.alpha: int = 255
+        self.elapsed: int = 0
 
-    def init(self) -> None:
-        self.active = False
-        self.notis.clear()
+    def __str__(self) -> str:
+        return (self.__class__.__name__)
 
     def process(self) -> None:
         assert game is not None
-        if not self.active:
-            return
-        now = pg.time.get_ticks()
-        if self.start + self.duration < now:
-            self.init()
-            pg.display.update()
-            return
-        for bu in self.notis:
-            bu.draw(game.display)
+        self.elapsed += pg.time.get_ticks()
+        if self.elapsed >= self.hold:
+            self.alpha -= 2
+            self.noti.surface.set_alpha(int(self.alpha))
+        if self.alpha < 0:
+            assert game is not None
+            game.remove_from_tree(self)
+        self.noti.draw()

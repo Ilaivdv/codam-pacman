@@ -1,8 +1,6 @@
 from src.utils.colors import YELLOW, DARK_GRAY, LIGHT_GRAY, GRAY
 import pygame as pg
 from typing import Callable
-import os
-import json
 from .uiconstant import FONT_NOTI, GAP_NOTI, FONT_DEFAULT
 
 
@@ -35,18 +33,22 @@ class Noti:
     def __init__(self, text: str, pos: tuple[int, int],
                  align: str = "center",
                  gap: tuple[int, int] | None = GAP_NOTI):
-        self.color = DARK_GRAY
         lines = text.split("\n")
         x, y = FONT_NOTI.size(lines[0])
-        self.rect = pg.Rect((0, 0), (x + 20, y * len(lines)))
+        self.surface = pg.Surface((x + 20, y * len(lines)), pg.SRCALPHA)
+        pg.draw.rect(self.surface, (40, 40, 40, 220),
+                     self.surface.get_rect())
         if gap is not None:
             pos = add_gap(pos, gap)
+        self.text = FONT_NOTI.render(text, True, (255, 255, 255))
+        self.surface.blit(self.text)
+        self.rect = self.surface.get_rect()
         setattr(self.rect, align, pos)
-        self.text = Text(text, self.rect.center, font=FONT_NOTI, gap=None)
 
-    def draw(self, screen: pg.Surface) -> None:
-        pg.draw.rect(screen, LIGHT_GRAY, self.rect)
-        self.text.draw(screen)
+    def draw(self) -> None:
+        from src.game import game
+        assert game is not None
+        game.display.blit(self.surface, self.rect)
 
 
 class Button:
@@ -109,24 +111,19 @@ class InputBox:
         self.button.draw(screen)
         pg.draw.rect(screen, self.color, self.rect, 2)
 
-    def update_highscore_file(self, rank: dict[str, int]) -> None:
-        path = os.path.expanduser("~/.local/share/highscore.json")
-        try:
-            with open(path, "w") as f:
-                json.dump(rank, f)
-        except Exception as e:
-            print(e)
-
     def create_new_score(self) -> None:
         from src.game import game
         assert game is not None
-        game._rank[self.text] = game._current_score
-        self.update_highscore_file(game._rank)
+        game._score.set_username(self.text)
+        game._score.update_rank()
+        game._score.update_file()
 
     def name_check(self) -> None:
         result: bool = (self.text != " "
                         and all(c.isalpha() or c.isspace() for c in self.text))
         if result is True:
+            if not self.text:
+                self.text = "Please enter at least 1 character"
             if len(self.text) > 10:
                 self.text = "Please enter a shorter name"
             else:

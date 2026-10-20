@@ -14,6 +14,8 @@ class Win(GameObject):
         area = game.display.get_rect()
         title: Text = Text("YOU WIN!", area.center,
                            FONT_TITLE, gap=(0, -100), color=YELLOW)
+        score: Text = Text(f"Score: {game._score.current}", title.rect.midtop,
+                           FONT_TITLE, "midbottom", gap=(0, -50), color=YELLOW)
         self.input_box: InputBox = InputBox("Click to enter your name here",
                                             title.rect.midbottom, "midtop",
                                             color=LIGHT_GRAY)
@@ -22,13 +24,22 @@ class Win(GameObject):
         bu: Button = Button("Back to menu", self.input_box.rect.midbottom,
                             "midtop", GAP_MID, self.back_to_menu)
         self.buttons: list[Button] = [bu, bu2]
-        self.elements: list[Any] = [bu, bu2, title, self.input_box]
+        self.elements: list[Any] = [bu, bu2, title, self.input_box, score]
 
     def continue_game(self) -> None:
-        ...
+        assert game is not None
+        game.remove_from_tree(self)
+        from src.obj.level import Level
+        game.add_to_tree(Level())
+
+    def __str__(self) -> str:
+        return (self.__class__.__name__)
 
     def back_to_menu(self) -> None:
-        ...
+        assert game is not None
+        from src.obj.menu import Menu
+        game.remove_from_tree(self)
+        game.add_to_tree(Menu())
 
     def process(self) -> None:
         assert game is not None

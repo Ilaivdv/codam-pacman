@@ -1,5 +1,5 @@
 import pygame as pg
-from src.game import game
+from src.game import game, settings
 import sys
 from src.obj import GameObject
 from src.ui.uielement import Button, Image, add_gap
@@ -11,6 +11,7 @@ from typing import Callable, Any
 class Menu(GameObject):
     def __init__(self) -> None:
         assert game is not None
+        assert settings is not None
         area = game.display.get_rect()
         path = "assets/pacman-outfit-0.jpg"
         start_im = Image(path, None, area.midtop, "midtop")
@@ -29,14 +30,20 @@ class Menu(GameObject):
             x, y = add_gap(bu.rect.midbottom, GAP_DEFAULT)
 
     def start_game(self) -> None:
-        ...
+        assert game is not None
+        game.remove_from_tree(self)
+        from src.obj.level import Level
+        game.add_to_tree(Level())
 
     def quit_game(self) -> None:
         pg.quit()
         sys.exit()
 
     def show_rank(self) -> None:
-        ...
+        assert game is not None
+        game.remove_from_tree(self)
+        from src.obj.rank import Rank
+        game.add_to_tree(Rank())
 
     def process(self) -> None:
         assert game is not None

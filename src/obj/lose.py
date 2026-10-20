@@ -14,16 +14,24 @@ class Lose(GameObject):
         area = game.display.get_rect()
         title: Text = Text("GAME OVER", area.center,
                            FONT_TITLE, gap=(0, -100), color=YELLOW)
+        score: Text = Text(f"Score:{game._score.current}", title.rect.midtop,
+                           FONT_TITLE, "midbottom", gap=(0, -50), color=YELLOW)
         self.input_box: InputBox = InputBox("Click to enter your name here",
                                             title.rect.midbottom, "midtop",
                                             color=LIGHT_GRAY)
         bu: Button = Button("Back to menu", self.input_box.rect.midbottom,
                             "midtop", GAP_MID, self.back_to_menu)
         self.buttons: list[Button] = [bu]
-        self.elements: list[Any] = [bu, title, self.input_box]
+        self.elements: list[Any] = [bu, title, self.input_box, score]
 
     def back_to_menu(self) -> None:
-        ...
+        assert game is not None
+        from src.obj.menu import Menu
+        game.remove_from_tree(self)
+        game.add_to_tree(Menu())
+
+    def __str__(self) -> str:
+        return (self.__class__.__name__)
 
     def process(self) -> None:
         assert game is not None
