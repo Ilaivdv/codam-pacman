@@ -1,6 +1,6 @@
 from src.utils.colors import RED, PINK, CYAN, BLUE, PURPLE
+from src.obj.entity import Entity, Direction
 from src.utils import SpriteSheet, State
-from src.obj.entity import Entity
 from src.game import game
 import pygame as pg
 import random
@@ -18,18 +18,6 @@ class Enemy(Entity):
         assert game is not None
 
         image: pg.Surface = game.assets.enemy1
-        # match variant:
-        #     case 0:
-        #         image = game.assets.enemy0
-        #     case 1:
-        #         image = game.assets.enemy1
-        #     case 2:
-        #         image = game.assets.enemy2
-        #     case 3:
-        #         image = game.assets.enemy3
-        #     case _:
-        #         image = game.assets.enemy0
-
         color: tuple[int, int, int] = random.choice([
             RED,
             PINK,
@@ -48,6 +36,7 @@ class Enemy(Entity):
         self.current_state: State = self.ChasingState(self)
 
         self.player_pos: pg.Vector2 = player_pos
+        self._get_neighbors()
 
         game.add_to_tree(self)
 
@@ -58,6 +47,16 @@ class Enemy(Entity):
     def on_collide(self, group_name: str) -> None:
         assert game is not None
         self.remove(self.sprite_groups["consumable"])
+
+    def _get_neighbors(self) -> list[Direction]:
+        res: list[Direction] = []
+        x, y = self.current_maze_position
+        for i in Direction:
+            if i == Direction.NONE:
+                continue
+            if not self.maze[y][x] & i:
+                res.append(i)
+        return res
 
     class ChasingState(State):
         def on_enter(self) -> None:
