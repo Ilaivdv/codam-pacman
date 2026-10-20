@@ -37,6 +37,7 @@ class Game:
         self._clock: pg.time.Clock = pg.time.Clock()
         self._running: bool = False
         self._score: Score = Score()
+        self._life: int = 3
 
     def start_process(self) -> None:
         self._running = True
