@@ -56,7 +56,6 @@ class Enemy(Entity):
     def on_collide(self, group_name: str) -> None:
         assert game is not None
         self.remove(self.sprite_groups["consumable"])
-        print("enemy collision")
 
     class ChasingState(State):
         def on_enter(self) -> None:

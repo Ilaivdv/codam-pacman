@@ -27,7 +27,7 @@ class Player(Entity):
         self.sprite.animations = {
                 "idle": [3],
                 "moving": [0, 1, 3, 2, 1],
-                "dead": [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+                "dead": [4, 5, 6, 7, 8, 9, 10, 11, 11, 12, 13, 14, 15]
                 }
         self.rotation: int = 0
         self.flipped: bool = False
@@ -46,6 +46,7 @@ class Player(Entity):
             self.move_direction = Direction.NONE
             if self.sprite.animation_finished:
                 game.remove_from_tree(self)
+                self.remove(self.sprite_groups["player"])
             return
 
         key_pressed = pg.key.get_just_pressed()
@@ -91,4 +92,3 @@ class Player(Entity):
     def on_collide(self, group_name: str) -> None:
         assert game is not None
         self.is_dead = True
-        print("player dead")
