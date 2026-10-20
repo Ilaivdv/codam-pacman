@@ -4,6 +4,7 @@ from src.utils.colors import BLACK
 from src.obj.player import Player
 from src.obj.entity import Entity
 from src.utils import SpriteSheet
+from src.obj.enemy import Enemy
 from src.obj import GameObject
 from random import randint
 from src.game import game  # noqa: F401
@@ -43,6 +44,10 @@ class Level(GameObject):
                                      self.player_spawn_pos, 1)
         self.pacgums: list[Consumable] = []
         self._spawn_pacgums(30, 0)
+        self.enemy0: Enemy = Enemy(self.sprite_groups,
+                                   self.tileset.frame_size,
+                                   self.maze,
+                                   (0, 0), 1, 1)
 
     def _get_display_maze_scale(self) -> int:
         assert game is not None
