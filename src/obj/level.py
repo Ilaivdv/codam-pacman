@@ -33,9 +33,9 @@ class Level(GameObject):
                 self.screen.get_rect().centery * self.scale)
 
         self.sprite_groups: dict[str, pg.sprite.Group[Entity]] = {
-                "player": pg.sprite.Group(),
                 "consumable": pg.sprite.Group(),
                 "enemy": pg.sprite.Group(),
+                "player": pg.sprite.Group(),
                 }
         self.player_spawn_pos: tuple[int, int] = self._get_maze_center()
         self.player: Player = Player(self.sprite_groups,
@@ -47,7 +47,7 @@ class Level(GameObject):
         self.enemy0: Enemy = Enemy(self.sprite_groups,
                                    self.tileset.frame_size,
                                    self.maze,
-                                   (0, 0), 1, 1)
+                                   (0, 0), 1, 2)
 
     def _get_display_maze_scale(self) -> int:
         assert game is not None
