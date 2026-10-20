@@ -4,6 +4,7 @@ from src.utils.colors import BLACK
 from src.obj.player import Player
 from src.obj.entity import Entity
 from src.utils import SpriteSheet
+from src.obj.enemy import Enemy
 from src.obj import GameObject
 from random import randint
 from src.game import game  # noqa: F401
@@ -24,7 +25,6 @@ class Level(GameObject):
                 (len(self.maze[0]) * self.tileset.frame_size[0],
                  len(self.maze) * self.tileset.frame_size[1]))
         self.scale: int = self._get_display_maze_scale()
-
         self.pos: tuple[int, int] = (
                 game.display.get_rect().centerx -
                 self.screen.get_rect().centerx * self.scale,
@@ -32,9 +32,9 @@ class Level(GameObject):
                 self.screen.get_rect().centery * self.scale)
 
         self.sprite_groups: dict[str, pg.sprite.Group[Entity]] = {
-                "player": pg.sprite.Group(),
                 "consumable": pg.sprite.Group(),
                 "enemy": pg.sprite.Group(),
+                "player": pg.sprite.Group(),
                 }
         self.player_spawn_pos: tuple[int, int] = self._get_maze_center()
         self.player: Player = Player(self.sprite_groups,
@@ -43,6 +43,10 @@ class Level(GameObject):
                                      self.player_spawn_pos, 1)
         self.pacgums: list[Consumable] = []
         self._spawn_pacgums(30, 0)
+        self.enemy0: Enemy = Enemy(self.sprite_groups,
+                                   self.tileset.frame_size,
+                                   self.maze, (0, 0),
+                                   pg.Vector2(self.player_spawn_pos), 1)
 
     def _get_display_maze_scale(self) -> int:
         assert game is not None
@@ -94,6 +98,8 @@ class Level(GameObject):
         assert game is not None
 
         game.display.fill(BLACK)
+        self.enemy0.player_pos = pg.Vector2(self.player.current_maze_position)
+        print(self.enemy0.player_pos)
 
         # Draw the maze
         for y in range(0, len(self.maze)):

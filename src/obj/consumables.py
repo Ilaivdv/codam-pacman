@@ -28,5 +28,4 @@ class Consumable(Entity):
     def on_collide(self, group_name: str) -> None:
         assert game is not None
         self.remove(self.sprite_groups["consumable"])
-        print("collided")
         game.remove_from_tree(self)

@@ -83,7 +83,8 @@ class Entity(GameObject, pg.sprite.Sprite, ABC):
     @abstractmethod
     def process(self) -> None:
         for name, group in self.collides_with.items():
-            if pg.sprite.spritecollide(self, group, False):
+            if pg.sprite.spritecollide(
+                    self, group, False, pg.sprite.collide_rect_ratio(0.5)):
                 self.on_collide(name)
 
         if self.target_reached() and self.stop_at_target:
@@ -103,3 +104,7 @@ class Entity(GameObject, pg.sprite.Sprite, ABC):
     @abstractmethod
     def on_collide(self, group_name: str) -> None:
         ...
+
+    def __str__(self) -> str:
+        """ Returns the name of parent class. """
+        return self.__class__.__name__

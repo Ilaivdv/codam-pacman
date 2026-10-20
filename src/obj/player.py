@@ -15,30 +15,40 @@ class Player(Entity):
         assert game is not None
 
         self.sprite: SpriteSheet = SpriteSheet(image=game.assets.player)
-        super().__init__(sprite_groups, tile_size,
-                         self.sprite.frames[0], maze,
-                         pos, speed)
-
-        self.stop_at_target: bool = False
+        super().__init__(sprite_groups, tile_size, self.sprite.frames[0],
+                         maze, pos, speed)
         self.sprite_groups["player"].add(self)
         self.collides_with: dict[str, pg.sprite.Group[Entity]] = {
                 k: self.sprite_groups[k] for k in ["enemy"]}
 
+        self.stop_at_target: bool = False
         self.current_speed: int = self.speed
         self.input_buffer: Direction = Direction.NONE
         self.sprite.animations = {
                 "idle": [3],
                 "moving": [0, 1, 3, 2, 1],
-                "dead": [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+                "dead": [4, 5, 6, 7, 8, 9, 10, 11, 11, 12, 13, 14, 15]
                 }
         self.rotation: int = 0
         self.flipped: bool = False
+
+        self.is_dead: bool = False
 
         game.add_to_tree(self)
 
     def process(self) -> None:
         super().process()
         assert game is not None
+
+        if self.is_dead:
+            self.image = self.sprite.process_animation("dead",
+                                                       game.clock.get_time())
+            self.move_direction = Direction.NONE
+            if self.sprite.animation_finished:
+                game.remove_from_tree(self)
+                self.remove(self.sprite_groups["player"])
+            return
+
         key_pressed = pg.key.get_just_pressed()
 
         if key_pressed[pg.K_w] or key_pressed[pg.K_UP]:
@@ -80,4 +90,5 @@ class Player(Entity):
         self.image = pg.transform.flip(self.image, self.flipped, False)
 
     def on_collide(self, group_name: str) -> None:
-        ...
+        assert game is not None
+        self.is_dead = True
