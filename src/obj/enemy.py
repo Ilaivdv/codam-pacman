@@ -37,8 +37,12 @@ class Enemy(Entity):
         self.collides_with: dict[str, pg.sprite.Group[Entity]] = {
                 k: self.sprite_groups[k] for k in ["player"]}
 
+        game.add_to_tree(self)
+
     def process(self) -> None:
-        ...
+        super().process()
 
     def on_collide(self, group_name: str) -> None:
-        ...
+        assert game is not None
+        self.remove(self.sprite_groups["consumable"])
+        print("enemy collision")
