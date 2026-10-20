@@ -1,8 +1,9 @@
+from src.utils.colors import RED, PINK, CYAN, BLUE, PURPLE
 from src.obj.entity import Entity, Direction
-from src.utils import SpriteSheet
-from src.utils import State
+from src.utils import SpriteSheet, State
 from src.game import game
 import pygame as pg
+import random
 
 
 class Enemy(Entity):
@@ -29,6 +30,15 @@ class Enemy(Entity):
             case _:
                 image = game.assets.enemy0
 
+        color: tuple[int, int, int] = random.choice([
+            RED,
+            PINK,
+            CYAN,
+            BLUE,
+            PURPLE
+            ])
+
+        image.fill(color, special_flags=pg.BLEND_MULT)
         self.sprite: SpriteSheet = SpriteSheet(image=image)
         super().__init__(sprite_groups, tile_size, self.sprite.frames[0],
                          maze, pos, speed)
