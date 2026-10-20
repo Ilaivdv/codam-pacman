@@ -32,11 +32,22 @@ class Player(Entity):
         self.rotation: int = 0
         self.flipped: bool = False
 
+        self.is_dead: bool = False
+
         game.add_to_tree(self)
 
     def process(self) -> None:
         super().process()
         assert game is not None
+
+        if self.is_dead:
+            self.image = self.sprite.process_animation("dead",
+                                                       game.clock.get_time())
+            self.move_direction = Direction.NONE
+            if self.sprite.animation_finished:
+                game.remove_from_tree(self)
+            return
+
         key_pressed = pg.key.get_just_pressed()
 
         if key_pressed[pg.K_w] or key_pressed[pg.K_UP]:
@@ -79,5 +90,5 @@ class Player(Entity):
 
     def on_collide(self, group_name: str) -> None:
         assert game is not None
-        game.remove_from_tree(self)
+        self.is_dead = True
         print("player dead")
