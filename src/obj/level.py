@@ -25,7 +25,6 @@ class Level(GameObject):
                 (len(self.maze[0]) * self.tileset.frame_size[0],
                  len(self.maze) * self.tileset.frame_size[1]))
         self.scale: int = self._get_display_maze_scale()
-
         self.pos: tuple[int, int] = (
                 game.display.get_rect().centerx -
                 self.screen.get_rect().centerx * self.scale,
@@ -46,8 +45,8 @@ class Level(GameObject):
         self._spawn_pacgums(30, 0)
         self.enemy0: Enemy = Enemy(self.sprite_groups,
                                    self.tileset.frame_size,
-                                   self.maze,
-                                   (0, 0), 1, 2)
+                                   self.maze, (0, 0),
+                                   pg.Vector2(self.player_spawn_pos), 1)
 
     def _get_display_maze_scale(self) -> int:
         assert game is not None
@@ -99,6 +98,8 @@ class Level(GameObject):
         assert game is not None
 
         game.display.fill(BLACK)
+        self.enemy0.player_pos = pg.Vector2(self.player.current_maze_position)
+        print(self.enemy0.player_pos)
 
         # Draw the maze
         for y in range(0, len(self.maze)):
