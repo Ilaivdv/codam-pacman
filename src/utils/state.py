@@ -21,7 +21,7 @@ class State(ABC):
         pass
 
     @abstractmethod
-    def on_event(self) -> None:
+    def state_process(self) -> None:
         """ Handle events for current state. """
         pass
 

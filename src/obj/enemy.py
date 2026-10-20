@@ -1,5 +1,6 @@
 from src.obj.entity import Entity, Direction
 from src.utils import SpriteSheet
+from src.utils import State
 from src.game import game
 import pygame as pg
 
@@ -29,20 +30,34 @@ class Enemy(Entity):
                 image = game.assets.enemy0
 
         self.sprite: SpriteSheet = SpriteSheet(image=image)
-        super().__init__(sprite_groups, tile_size,
-                         self.sprite.frames[0], maze,
-                         pos, speed)
-
+        super().__init__(sprite_groups, tile_size, self.sprite.frames[0],
+                         maze, pos, speed)
         self.sprite_groups["enemy"].add(self)
         self.collides_with: dict[str, pg.sprite.Group[Entity]] = {
                 k: self.sprite_groups[k] for k in ["player"]}
+        self.current_state: State = self.ChasingState(self)
 
         game.add_to_tree(self)
 
     def process(self) -> None:
         super().process()
+        self.current_state.state_process()
 
     def on_collide(self, group_name: str) -> None:
         assert game is not None
         self.remove(self.sprite_groups["consumable"])
         print("enemy collision")
+
+    class ChasingState(State):
+        def on_enter(self) -> None:
+            pass
+
+        def state_process(self) -> None:
+            ...
+
+    class RunningState(State):
+        def on_enter(self) -> None:
+            pass
+
+        def state_process(self) -> None:
+            ...
