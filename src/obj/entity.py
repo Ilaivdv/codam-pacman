@@ -44,6 +44,39 @@ class Entity(GameObject, pg.sprite.Sprite, ABC):
         return ((pos[0] * offset_x) + (offset_x - self.rect.width) // 2,
                 (pos[1] * offset_y) + (offset_y - self.rect.height) // 2)
 
+    def _get_neighbors(self,
+                       pos: tuple[int, int] | None = None) -> list[Direction]:
+        if not pos:
+            pos = self.current_maze_position
+
+        res: list[Direction] = []
+        x, y = pos
+        for i in Direction:
+            if i == Direction.NONE:
+                continue
+            if not self.maze[y][x] & i:
+                res.append(i)
+        return res
+
+    def _get_maze_cell(self, direction: Direction) -> tuple[int, int]:
+        res: tuple[int, int]
+        match direction:
+            case Direction.UP:
+                res = (self.current_maze_position[0],
+                       self.current_maze_position[1] - 1)
+            case Direction.RIGHT:
+                res = (self.current_maze_position[0] + 1,
+                       self.current_maze_position[1])
+            case Direction.DOWN:
+                res = (self.current_maze_position[0],
+                       self.current_maze_position[1] + 1)
+            case Direction.LEFT:
+                res = (self.current_maze_position[0] - 1,
+                       self.current_maze_position[1])
+            case Direction.NONE:
+                res = self.current_maze_position
+        return res
+
     def target_reached(self) -> bool:
         if pg.Vector2(self.rect.topleft) == self.target_position:
             self.current_maze_position = (int(self.target_position.x //
