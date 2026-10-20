@@ -4,6 +4,7 @@ from src.utils import SpriteSheet, State
 from src.game import game
 import pygame as pg
 import random
+import heapq
 
 
 class Enemy(Entity):
@@ -57,15 +58,36 @@ class Enemy(Entity):
             if not self.maze[y][x] & i:
                 res.append(i)
         return res
+    
+    def _get_shortest(self) -> Direction:
+        x, y = self.current_maze_position
+        heuristic = abs(x - self.player_pos.x) + abs(y - self.player_pos.y) 
+        visited_cells = [[False for _ in range(self.maze[1])]
+                         for _ in range(self.maze)]
+        open_list = []
+        heapq.heappush(open_list, (0.0, x, y))
+
+        while len(open_list) > 0:
+            ...
+
+        return Direction.NONE
 
     class ChasingState(State):
+        def __init__(self, parent: Enemy) -> None:
+            super().__init__(parent)
+            self.parent: Enemy = parent
+
         def on_enter(self) -> None:
             pass
 
         def state_process(self) -> None:
+            # self.parent.move_to_pos(self.parent._get_shortest(self.parent._get_neighbors()))
             ...
 
     class RunningState(State):
+        def __init__(self, parent: Enemy) -> None:
+            super().__init__(parent)
+
         def on_enter(self) -> None:
             pass
 
