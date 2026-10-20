@@ -10,6 +10,7 @@ class SpriteSheet(BaseModel):
     frames: list[pg.Surface] = Field(default=list())
 
     animations: dict[str, list[int]] = Field(default_factory=dict)
+    animation_finished: bool = False
     current_animation: str = Field(default="")
     current_frame: int = Field(default=0)
     last_frame_update: int = Field(gt=0, default=0)
@@ -32,15 +33,22 @@ class SpriteSheet(BaseModel):
                           current_time: int) -> pg.Surface:
         self.last_frame_update += current_time
         if animation != self.current_animation:
+            self.animation_finished = False
             self.current_animation = animation
             self.current_frame = 0
 
         if self.last_frame_update >= self.frame_duration:
+            self.animation_finished = False
             self.last_frame_update = 0
             self.current_frame += 1
             if self.current_frame >= len(
                     self.animations[self.current_animation]):
                 self.current_frame = 0
+
+        if self.current_frame + 1 >= len(
+                self.animations[self.current_animation]):
+            self.animation_finished = True
+
 
         return self.frames[self.animations[self.current_animation][
             self.current_frame]]
