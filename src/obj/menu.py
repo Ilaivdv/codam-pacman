@@ -33,7 +33,11 @@ class Menu(GameObject):
         assert game is not None
         game.remove_from_tree(self)
         from src.obj.level import Level
-        game.add_to_tree(Level())
+        from src.obj.level_add import Level_add
+        level: Level = Level()
+        game.add_to_tree(Level_add(level))
+        game.add_to_tree(level)
+        game._stash['Level'] = level
 
     def quit_game(self) -> None:
         pg.quit()

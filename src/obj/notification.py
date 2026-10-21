@@ -32,8 +32,8 @@ class Notification(GameObject):
         self.elapsed += pg.time.get_ticks()
         if self.elapsed >= self.hold:
             self.alpha -= 2
-            self.noti.surface.set_alpha(int(self.alpha))
-        if self.alpha < 0:
+            self.noti.surface.set_alpha(self.alpha)
+        if self.alpha <= 0:
             assert game is not None
             game.remove_from_tree(self)
         self.noti.draw()
