@@ -58,23 +58,30 @@ class Entity(GameObject, pg.sprite.Sprite, ABC):
                 res.append(i)
         return res
 
-    def _get_maze_cell(self, direction: Direction) -> tuple[int, int]:
+    def _get_maze_cell(self, direction: Direction,
+                       from_pos: tuple[int, int] | None = None
+                       ) -> tuple[int, int]:
+        if not from_pos:
+            from_pos = self.current_maze_position
+        if not self._validate_direction(direction):
+            return from_pos
+
         res: tuple[int, int]
         match direction:
             case Direction.UP:
-                res = (self.current_maze_position[0],
-                       self.current_maze_position[1] - 1)
+                res = (from_pos[0],
+                       from_pos[1] - 1)
             case Direction.RIGHT:
-                res = (self.current_maze_position[0] + 1,
-                       self.current_maze_position[1])
+                res = (from_pos[0] + 1,
+                       from_pos[1])
             case Direction.DOWN:
-                res = (self.current_maze_position[0],
-                       self.current_maze_position[1] + 1)
+                res = (from_pos[0],
+                       from_pos[1] + 1)
             case Direction.LEFT:
-                res = (self.current_maze_position[0] - 1,
-                       self.current_maze_position[1])
+                res = (from_pos[0] - 1,
+                       from_pos[1])
             case Direction.NONE:
-                res = self.current_maze_position
+                res = from_pos
         return res
 
     def target_reached(self) -> bool:
@@ -87,9 +94,13 @@ class Entity(GameObject, pg.sprite.Sprite, ABC):
         else:
             return False
 
-    def _validate_direction(self, direction: Direction) -> bool:
-        if self.maze[self.current_maze_position[1]][
-                self.current_maze_position[0]] & direction:
+    def _validate_direction(self, direction: Direction,
+                            from_pos: tuple[int, int] | None = None
+                            ) -> bool:
+        if not from_pos:
+            from_pos = self.current_maze_position
+        if self.maze[from_pos[1]][
+                from_pos[0]] & direction:
             return False
         else:
             return True
