@@ -39,8 +39,10 @@ class Rank(GameObject):
 
     def play(self) -> None:
         assert game is not None
-        from src.obj.level import Level
         game.remove_from_tree(self)
+        from src.obj.level import Level
+        from src.obj.level_add import Level_add
+        game.add_to_tree(Level_add())
         game.add_to_tree(Level())
 
     def process(self) -> None:
