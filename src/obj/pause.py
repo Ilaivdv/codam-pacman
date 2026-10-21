@@ -29,9 +29,11 @@ class Pause(GameObject):
 
     def continue_game(self) -> None:
         assert game is not None
-        from src.obj.level import Level
         game.remove_from_tree(self)
-        game.add_to_tree(Level())
+        from src.obj.level_add import Level_add
+        level: GameObject = game._stash["Level"]
+        game.add_to_tree(Level_add(level))
+        game.add_to_tree(level)
 
     def quit_game(self) -> None:
         pg.quit()
