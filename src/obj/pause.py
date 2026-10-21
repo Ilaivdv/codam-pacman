@@ -2,9 +2,8 @@ import pygame as pg
 from src.game import game
 import sys
 from src.obj import GameObject
-from src.ui import GAP_DEFAULT
-from src.ui.uielement import Button, add_gap
-from src.utils.colors import DARK_GRAY
+from src.ui import GAP_DEFAULT, GAP_BIG
+from src.ui.uielement import Button, add_gap, Overlay
 from typing import Callable
 
 
@@ -12,9 +11,11 @@ class Pause(GameObject):
     def __init__(self) -> None:
         assert game is not None
         area = game.display.get_rect()
+        self.bg: Overlay = Overlay(add_gap(area.center, GAP_BIG))
         defs: list[tuple[str, Callable[[], None]]] = [
             ("Continue", self.continue_game),
             ("Rank", self.show_rank),
+            ("Cheat Mode", self.cheat),
             ("Quit", self.quit_game)
         ]
         self.buttons: list[Button] = []
@@ -27,13 +28,20 @@ class Pause(GameObject):
     def __str__(self) -> str:
         return (self.__class__.__name__)
 
+    def cheat(self) -> None:
+        assert game is not None
+        game.cheat = True
+        self.continue_game()
+        from src.obj.level import Level
+        from src.obj.level_add import Level_add
+        level: Level = Level()
+        game.add_to_tree(Level_add())
+        game.add_to_tree(level)
+
     def continue_game(self) -> None:
         assert game is not None
         game.remove_from_tree(self)
-        from src.obj.level_add import Level_add
-        level: GameObject = game._stash["Level"]
-        game.add_to_tree(Level_add(level))
-        game.add_to_tree(level)
+        game.is_paused = False
 
     def quit_game(self) -> None:
         pg.quit()
@@ -47,7 +55,7 @@ class Pause(GameObject):
 
     def process(self) -> None:
         assert game is not None
-        game.display.fill(DARK_GRAY)
+        self.bg.draw(game.display)
         for bu in self.buttons:
             bu.draw(game.display)
         for event in pg.event.get():
