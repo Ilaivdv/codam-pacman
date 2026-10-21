@@ -35,10 +35,8 @@ class Level_add(GameObject):
 
     def process(self) -> None:
         assert game is not None
-        game.display.fill(DARK_GRAY)
         for element in self.elements:
             element.draw(game.display)
-        pg.display.update()
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 pg.quit()
