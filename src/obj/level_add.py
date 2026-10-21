@@ -4,7 +4,6 @@ import sys
 from src.obj import GameObject
 from src.ui.uielement import Text, add_gap, Image, CheckBox
 from src.ui.uiconstant import GAP_LIFE, GAP_SCORE, SIZE_LIFE
-from src.utils.colors import DARK_GRAY
 from typing import Any
 
 
