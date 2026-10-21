@@ -1,6 +1,6 @@
 import pygame as pg
 
-GAP_DEFAULT = (0, 50)
+GAP_DEFAULT = (0, 40)
 GAP_MID = (0, 100)
 FONT_NOTI = pg.font.SysFont("Arial", 20)
 FONT_DEFAULT = pg.font.SysFont("Arial", 40)
@@ -13,3 +13,4 @@ GAP_LIFE = (-900, 30)
 GAP_SCORE = (900, 0)
 SIZE_LIFE = (30, 30)
 SIZE_PAUSE = (40, 40)
+SIZE_MENU = (400, 400)

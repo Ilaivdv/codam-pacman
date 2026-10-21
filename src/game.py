@@ -31,7 +31,6 @@ def start_game(config_file: str) -> None:
 class Game:
     def __init__(self, assets: Assets) -> None:
         self._process_tree: list[GameObject] = []
-        self._stash: dict[str, GameObject] = {}
         self._assets: Assets = assets
         self._display: pg.Surface = pg.display.set_mode()
         self._resolution: tuple[int, int] = pg.display.get_desktop_sizes()[0]
@@ -39,6 +38,8 @@ class Game:
         self._running: bool = False
         self._score: Score = Score()
         self._life: int = 3
+        self.is_paused: bool = False
+        self.cheat: bool = False
 
     def start_process(self) -> None:
         self._running = True
@@ -55,8 +56,11 @@ class Game:
 
         pg.quit()
 
-    def add_to_tree(self, obj: GameObject) -> None:
-        self._process_tree.insert(0, obj)
+    def add_to_tree(self, obj: GameObject, front: bool = True) -> None:
+        if front:
+            self._process_tree.insert(0, obj)
+        else:
+            self._process_tree.append(obj)
 
     def remove_from_tree(self, obj: GameObject) -> None:
         self._process_tree.remove(obj)

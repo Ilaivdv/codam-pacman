@@ -18,6 +18,7 @@ class Menu(GameObject):
         defs: list[tuple[str, Callable[[], None]]] = [
             ("Play", self.start_game),
             ("Rank", self.show_rank),
+            ("Cheat", self.cheat),
             ("Quit", self.quit_game)
         ]
         self.elements: list[Any] = [start_im]
@@ -29,15 +30,19 @@ class Menu(GameObject):
             self.elements.append(bu)
             x, y = add_gap(bu.rect.midbottom, GAP_DEFAULT)
 
+    def cheat(self) -> None:
+        assert game is not None
+        game.cheat = True
+        self.start_game()
+
     def start_game(self) -> None:
         assert game is not None
-        game.remove_from_tree(self)
         from src.obj.level import Level
         from src.obj.level_add import Level_add
         level: Level = Level()
-        game.add_to_tree(Level_add(level))
+        game.add_to_tree(Level_add())
         game.add_to_tree(level)
-        game._stash['Level'] = level
+        game.remove_from_tree(self)
 
     def quit_game(self) -> None:
         pg.quit()

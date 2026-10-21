@@ -29,7 +29,6 @@ class Win(GameObject):
     def continue_game(self) -> None:
         assert game is not None
         game.remove_from_tree(self)
-        game.add_to_tree(game._stash["Level"])
 
     def __str__(self) -> str:
         return (self.__class__.__name__)
