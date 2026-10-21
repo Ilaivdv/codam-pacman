@@ -31,6 +31,7 @@ def start_game(config_file: str) -> None:
 class Game:
     def __init__(self, assets: Assets) -> None:
         self._process_tree: list[GameObject] = []
+        self._stash: dict[str, GameObject] = {}
         self._assets: Assets = assets
         self._display: pg.Surface = pg.display.set_mode()
         self._resolution: tuple[int, int] = pg.display.get_desktop_sizes()[0]

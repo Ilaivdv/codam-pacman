@@ -5,11 +5,10 @@ from src.obj import GameObject
 from src.ui.uielement import Text, add_gap, Image, CheckBox
 from src.ui.uiconstant import GAP_LIFE, GAP_SCORE, SIZE_LIFE, SIZE_PAUSE
 from typing import Any
-from src.obj.level import Level
 
 
 class Level_add(GameObject):
-    def __init__(self, level: Level) -> None:
+    def __init__(self, level: GameObject) -> None:
         assert game is not None
         area = game.display.get_rect()
         path: str = "assets/pacgum.png"

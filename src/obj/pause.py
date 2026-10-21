@@ -30,9 +30,8 @@ class Pause(GameObject):
     def continue_game(self) -> None:
         assert game is not None
         game.remove_from_tree(self)
-        from src.obj.level import Level
         from src.obj.level_add import Level_add
-        level: Level = Level()
+        level: GameObject = game._stash["Level"]
         game.add_to_tree(Level_add(level))
         game.add_to_tree(level)
 

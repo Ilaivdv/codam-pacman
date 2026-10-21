@@ -37,6 +37,7 @@ class Menu(GameObject):
         level: Level = Level()
         game.add_to_tree(Level_add(level))
         game.add_to_tree(level)
+        game._stash['Level'] = level
 
     def quit_game(self) -> None:
         pg.quit()

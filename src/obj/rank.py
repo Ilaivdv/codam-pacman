@@ -40,9 +40,12 @@ class Rank(GameObject):
     def play(self) -> None:
         assert game is not None
         game.remove_from_tree(self)
-        from src.obj.level import Level
+        if game._stash["Level"]:
+            level: GameObject = game._stash["Level"]
+        else:
+            from src.obj.level import Level
+            level = Level()
         from src.obj.level_add import Level_add
-        level: Level = Level()
         game.add_to_tree(Level_add(level))
         game.add_to_tree(level)
 
