@@ -31,8 +31,9 @@ class Win(GameObject):
         game.remove_from_tree(self)
         from src.obj.level import Level
         from src.obj.level_add import Level_add
-        game.add_to_tree(Level_add())
-        game.add_to_tree(Level())
+        level: Level = Level()
+        game.add_to_tree(Level_add(level))
+        game.add_to_tree(level)
 
     def __str__(self) -> str:
         return (self.__class__.__name__)

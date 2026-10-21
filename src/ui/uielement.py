@@ -82,14 +82,26 @@ class Button:
 
 class Image:
     def __init__(self, path: str, size: tuple[int, int] | None,
-                 pos: tuple[int, int], align: str = "center"):
+                 pos: tuple[int, int], align: str = "center",
+                 on_click: Callable[[], None] | None = None):
         self.surface = pg.image.load(path).convert_alpha()
         if size is not None:
             self.surface = pg.transform.smoothscale(self.surface, size)
         self.rect = self.surface.get_rect(**{align: pos})
+        self.on_click = on_click
 
     def draw(self, screen: pg.Surface) -> None:
+        hovered = self.rect.collidepoint(pg.mouse.get_pos())
+        pg.draw.rect(screen, LIGHT_GRAY if hovered else DARK_GRAY, self.rect)
         screen.blit(self.surface, self.rect)
+
+    def handle_event(self, event: pg.event.Event) -> None:
+        if (
+                event.type == pg.MOUSEBUTTONDOWN
+                and event.button == 1 and
+                self.rect.collidepoint(event.pos) and self.on_click
+                ):
+            self.on_click()
 
 
 class InputBox:
