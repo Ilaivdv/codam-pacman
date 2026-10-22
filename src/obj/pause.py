@@ -14,12 +14,11 @@ class Pause(GameObject):
         self.bg: Overlay = Overlay(add_gap(area.center, GAP_BIG))
         defs: list[tuple[str, Callable[[], None]]] = [
             ("Continue", self.continue_game),
-            ("Rank", self.show_rank),
-            ("Cheat Mode", self.cheat),
-            ("Quit", self.quit_game)
+            ("Cheat mode", self.cheat),
+            ("Menu", self.back_to_menu)
         ]
         self.buttons: list[Button] = []
-        x, y = area.center
+        x, y = add_gap(area.center, (0, 30))
         for label, method in defs:
             bu = Button(label, (x, y), "midbottom", on_click=method)
             self.buttons.append(bu)
@@ -47,11 +46,11 @@ class Pause(GameObject):
         pg.quit()
         sys.exit()
 
-    def show_rank(self) -> None:
+    def back_to_menu(self) -> None:
         assert game is not None
         game.remove_from_tree(self)
-        from src.obj.rank import Rank
-        game.add_to_tree(Rank())
+        from src.obj.menu import Menu
+        game.add_to_tree(Menu())
 
     def process(self) -> None:
         assert game is not None

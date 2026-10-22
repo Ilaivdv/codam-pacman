@@ -9,7 +9,7 @@ class Score():
     def __init__(self) -> None:
         self._rank: dict[str, int | Any] = Config.parse_highscore()
         self._current = 0
-        self._username = "Unknown User"
+        self._username = "UnknownUser"
 
     @property
     def current(self) -> int:

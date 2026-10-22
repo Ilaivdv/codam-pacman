@@ -1,8 +1,8 @@
-from src.utils.colors import YELLOW, DARK_GRAY, LIGHT_GRAY, GRAY
+from src.utils.colors import YELLOW, DARK_GRAY, LIGHT_GRAY, GRAY, BLACK
 import pygame as pg
 from typing import Callable
 from .uiconstant import (FONT_NOTI, GAP_NOTI,
-                         FONT_DEFAULT, SIZE_LIFE, FONT_CHEAT,
+                         FONT_DEFAULT, FONT_RANK,
                          SIZE_MENU)
 
 
@@ -20,7 +20,7 @@ class Overlay:
                  pos: tuple[int, int],
                  align: str = "center",
                  size: tuple[int, int] = SIZE_MENU,
-                 color: tuple[int, int, int] = YELLOW):
+                 color: tuple[int, int, int] = BLACK):
         self.size = size
         self.color = color
         self.surface = pg.Surface(size)
@@ -29,6 +29,7 @@ class Overlay:
 
     def draw(self, screen: pg.Surface) -> None:
         screen.blit(self.surface, self.rect)
+        pg.draw.rect(screen, YELLOW, self.rect, 5)
 
 
 class Text:
@@ -73,19 +74,25 @@ class Button:
     def __init__(self, text: str, pos: tuple[int, int],
                  align: str = "center",
                  gap: tuple[int, int] | None = (0, 50),
-                 on_click: Callable[[], None] | None = None):
+                 on_click: Callable[[], None] | None = None,
+                 font: pg.font.Font | None = FONT_DEFAULT):
         self.color = DARK_GRAY
-        size = FONT_DEFAULT.size(text)
+        if not font:
+            font = FONT_DEFAULT
+        size = font.size(text)
         self.rect = pg.Rect((0, 0), size)
         if gap is not None:
             pos = add_gap(pos, gap)
         setattr(self.rect, align, pos)
-        self.text = Text(text, self.rect.center, gap=None)
+        self.text = Text(text, self.rect.center, font=font, gap=(0, 3))
         self.on_click = on_click
 
     def draw(self, screen: pg.Surface) -> None:
         hovered = self.rect.collidepoint(pg.mouse.get_pos())
-        pg.draw.rect(screen, LIGHT_GRAY if hovered else DARK_GRAY, self.rect)
+        outter = self.rect.inflate(20, 15)
+        pg.draw.rect(screen, GRAY if hovered else BLACK, outter)
+        # pg.draw.line(screen, YELLOW if hovered else BLACK, outter.bottomleft,
+        #              outter.bottomright, 5)
         self.text.draw(screen)
 
     def handle_event(self, event: pg.event.Event) -> None:
@@ -127,14 +134,14 @@ class InputBox:
                  color: tuple[int, int, int] = GRAY):
         self.color = color
         self.text = text
-        self.text_surface = FONT_DEFAULT.render(text, True, color)
+        self.text_surface = FONT_RANK.render(text, True, color)
         self.rect = pg.Rect((0, 0), (800, 50))
         if gap is not None:
-            pos = add_gap(pos, gap)
+            pos = add_gap(pos, (-100, 50))
         setattr(self.rect, align, pos)
         self.active = False
         self.button = Button("Enter", self.rect.midright,
-                             "midleft", None, self.name_check)
+                             "midleft", gap=(10, 0), on_click=self.name_check)
 
     def draw(self, screen: pg.Surface) -> None:
         screen.blit(self.text_surface, self.rect)
@@ -172,8 +179,8 @@ class InputBox:
                 self.text = ""
             else:
                 self.active = False
-            self.text_surface = FONT_DEFAULT.render(self.text,
-                                                    True, self.color)
+            self.text_surface = FONT_RANK.render(self.text,
+                                                 True, self.color)
         if event.type == pg.KEYDOWN:
             if self.active:
                 if event.key == pg.K_RETURN:
@@ -182,31 +189,5 @@ class InputBox:
                     self.text = self.text[:-1]
                 else:
                     self.text += event.unicode
-                self.text_surface = FONT_DEFAULT.render(self.text,
-                                                        True, self.color)
-
-
-class CheckBox:
-    def __init__(self, text: str, pos: tuple[int, int], align: str = "center",
-                 gap: tuple[int, int] | None = (0, 50),
-                 color: tuple[int, int, int] = YELLOW,
-                 checked: bool = False):
-        self.text_surface = FONT_CHEAT.render(text, True, color)
-        self.rect = pg.Rect((0, 0), SIZE_LIFE)
-        if gap is not None:
-            pos = add_gap(pos, gap)
-        setattr(self.rect, align, pos)
-        self.checked = checked
-        self.color = color
-
-    def draw(self, screen: pg.Surface) -> None:
-        pg.draw.rect(screen, self.color, self.rect, 3)
-        pos: tuple[int, int] = add_gap(self.rect.midright, (10, 2))
-        text_rect = self.text_surface.get_rect(midleft=pos)
-        screen.blit(self.text_surface, text_rect)
-        if self.checked:
-            inner = self.rect.inflate(-10, -10)
-            pg.draw.line(screen, self.color,
-                         inner.topleft, inner.bottomright, 3)
-            pg.draw.line(screen, self.color,
-                         inner.topright, inner.bottomleft, 3)
+                self.text_surface = FONT_RANK.render(self.text,
+                                                     True, self.color)

@@ -3,7 +3,9 @@ from src.game import game
 import sys
 from src.obj import GameObject
 from src.ui.uielement import Text, add_gap, Image
-from src.ui.uiconstant import GAP_LIFE, GAP_SCORE, SIZE_LIFE, SIZE_PAUSE
+from src.ui.uiconstant import (GAP_LIFE, GAP_SCORE, SIZE_LIFE,
+                               SIZE_PAUSE, FONT_RANK)
+from src.utils.colors import LIGHT_GRAY, PINK
 from typing import Any
 
 
@@ -14,14 +16,19 @@ class Level_add(GameObject):
         path: str = "assets/pacgum.png"
         life: Image = Image(path, SIZE_LIFE, add_gap(area.midtop, GAP_LIFE),
                             "midtop")
+        time_remain: Text = Text("00:30", area.midtop, FONT_RANK,
+                                 align="center", color=PINK)
         score: Text = Text(f"{game._score.current}", add_gap(area.midtop,
                                                              GAP_SCORE),
-                           align="midleft")
+                           font=FONT_RANK, align="midleft")
         _, y = area.midbottom
         pause: Image = Image("assets/pause.png", SIZE_PAUSE,
                              (score.rect.x, y - 100),
                              align="midbottom", on_click=self.pause)
-        self.elements: list[Any] = [life, score, pause]
+        level: Text = Text("Lv 1", (life.rect.x, pause.rect.y - 30),
+                           font=FONT_RANK, color=LIGHT_GRAY,
+                           align="midleft")
+        self.elements: list[Any] = [life, score, pause, level, time_remain]
         for _ in range(game._life - 1):
             life = Image(path, SIZE_LIFE, add_gap(life.rect.midright, (20, 0)),
                          "midleft")
