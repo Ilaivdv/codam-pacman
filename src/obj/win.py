@@ -3,8 +3,8 @@ from src.game import game
 import sys
 from src.obj import GameObject
 from src.ui.uielement import Button, Text, InputBox
-from src.ui import GAP_MID, FONT_TITLE
-from src.utils.colors import DARK_GRAY, YELLOW, LIGHT_GRAY
+from src.ui import FONT_TITLE, GAP_BIG, GAP_DEFAULT
+from src.utils.colors import LIGHT_GRAY, RED, PINK, BLACK
 from typing import Any
 
 
@@ -13,22 +13,23 @@ class Win(GameObject):
         assert game is not None
         area = game.display.get_rect()
         title: Text = Text("YOU WIN!", area.center,
-                           FONT_TITLE, gap=(0, -100), color=YELLOW)
-        score: Text = Text(f"Score: {game._score.current}", title.rect.midtop,
-                           FONT_TITLE, "midbottom", gap=(0, -50), color=YELLOW)
+                           FONT_TITLE, gap=(0, -100), color=PINK)
+        score: Text = Text(f"{game._score.current}", title.rect.midtop,
+                           FONT_TITLE, "midbottom", gap=(0, -50), color=RED)
         self.input_box: InputBox = InputBox("Click to enter your name here",
                                             title.rect.midbottom, "midtop",
                                             color=LIGHT_GRAY)
-        bu2: Button = Button("Continue", self.input_box.rect.midbottom,
-                             "midtop", on_click=self.continue_game)
-        bu: Button = Button("Back to menu", self.input_box.rect.midbottom,
-                            "midtop", GAP_MID, self.back_to_menu)
+        bu2: Button = Button("Continue", title.rect.midbottom,
+                             "midtop", GAP_BIG, on_click=self.continue_game)
+        bu: Button = Button("Back to menu", bu2.rect.midbottom,
+                            "midtop", GAP_DEFAULT, self.back_to_menu)
         self.buttons: list[Button] = [bu, bu2]
         self.elements: list[Any] = [bu, bu2, title, self.input_box, score]
 
     def continue_game(self) -> None:
         assert game is not None
         game.remove_from_tree(self)
+        game.is_paused = False
 
     def __str__(self) -> str:
         return (self.__class__.__name__)
@@ -41,7 +42,7 @@ class Win(GameObject):
 
     def process(self) -> None:
         assert game is not None
-        game.display.fill(DARK_GRAY)
+        game.display.fill(BLACK)
         for element in self.elements:
             element.draw(game.display)
         for event in pg.event.get():

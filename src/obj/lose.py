@@ -3,8 +3,8 @@ from src.game import game
 import sys
 from src.obj import GameObject
 from src.ui.uielement import Button, Text, InputBox
-from src.ui import FONT_TITLE, GAP_MID
-from src.utils.colors import DARK_GRAY, YELLOW, LIGHT_GRAY
+from src.ui import FONT_TITLE, GAP_BIG
+from src.utils.colors import LIGHT_GRAY, BLUE, RED, BLACK
 from typing import Any
 
 
@@ -13,14 +13,14 @@ class Lose(GameObject):
         assert game is not None
         area = game.display.get_rect()
         title: Text = Text("GAME OVER", area.center,
-                           FONT_TITLE, gap=(0, -100), color=YELLOW)
-        score: Text = Text(f"Score:{game._score.current}", title.rect.midtop,
-                           FONT_TITLE, "midbottom", gap=(0, -50), color=YELLOW)
+                           FONT_TITLE, gap=(0, -100), color=BLUE)
+        score: Text = Text(f"{game._score.current}", title.rect.midtop,
+                           FONT_TITLE, "midbottom", gap=(0, -50), color=RED)
         self.input_box: InputBox = InputBox("Click to enter your name here",
                                             title.rect.midbottom, "midtop",
                                             color=LIGHT_GRAY)
-        bu: Button = Button("Back to menu", self.input_box.rect.midbottom,
-                            "midtop", GAP_MID, self.back_to_menu)
+        bu: Button = Button("Back to menu", title.rect.midbottom,
+                            "midtop", GAP_BIG, self.back_to_menu)
         self.buttons: list[Button] = [bu]
         self.elements: list[Any] = [bu, title, self.input_box, score]
 
@@ -35,7 +35,7 @@ class Lose(GameObject):
 
     def process(self) -> None:
         assert game is not None
-        game.display.fill(DARK_GRAY)
+        game.display.fill(BLACK)
         for element in self.elements:
             element.draw(game.display)
         for event in pg.event.get():

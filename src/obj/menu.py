@@ -2,8 +2,8 @@ import pygame as pg
 from src.game import game, settings
 import sys
 from src.obj import GameObject
-from src.ui.uielement import Button, Image, add_gap
-from src.ui import GAP_DEFAULT
+from src.ui.uielement import Button, Image, add_gap, Overlay
+from src.ui.uiconstant import GAP_DEFAULT, GAP_BIG
 from src.utils.colors import DARK_GRAY
 from typing import Callable, Any
 
@@ -13,22 +13,28 @@ class Menu(GameObject):
         assert game is not None
         assert settings is not None
         area = game.display.get_rect()
+        bg: Overlay = Overlay(add_gap(area.center, GAP_BIG), size=(600, 600))
         path = "assets/pacman-outfit-0.jpg"
         start_im = Image(path, None, area.midtop, "midtop")
         defs: list[tuple[str, Callable[[], None]]] = [
             ("Play", self.start_game),
             ("Rank", self.show_rank),
+            ("Instructions", self.instructions),
             ("Cheat", self.cheat),
             ("Quit", self.quit_game)
         ]
-        self.elements: list[Any] = [start_im]
+        self.elements: list[Any] = [start_im, bg]
         self.buttons: list[Button] = []
-        x, y = area.center
+        x, y = add_gap(area.center, (0, -50))
         for label, method in defs:
             bu = Button(label, (x, y), "midbottom", on_click=method)
             self.buttons.append(bu)
             self.elements.append(bu)
             x, y = add_gap(bu.rect.midbottom, GAP_DEFAULT)
+
+    def instructions(self) -> None:
+        assert game is not None
+        game.remove_from_tree(self)
 
     def cheat(self) -> None:
         assert game is not None
