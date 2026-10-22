@@ -34,7 +34,8 @@ class Enemy(Entity):
         self.sprite_groups["enemy"].add(self)
         self.collides_with: dict[str, pg.sprite.Group[Entity]] = {
                 k: self.sprite_groups[k] for k in ["player"]}
-        self.current_state: State = self.ChasingState(self)
+        # self.current_state: State = self.ChasingState(self)
+        self.current_state: State = self.RunningState(self)
 
         self._slow_down_count: int = 0
         self._slow_down: int = 4
@@ -60,7 +61,7 @@ class Enemy(Entity):
         assert game is not None
         self.remove(self.sprite_groups["consumable"])
 
-    def _get_shortest_path(self) -> list[Direction]:
+    def _get_path(self, reverse: bool = False) -> list[Direction]:
 
         res: list[Direction] = []
 
@@ -79,6 +80,13 @@ class Enemy(Entity):
             return retrace_path(path, path[current[1:]])
 
         pos: tuple[int, int] = self.current_maze_position
+
+        if reverse:
+            for dir in self.get_neighbors():
+                if get_heuristic(self._get_maze_cell(dir)
+                                 ) > get_heuristic(pos):
+                    return [dir]
+
         # [0] = hueristic, [1], [2] = position in x, y
         open_cells: list[tuple[int, int, int]] = []
         closed_cells: list[tuple[int, int, int]] = []
@@ -109,7 +117,7 @@ class Enemy(Entity):
             self.parent: Enemy = parent
 
         def on_enter(self) -> None:
-            self.parent.current_path = self.parent._get_shortest_path()
+            self.parent.current_path = self.parent._get_path()
 
         def state_process(self) -> None:
             assert game is not None
@@ -126,7 +134,7 @@ class Enemy(Entity):
             if self.parent._path_last_update >= self.parent._path_update_time \
                     or len(self.parent.current_path) < 1:
                 self.parent._path_last_update = 0
-                self.parent.current_path = self.parent._get_shortest_path()
+                self.parent.current_path = self.parent._get_path()
 
             if self.parent.target_reached() and self.parent.current_path:
                 self.parent.move_to_pos(self.parent.current_path.pop())
@@ -137,7 +145,10 @@ class Enemy(Entity):
             self.parent: Enemy = parent
 
         def on_enter(self) -> None:
-            pass
+            self.parent.current_path = self.parent._get_path(True)
 
         def state_process(self) -> None:
-            ...
+            self.parent.current_path = self.parent._get_path(True)
+
+            if self.parent.target_reached() and self.parent.current_path:
+                self.parent.move_to_pos(self.parent.current_path.pop())
