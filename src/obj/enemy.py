@@ -36,6 +36,8 @@ class Enemy(Entity):
                 k: self.sprite_groups[k] for k in ["player"]}
         self.current_state: State = self.ChasingState(self)
 
+        self._slow_down_count: int = 0
+        self._slow_down: int = 4
         self.player_pos: pg.Vector2 = player_pos
         self.current_path: list[Direction] = []
         self._path_update_time: int = 1000
@@ -45,6 +47,12 @@ class Enemy(Entity):
         game.add_to_tree(self)
 
     def process(self) -> None:
+        if self.speed == 0:
+            self.speed = 1
+        self._slow_down_count += 1
+        if self._slow_down_count >= self._slow_down:
+            self._slow_down_count = 0
+            self.speed = 0
         super().process()
         self.current_state.state_process()
 
@@ -64,7 +72,7 @@ class Enemy(Entity):
                                     tuple[Direction, int, int] | None],
                          current: tuple[Direction, int, int]
                          ) -> list[Direction]:
-            res.insert(0, current[0])
+            res.append(current[0])
             if path[current[1:]] is None:
                 return res
             return retrace_path(path, path[current[1:]])
@@ -114,16 +122,18 @@ class Enemy(Entity):
             #     self.parent.current_path.append(
             #             random.choice(self.parent.get_neighbors()))
 
-            if self.parent._path_last_update >= self.parent._path_update_time:
+            if self.parent._path_last_update >= self.parent._path_update_time \
+                    or len(self.parent.current_path) < 1:
                 self.parent._path_last_update = 0
                 self.parent.current_path = self.parent._get_shortest_path()
             
             if self.parent.target_reached() and self.parent.current_path:
-                self.parent.move_to_pos(self.parent.current_path.pop(0))
+                self.parent.move_to_pos(self.parent.current_path.pop())
 
     class RunningState(State):
         def __init__(self, parent: Enemy) -> None:
             super().__init__(parent)
+            self.parent: Enemy = parent
 
         def on_enter(self) -> None:
             pass
