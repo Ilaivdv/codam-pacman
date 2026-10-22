@@ -18,7 +18,7 @@ class Enemy(Entity):
                  ) -> None:
         assert game is not None
 
-        image: pg.Surface = game.assets.enemy1
+        image: pg.Surface = game.assets.enemy
         color: tuple[int, int, int] = random.choice([
             RED,
             PINK,
@@ -28,9 +28,19 @@ class Enemy(Entity):
             ])
 
         image.fill(color, special_flags=pg.BLEND_MULT)
-        self.sprite: SpriteSheet = SpriteSheet(image=image)
+        self.sprite: SpriteSheet = SpriteSheet(image=image,
+                                               frame_duration=80)
         super().__init__(sprite_groups, tile_size, self.sprite.frames[0],
                          maze, pos, speed)
+        self.sprite.animations = {
+                "idle": [0],
+                "moving": [0, 1, 2, 3],
+                "idle_vulnerable": [4],
+                "moving_vulnerable": [4, 5, 6, 7],
+                "dead": [8, 9, 10, 11, 12]
+                }
+        self.flipped: bool = False
+
         self.sprite_groups["enemy"].add(self)
         self.collides_with: dict[str, pg.sprite.Group[Entity]] = {
                 k: self.sprite_groups[k] for k in ["player"]}
@@ -47,6 +57,8 @@ class Enemy(Entity):
         game.add_to_tree(self)
 
     def process(self) -> None:
+        assert game is not None
+
         if self.speed == 0:
             self.speed = 1
         self._slow_down_count += 1
@@ -55,6 +67,25 @@ class Enemy(Entity):
             self.speed = 0
         super().process()
         self.current_state.state_process()
+
+        curr_anim: str = "moving"
+        match self.move_direction:
+            case Direction.NONE:
+                curr_anim = "idle"
+            case Direction.UP:
+                self.rotation = 90
+            case Direction.RIGHT:
+                self.flipped = False
+                self.rotation = 0
+            case Direction.DOWN:
+                self.rotation = -90
+            case Direction.LEFT:
+                self.flipped = True
+                self.rotation = 0
+        self.image = self.sprite.process_animation(curr_anim,
+                                                   game.clock.get_time())
+        self.image = pg.transform.rotate(self.image, self.rotation)
+        self.image = pg.transform.flip(self.image, self.flipped, False)
 
     def on_collide(self, group_name: str) -> None:
         assert game is not None

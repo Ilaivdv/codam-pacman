@@ -6,10 +6,7 @@ ASSET_LIST: dict[str, str] = {
         "tileset": "assets/tileset.png",
         "player": "assets/player.png",
         "pacgum": "assets/pacgum.png",
-        "enemy0": "assets/enemy_00.png",
-        "enemy1": "assets/enemy_01.png",
-        "enemy2": "assets/enemy_02.png",
-        "enemy3": "assets/enemy_03.png",
+        "enemy": "assets/enemy.png",
         }
 
 
@@ -21,14 +18,8 @@ class Assets:
                 ASSET_LIST["player"])
         self._pacgum: pg.Surface = pg.image.load(
                 ASSET_LIST["pacgum"])
-        self._enemy0: pg.Surface = pg.image.load(
-                ASSET_LIST["enemy0"])
-        self._enemy1: pg.Surface = pg.image.load(
-                ASSET_LIST["enemy1"])
-        self._enemy2: pg.Surface = pg.image.load(
-                ASSET_LIST["enemy2"])
-        self._enemy3: pg.Surface = pg.image.load(
-                ASSET_LIST["enemy3"])
+        self._enemy: pg.Surface = pg.image.load(
+                ASSET_LIST["enemy"])
 
     @classmethod
     def validate_assets(cls) -> Assets:
@@ -56,17 +47,5 @@ class Assets:
         return self._pacgum.convert_alpha()
 
     @property
-    def enemy0(self) -> pg.Surface:
-        return self._enemy0.convert_alpha()
-
-    @property
-    def enemy1(self) -> pg.Surface:
-        return self._enemy1.convert_alpha()
-
-    @property
-    def enemy2(self) -> pg.Surface:
-        return self._enemy2.convert_alpha()
-
-    @property
-    def enemy3(self) -> pg.Surface:
-        return self._enemy3.convert_alpha()
+    def enemy(self) -> pg.Surface:
+        return self._enemy.convert_alpha()
