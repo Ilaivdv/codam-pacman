@@ -1,4 +1,4 @@
-from src.utils.colors import RED, PINK, CYAN, BLUE, PURPLE
+from src.utils.colors import RED, PINK, CYAN, BLUE, PURPLE, GREEN
 from src.obj.entity import Entity, Direction
 from src.utils import SpriteSheet, State
 from src.game import game
@@ -24,7 +24,8 @@ class Enemy(Entity):
             PINK,
             CYAN,
             BLUE,
-            PURPLE
+            PURPLE,
+            GREEN
             ])
 
         image.fill(color, special_flags=pg.BLEND_MULT)
