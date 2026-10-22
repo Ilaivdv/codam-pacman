@@ -59,7 +59,7 @@ class Enemy(Entity):
     def on_collide(self, group_name: str) -> None:
         assert game is not None
         self.remove(self.sprite_groups["consumable"])
-    
+
     def _get_shortest_path(self) -> list[Direction]:
 
         res: list[Direction] = []
@@ -70,8 +70,9 @@ class Enemy(Entity):
 
         def retrace_path(path: dict[tuple[int, int],
                                     tuple[Direction, int, int] | None],
-                         current: tuple[Direction, int, int]
+                         current: tuple[Direction, int, int] | None
                          ) -> list[Direction]:
+            assert current is not None
             res.append(current[0])
             if path[current[1:]] is None:
                 return res
@@ -99,7 +100,7 @@ class Enemy(Entity):
                     path[(x, y)] = (dir, *curr[1:])
                     if pg.Vector2((x, y)) == self.player_pos:
                         return retrace_path(path, (dir, *curr[1:]))
-        
+
         return [Direction.NONE]
 
     class ChasingState(State):
@@ -126,7 +127,7 @@ class Enemy(Entity):
                     or len(self.parent.current_path) < 1:
                 self.parent._path_last_update = 0
                 self.parent.current_path = self.parent._get_shortest_path()
-            
+
             if self.parent.target_reached() and self.parent.current_path:
                 self.parent.move_to_pos(self.parent.current_path.pop())
 
