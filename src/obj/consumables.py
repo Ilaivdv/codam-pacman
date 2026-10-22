@@ -14,8 +14,8 @@ class Consumable(Entity):
                  ) -> None:
         assert game is not None
         self.is_super: bool = is_super
-        self._freeze_time: int = 0
-        self._elapsed_freeze_time: int = 1000
+        self._freeze_time: int = 500
+        self._elapsed_freeze_time: int = 0
 
         sprite: pg.Surface = game.assets.super_pacgum if self.is_super \
                 else game.assets.pacgum
@@ -29,13 +29,20 @@ class Consumable(Entity):
         game.add_to_tree(self)
 
     def process(self) -> None:
+        assert game is not None
+
+        if game.is_paused and self._elapsed_freeze_time <= self._freeze_time:
+            self._elapsed_freeze_time += game.clock.get_time()
+        elif game.is_paused and self._elapsed_freeze_time >= self._freeze_time:
+            game.is_paused = False
+        elif not game.is_paused:
+            self._elapsed_freeze_time = 0
+
         super().process()
 
     def on_collide(self, group_name: str) -> None:
         assert game is not None
         self.remove(self.sprite_groups["consumable"])
         if self.is_super:
-            ## TODO Pause and unpause game here
-            while self._elapsed_freeze_time < self._freeze_time:
-                self._elapsed_freeze_time += game.clock.get_time()
+            game.is_paused = True
         game.remove_from_tree(self)
