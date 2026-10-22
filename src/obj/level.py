@@ -45,7 +45,7 @@ class Level(GameObject):
         self._spawn_pacgums(30, 0)
         self.enemy0: Enemy = Enemy(self.sprite_groups,
                                    self.tileset.frame_size,
-                                   self.maze, (0, 0),
+                                   self.maze, (5, 0),
                                    pg.Vector2(self.player_spawn_pos), 1)
 
     def _get_display_maze_scale(self) -> int:
@@ -99,7 +99,6 @@ class Level(GameObject):
 
         game.display.fill(BLACK)
         self.enemy0.player_pos = pg.Vector2(self.player.current_maze_position)
-        print(self.enemy0.player_pos)
 
         # Draw the maze
         for y in range(0, len(self.maze)):

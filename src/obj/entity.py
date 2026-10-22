@@ -44,6 +44,46 @@ class Entity(GameObject, pg.sprite.Sprite, ABC):
         return ((pos[0] * offset_x) + (offset_x - self.rect.width) // 2,
                 (pos[1] * offset_y) + (offset_y - self.rect.height) // 2)
 
+    def get_neighbors(self,
+                      pos: tuple[int, int] | None = None) -> list[Direction]:
+        if not pos:
+            pos = self.current_maze_position
+
+        res: list[Direction] = []
+        x, y = pos
+        for i in Direction:
+            if i == Direction.NONE:
+                continue
+            if not self.maze[y][x] & i:
+                res.append(i)
+        return res
+
+    def _get_maze_cell(self, direction: Direction,
+                       from_pos: tuple[int, int] | None = None
+                       ) -> tuple[int, int]:
+        if from_pos is None:
+            from_pos = self.current_maze_position
+        if not self._validate_direction(direction, from_pos):
+            return from_pos
+
+        res: tuple[int, int]
+        match direction:
+            case Direction.UP:
+                res = (from_pos[0],
+                       from_pos[1] - 1)
+            case Direction.RIGHT:
+                res = (from_pos[0] + 1,
+                       from_pos[1])
+            case Direction.DOWN:
+                res = (from_pos[0],
+                       from_pos[1] + 1)
+            case Direction.LEFT:
+                res = (from_pos[0] - 1,
+                       from_pos[1])
+            case Direction.NONE:
+                res = from_pos
+        return res
+
     def target_reached(self) -> bool:
         if pg.Vector2(self.rect.topleft) == self.target_position:
             self.current_maze_position = (int(self.target_position.x //
@@ -54,9 +94,13 @@ class Entity(GameObject, pg.sprite.Sprite, ABC):
         else:
             return False
 
-    def _validate_direction(self, direction: Direction) -> bool:
-        if self.maze[self.current_maze_position[1]][
-                self.current_maze_position[0]] & direction:
+    def _validate_direction(self, direction: Direction,
+                            from_pos: tuple[int, int] | None = None
+                            ) -> bool:
+        if from_pos is None:
+            from_pos = self.current_maze_position
+        if self.maze[from_pos[1]][
+                from_pos[0]] & direction:
             return False
         else:
             return True
