@@ -60,6 +60,9 @@ class Enemy(Entity):
     def process(self) -> None:
         assert game is not None
 
+        if game.is_paused:
+            return
+
         if self.speed == 0:
             self.speed = 1
         self._slow_down_count += 1

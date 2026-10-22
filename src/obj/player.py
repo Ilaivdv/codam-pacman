@@ -37,8 +37,12 @@ class Player(Entity):
         game.add_to_tree(self)
 
     def process(self) -> None:
-        super().process()
         assert game is not None
+
+        if game.is_paused:
+            return
+
+        super().process()
 
         if self.is_dead:
             self.image = self.sprite.process_animation("dead",
