@@ -133,7 +133,8 @@ class Enemy(Entity):
             if self.parent._path_last_update >= self.parent._path_update_time \
                     or len(self.parent.current_path) < 1:
                 self.parent._path_last_update = 0
-                self.parent.current_path = self.parent._get_path()
+                if len(self.parent.current_path) < 4:
+                    self.parent.current_path = self.parent._get_path()
 
             if self.parent.target_reached() and self.parent.current_path:
                 self.parent.move_to_pos(self.parent.current_path.pop())
