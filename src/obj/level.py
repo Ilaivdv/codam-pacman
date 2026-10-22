@@ -42,7 +42,7 @@ class Level(GameObject):
                                      self.maze,
                                      self.player_spawn_pos, 1)
         self.pacgums: list[Consumable] = []
-        self._spawn_pacgums(30, 0)
+        self._spawn_pacgums(30, 4)
         self.enemy0: Enemy = Enemy(self.sprite_groups,
                                    self.tileset.frame_size,
                                    self.maze, (5, 0),
@@ -92,6 +92,15 @@ class Level(GameObject):
             self.pacgums.append(Consumable(self.sprite_groups,
                                            self.tileset.frame_size,
                                            self.maze, spawn_pos, 1))
+            is_available[spawn_pos[1]][spawn_pos[0]] = False
+        for _ in range(super_pacgum_amount):
+            while not is_available[spawn_pos[1]][spawn_pos[0]]:
+                spawn_pos = (randint(0, len(self.maze[0]) - 1),
+                             randint(0, len(self.maze) - 1))
+            self.pacgums.append(Consumable(self.sprite_groups,
+                                           self.tileset.frame_size,
+                                           self.maze, spawn_pos, 1,
+                                           True))
             is_available[spawn_pos[1]][spawn_pos[0]] = False
 
     def process(self) -> None:
