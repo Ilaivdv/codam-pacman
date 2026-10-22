@@ -38,7 +38,7 @@ class Enemy(Entity):
 
         self.player_pos: pg.Vector2 = player_pos
         self.current_path: list[Direction] = []
-        self._path_update_time: int = 20000
+        self._path_update_time: int = 1000
         self._path_last_update: int = game.clock.get_time()
 
         self.current_state.on_enter()
@@ -64,9 +64,9 @@ class Enemy(Entity):
                                     tuple[Direction, int, int] | None],
                          current: tuple[Direction, int, int]
                          ) -> list[Direction]:
+            res.insert(0, current[0])
             if path[current[1:]] is None:
                 return res
-            res.insert(0, current[0])
             return retrace_path(path, path[current[1:]])
 
         pos: tuple[int, int] = self.current_maze_position
@@ -114,14 +114,12 @@ class Enemy(Entity):
             #     self.parent.current_path.append(
             #             random.choice(self.parent.get_neighbors()))
 
-            print(self.parent.current_path)
             if self.parent._path_last_update >= self.parent._path_update_time:
                 self.parent._path_last_update = 0
                 self.parent.current_path = self.parent._get_shortest_path()
-            game.remove_from_tree(self.parent)
             
-            # if self.parent.target_reached() and self.parent.current_path:
-            #     self.parent.move_to_pos(self.parent.current_path.pop())
+            if self.parent.target_reached() and self.parent.current_path:
+                self.parent.move_to_pos(self.parent.current_path.pop(0))
 
     class RunningState(State):
         def __init__(self, parent: Enemy) -> None:
