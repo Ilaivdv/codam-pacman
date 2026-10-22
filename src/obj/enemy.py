@@ -34,8 +34,7 @@ class Enemy(Entity):
         self.sprite_groups["enemy"].add(self)
         self.collides_with: dict[str, pg.sprite.Group[Entity]] = {
                 k: self.sprite_groups[k] for k in ["player"]}
-        # self.current_state: State = self.ChasingState(self)
-        self.current_state: State = self.RunningState(self)
+        self.current_state: State = self.ChasingState(self)
 
         self._slow_down_count: int = 0
         self._slow_down: int = 4
