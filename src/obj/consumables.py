@@ -44,5 +44,6 @@ class Consumable(Entity):
         self.remove(self.sprite_groups["consumable"])
         if self.is_super:
             game.player_is_super = True
+            game.super_elapsed_time = 0
             game.is_paused = True
         game.remove_from_tree(self)

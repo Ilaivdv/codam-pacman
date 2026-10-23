@@ -43,12 +43,9 @@ class Level(GameObject):
                                      self.player_spawn_pos, 1)
         self.pacgums: list[Consumable] = []
         self._spawn_pacgums(30, 4)
-        self._super_pacgum_duration: int = 5000
-        self._super_pacgum_elapsed: int = 0
-        self.enemy0: Enemy = Enemy(self.sprite_groups,
-                                   self.tileset.frame_size,
-                                   self.maze, (5, 0),
-                                   pg.Vector2(self.player_spawn_pos), 1)
+        self._super_pacgum_duration: int = 7000
+        self.enemies: list[Enemy] = []
+        self._spawn_enemies()
 
     def _get_display_maze_scale(self) -> int:
         assert game is not None
@@ -105,11 +102,27 @@ class Level(GameObject):
                                            True))
             is_available[spawn_pos[1]][spawn_pos[0]] = False
 
+    def _spawn_enemies(self) -> None:
+        spawn_positions: list[tuple[int, int]] = [
+                (0, 0),
+                (len(self.maze) - 1, 0),
+                (0, len(self.maze[0]) - 1),
+                (len(self.maze) - 1, len(self.maze[0]) - 1),
+                ]
+        if not self.enemies:
+            for pos in spawn_positions:
+                self.enemies.append(Enemy(self.sprite_groups,
+                                          self.tileset.frame_size,
+                                          self.maze, pos,
+                                          pg.Vector2(self.player_spawn_pos),
+                                          1))
+
     def process(self) -> None:
         assert game is not None
 
         game.display.fill(BLACK)
-        self.enemy0.player_pos = pg.Vector2(self.player.current_maze_position)
+        for e in self.enemies:
+            e.player_pos = pg.Vector2(self.player.current_maze_position)
 
         # Draw the maze
         for y in range(0, len(self.maze)):
@@ -125,8 +138,8 @@ class Level(GameObject):
                           self.pos)
 
         if game.player_is_super and \
-                self._super_pacgum_elapsed <= self._super_pacgum_duration:
-            self._super_pacgum_elapsed += game.clock.get_time()
+                game.super_elapsed_time <= self._super_pacgum_duration:
+            game.super_elapsed_time += game.clock.get_time()
         elif game.player_is_super:
-            self._super_pacgum_elapsed = 0
+            game.super_elapsed_time = 0
             game.player_is_super = False
