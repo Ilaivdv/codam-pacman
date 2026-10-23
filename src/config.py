@@ -44,13 +44,9 @@ class Config(BaseModel):
         notification: list[str] = []
         game_set: dict[str, Any] = {
                     'highscore_filename': "highscore.json",
-                    'level': [
-                        {"width": 5, "length": 5},
-                        {"width": 10, "length": 10},
-                        {"width": 15, "length": 15},
-                        {"width": 20, "length": 20},
-                        {"width": 25, "length": 25},
-                        {"width": 30, "length": 30}],
+                    "level": 10,
+                    "width": 15,
+                    "height": 15,
                     'lives': 3, 'pacgum': 42,
                     'points_per_pacgum': 10,
                     'points_per_super_pacgum': 50,
@@ -62,7 +58,7 @@ class Config(BaseModel):
             if key in config_dict.keys():
                 game_set[key] = config_dict[key]
             else:
-                notification.append("NOTICE: Missing KEY in config.json,"
+                notification.append("NOTICE: Missing KEY in config file,"
                                     f"using a default value: {key}")
         if notification:
             game_set["notification"] = notification

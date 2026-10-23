@@ -98,7 +98,9 @@ class Game:
 
 class GameSettings(BaseModel):
     highscore_filename: str = Field(frozen=True)
-    level: list[dict[str, int]] = Field(frozen=True)
+    level: int = Field(frozen=True)
+    width: int = Field(frozen=True)
+    height: int = Field(frozen=True)
     lives: int = Field(gt=0, frozen=True)
     pacgum: int = Field(gt=0, frozen=True)
     points_per_pacgum: int = Field(gt=0, frozen=True)
