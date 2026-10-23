@@ -30,12 +30,9 @@ class Pause(GameObject):
     def cheat(self) -> None:
         assert game is not None
         game.cheat = True
-        self.continue_game()
-        from src.obj.level import Level
-        from src.obj.level_add import Level_add
-        level: Level = Level()
-        game.add_to_tree(Level_add())
-        game.add_to_tree(level)
+        from src.obj.cheat_option import CheatOption
+        game.add_to_tree(CheatOption())
+        game.remove_from_tree(self)
 
     def continue_game(self) -> None:
         assert game is not None

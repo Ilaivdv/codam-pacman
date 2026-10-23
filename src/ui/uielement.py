@@ -3,7 +3,7 @@ import pygame as pg
 from typing import Callable, Any
 from .uiconstant import (FONT_NOTI, GAP_NOTI,
                          FONT_DEFAULT, FONT_RANK,
-                         SIZE_MENU)
+                         SIZE_MENU, SIZE_LIFE)
 
 
 def add_gap(pos: tuple[int, int], gap: tuple[int, int]) -> tuple[int, int]:
@@ -75,6 +75,7 @@ class Button:
                  align: str = "center",
                  gap: tuple[int, int] | None = (0, 50),
                  on_click: Callable[[], None] | None = None,
+                 color_bu: tuple[int, int, int] | None = YELLOW,
                  font: pg.font.Font | None = FONT_DEFAULT):
         self.color = DARK_GRAY
         if not font:
@@ -84,7 +85,11 @@ class Button:
         if gap is not None:
             pos = add_gap(pos, gap)
         setattr(self.rect, align, pos)
-        self.text = Text(text, self.rect.center, font=font, gap=(0, 3))
+        if color_bu:
+            self.text = Text(text, self.rect.center, font=font, gap=(0, 3),
+                             color=color_bu)
+        else:
+            self.text = Text(text, self.rect.center, font=font, gap=(0, 3))
         self.on_click = on_click
 
     def draw(self, screen: pg.Surface) -> None:
@@ -191,3 +196,38 @@ class InputBox:
                     self.text += event.unicode
                 self.text_surface = FONT_RANK.render(self.text,
                                                      True, self.color)
+
+
+class CheckBox:
+    def __init__(self, text: str, pos: tuple[int, int], align: str = "center",
+                 gap: tuple[int, int] | None = (0, 50),
+                 color: tuple[int, int, int] = YELLOW):
+        self.text = text
+        self.text_surface = FONT_RANK.render(text, True, color)
+        self.rect = pg.Rect((0, 0), SIZE_LIFE)
+        if gap is not None:
+            pos = add_gap(pos, gap)
+        setattr(self.rect, align, pos)
+        self.checked = False
+        self.color = color
+
+    def draw(self, screen: pg.Surface) -> None:
+        pg.draw.rect(screen, self.color, self.rect, 3)
+        pos: tuple[int, int] = add_gap(self.rect.midright, (10, 2))
+        text_rect = self.text_surface.get_rect(midleft=pos)
+        screen.blit(self.text_surface, text_rect)
+        if self.checked:
+            inner = self.rect.inflate(-10, -10)
+            pg.draw.line(screen, self.color,
+                         inner.topleft, inner.bottomright, 3)
+            pg.draw.line(screen, self.color,
+                         inner.topright, inner.bottomleft, 3)
+
+    def handle_event(self, event: pg.event.Event) -> None:
+        if (event.type == pg.MOUSEBUTTONDOWN and event.button == 1):
+            if self.rect.collidepoint(event.pos):
+                self.checked = not self.checked
+                from src.game import game
+                assert game is not None
+                bool_op: bool = game.cheat_options[self.text]
+                game.cheat_options[self.text] = not bool_op

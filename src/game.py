@@ -23,10 +23,10 @@ def start_game(config_file: str) -> None:
         if settings.notification is not []:
             from src.obj.notification import Notification
             game.add_to_tree(Notification())
+        # from src.obj.cheat_option import CheatOption
+        # game.add_to_tree(CheatOption())
         from src.obj.menu import Menu
         game.add_to_tree(Menu())
-        # from src.obj.win import Win
-        # game.add_to_tree(Win())
         # from src.obj.instruction import Instruction
         # game.add_to_tree(Instruction())
         game.start_process()
@@ -46,6 +46,11 @@ class Game:
         self.cheat: bool = False
         self.player_is_super: bool = False
         self.super_elapsed_time: int = 0
+        self.cheat_options: dict[str, bool] = {
+            "Invincibility": False,
+            "Skip level": False,
+            "Increase speed": False
+        }
 
     def start_process(self) -> None:
         self._running = True
