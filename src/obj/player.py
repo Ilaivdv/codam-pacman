@@ -95,4 +95,5 @@ class Player(Entity):
 
     def on_collide(self, group_name: str) -> None:
         assert game is not None
-        self.is_dead = True
+        if not game.player_is_super:
+            self.is_dead = True
