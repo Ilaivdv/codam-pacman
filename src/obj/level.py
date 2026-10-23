@@ -1,5 +1,6 @@
 from src.obj.consumables import Consumable
 from mazegenerator import MazeGenerator  # type: ignore[import-untyped]
+from src.game import game, settings  # noqa: F401
 from src.utils.colors import BLACK
 from src.obj.player import Player
 from src.obj.entity import Entity
@@ -7,18 +8,18 @@ from src.utils import SpriteSheet
 from src.obj.enemy import Enemy
 from src.obj import GameObject
 from random import randint
-from src.game import game  # noqa: F401
 import pygame as pg
 
 
 class Level(GameObject):
-    def __init__(self) -> None:
-        assert game is not None
+    def __init__(self, seed: int = 42) -> None:
+        assert game is not None and settings is not None
 
-        self.mazegen: MazeGenerator = MazeGenerator()
+        self.mazegen: MazeGenerator = MazeGenerator((settings.width,
+                                                     settings.height))
         self.tileset: SpriteSheet = SpriteSheet(image=game.assets.tileset)
 
-        self.mazegen.generate()
+        self.mazegen.generate(seed)
         self.maze: list[list[int]] = self.mazegen.maze
 
         self.screen: pg.Surface = pg.Surface(
@@ -45,18 +46,19 @@ class Level(GameObject):
         self.pacgums: list[Consumable] = []
         self._spawn_pacgums(30, 4)
         self._super_pacgum_duration: int = 7000
+
         self.enemies: list[Enemy] = []
         self._spawn_enemies()
 
     def _get_display_maze_scale(self) -> int:
         assert game is not None
         screen_size: tuple[int, int] = self.screen.get_rect().size
-        scale: int = 1
+        scale: int = 0
 
         while screen_size[0] * (scale + 1) < game.resolution[0] and \
                 screen_size[1] * (scale + 1) < game.resolution[1]:
             scale += 1
-        return scale
+        return scale - 1
 
     def _get_maze_center(self) -> tuple[int, int]:
         pos: tuple[int, int] = (

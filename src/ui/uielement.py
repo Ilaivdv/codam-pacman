@@ -110,7 +110,7 @@ class Image:
                  on_click: Callable[[], None] | None = None):
         self.surface = pg.image.load(path).convert_alpha()
         if size is not None:
-            self.surface = pg.transform.smoothscale(self.surface, size)
+            self.surface = pg.transform.scale(self.surface, size)
         self.rect = self.surface.get_rect(**{align: pos})
         self.on_click = on_click
 
