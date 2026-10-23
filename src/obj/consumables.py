@@ -25,7 +25,6 @@ class Consumable(Entity):
         self.collides_with: dict[str, pg.sprite.Group[Entity]] = {
                 k: self.sprite_groups[k] for k in ["player"]}
 
-
         game.add_to_tree(self)
 
     def process(self) -> None:
@@ -44,5 +43,6 @@ class Consumable(Entity):
         assert game is not None
         self.remove(self.sprite_groups["consumable"])
         if self.is_super:
+            game.player_is_super = True
             game.is_paused = True
         game.remove_from_tree(self)

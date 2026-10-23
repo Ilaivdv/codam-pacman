@@ -43,6 +43,8 @@ class Level(GameObject):
                                      self.player_spawn_pos, 1)
         self.pacgums: list[Consumable] = []
         self._spawn_pacgums(30, 4)
+        self._super_pacgum_duration: int = 5000
+        self._super_pacgum_elapsed: int = 0
         self.enemy0: Enemy = Enemy(self.sprite_groups,
                                    self.tileset.frame_size,
                                    self.maze, (5, 0),
@@ -121,3 +123,10 @@ class Level(GameObject):
 
         game.display.blit(pg.transform.scale_by(self.screen, self.scale),
                           self.pos)
+
+        if game.player_is_super and \
+                self._super_pacgum_elapsed <= self._super_pacgum_duration:
+            self._super_pacgum_elapsed += game.clock.get_time()
+        elif game.player_is_super:
+            self._super_pacgum_elapsed = 0
+            game.player_is_super = False

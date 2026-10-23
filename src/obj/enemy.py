@@ -53,12 +53,23 @@ class Enemy(Entity):
         self.current_path: list[Direction] = []
         self._path_update_time: int = 1000
         self._path_last_update: int = game.clock.get_time()
+        self.dead: bool = False
 
         self.current_state.on_enter()
         game.add_to_tree(self)
 
     def process(self) -> None:
         assert game is not None
+        if self.dead:
+            self.image = self.sprite.process_animation("dead",
+                                                       game.clock.get_time())
+            if self.sprite.animation_finished:
+                self.remove(self.sprite_groups["enemy"])
+                game.remove_from_tree(self)
+            return
+
+        if game.is_paused:
+            return
 
         curr_anim: str = "moving_vulnerable" if game.player_is_super \
                 else "moving"
@@ -81,9 +92,6 @@ class Enemy(Entity):
         self.image = pg.transform.rotate(self.image, self.rotation)
         self.image = pg.transform.flip(self.image, self.flipped, False)
 
-        if game.is_paused:
-            return
-
         if self.speed == 0:
             self.speed = 1
         self._slow_down_count += 1
@@ -95,11 +103,10 @@ class Enemy(Entity):
 
     def on_collide(self, group_name: str) -> None:
         assert game is not None
-        self.remove(self.sprite_groups["enemy"])
+        if self.dead:
+            return
         if game.player_is_super:
-            self._freeze_time: int = 500
-            self._elapsed_freeze_time: int = 0
-            game.remove_from_tree(self)
+            self.dead = True
 
     def _get_path(self, reverse: bool = False) -> list[Direction]:
 
