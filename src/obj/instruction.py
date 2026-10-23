@@ -11,7 +11,7 @@ class Instruction(GameObject):
     def __init__(self) -> None:
         assert game is not None
         area = game.display.get_rect()
-        self.bg: Overlay = Overlay(area.center, size=(1300, 1300))
+        self.bg: Overlay = Overlay(area.center, size=(1300, 1200))
         with open('assets/instruction.md', 'r', encoding='utf-8') as f:
             content = f.readlines()
         all_text = content

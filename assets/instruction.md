@@ -10,4 +10,3 @@ Edible Ghost: 150 pts
 Specials
 - Eat the large Pacgum in the corners to temporarily turn the ghosts blue.
 - While the ghosts are blue, you can eat them for massive bonus points!
-- Use the openings on the left and right sides to escape and teleport to the opposite side.
