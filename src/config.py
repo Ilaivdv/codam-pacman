@@ -56,7 +56,14 @@ class Config(BaseModel):
                 }
         for key in game_set.keys():
             if key in config_dict.keys():
-                game_set[key] = config_dict[key]
+                if ((key == "width" or key == "height")
+                   and (config_dict[key] > 20 or config_dict[key] < 10)):
+                    notification.append("NOTICE: Using a default size(15"
+                                        f"x15), wrong {key} in config file"
+                                        f": {config_dict[key]}")
+                    game_set[key] = 15
+                else:
+                    game_set[key] = config_dict[key]
             else:
                 notification.append("NOTICE: Missing KEY in config file,"
                                     f"using a default value: {key}")
