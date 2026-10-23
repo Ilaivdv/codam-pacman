@@ -69,7 +69,7 @@ class Enemy(Entity):
             self.image = self.sprite.process_animation("dead",
                                                        game.clock.get_time())
             if self.sprite.animation_finished:
-                self.remove(self.sprite_groups["enemy"])
+                self.remove(self.sprite_groups["dead"])
                 self._elapsed_respawn_time = 1
                 self.dead = False
             return
@@ -126,6 +126,8 @@ class Enemy(Entity):
         if self.dead:
             return
         if game.player_is_super:
+            self.add(self.sprite_groups["dead"])
+            self.remove(self.sprite_groups["enemy"])
             self.dead = True
 
     def _get_path(self, reverse: bool = False) -> list[Direction]:

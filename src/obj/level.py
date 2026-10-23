@@ -34,6 +34,7 @@ class Level(GameObject):
         self.sprite_groups: dict[str, pg.sprite.Group[Entity]] = {
                 "consumable": pg.sprite.Group(),
                 "enemy": pg.sprite.Group(),
+                "dead": pg.sprite.Group(),
                 "player": pg.sprite.Group(),
                 }
         self.player_spawn_pos: tuple[int, int] = self._get_maze_center()
