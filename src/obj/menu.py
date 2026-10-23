@@ -19,7 +19,7 @@ class Menu(GameObject):
         defs: list[tuple[str, Callable[[], None]]] = [
             ("Play", self.start_game),
             ("Rank", self.show_rank),
-            ("Instructions", self.instructions),
+            ("How to play", self.instructions),
             ("Cheat", self.cheat),
             ("Quit", self.quit_game)
         ]
@@ -34,6 +34,8 @@ class Menu(GameObject):
 
     def instructions(self) -> None:
         assert game is not None
+        from src.obj.instruction import Instruction
+        game.add_to_tree(Instruction())
         game.remove_from_tree(self)
 
     def cheat(self) -> None:

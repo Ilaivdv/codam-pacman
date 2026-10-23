@@ -22,13 +22,16 @@ class Score():
     def set_current(self, score: int) -> None:
         self._current = score
 
+    def add_score(self, score: int) -> None:
+        self._current += score
+
     def set_username(self, name: str) -> None:
         self._username = name
 
     def update_rank(self) -> None:
         self._rank[self._username] = self._current
 
-    def current_init(self) -> None:
+    def init_current(self) -> None:
         self.set_current(0)
         self.set_username("Unknown User")
 

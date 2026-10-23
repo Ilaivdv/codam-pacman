@@ -1,6 +1,6 @@
 from src.utils.colors import YELLOW, DARK_GRAY, LIGHT_GRAY, GRAY, BLACK
 import pygame as pg
-from typing import Callable
+from typing import Callable, Any
 from .uiconstant import (FONT_NOTI, GAP_NOTI,
                          FONT_DEFAULT, FONT_RANK,
                          SIZE_MENU)
@@ -27,9 +27,9 @@ class Overlay:
         self.rect = self.surface.get_rect(**{align: pos})
         self.surface.fill(self.color)
 
-    def draw(self, screen: pg.Surface) -> None:
+    def draw(self, screen: pg.Surface, color: Any = YELLOW) -> None:
         screen.blit(self.surface, self.rect)
-        pg.draw.rect(screen, YELLOW, self.rect, 5)
+        pg.draw.rect(screen, color, self.rect, 5)
 
 
 class Text:

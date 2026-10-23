@@ -23,12 +23,12 @@ def start_game(config_file: str) -> None:
         if settings.notification is not []:
             from src.obj.notification import Notification
             game.add_to_tree(Notification())
-        # from src.obj.menu import Menu
-        # game.add_to_tree(Menu())
+        from src.obj.menu import Menu
+        game.add_to_tree(Menu())
         # from src.obj.win import Win
         # game.add_to_tree(Win())
-        from src.obj.lose import Lose
-        game.add_to_tree(Lose())
+        # from src.obj.instruction import Instruction
+        # game.add_to_tree(Instruction())
         game.start_process()
 
 

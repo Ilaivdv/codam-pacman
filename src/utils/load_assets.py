@@ -7,6 +7,15 @@ ASSET_LIST: dict[str, str] = {
         "player": "assets/player.png",
         "pacgum": "assets/pacgum.png",
         "enemy": "assets/enemy.png",
+        "enemy0": "assets/enemy_00.png",
+        "enemy1": "assets/enemy_01.png",
+        "enemy2": "assets/enemy_02.png",
+        "enemy3": "assets/enemy_03.png",
+        "pause": "assets/pause.png",
+        "instruction": "assets/instruction.md",
+        "font1": "assets/font/1.ttf",
+        "font2": "assets/font/2.otf",
+        "font3": "assets/font/3.ttf"
         }
 
 
@@ -20,6 +29,8 @@ class Assets:
                 ASSET_LIST["pacgum"])
         self._enemy: pg.Surface = pg.image.load(
                 ASSET_LIST["enemy"])
+        self._pause: pg.Surface = pg.image.load(
+                ASSET_LIST["pause"])
 
     @classmethod
     def validate_assets(cls) -> Assets:
@@ -29,7 +40,7 @@ class Assets:
             elif not os.access(path, os.R_OK):
                 raise FileNotFoundError(("No permission to read "
                                          f"asset path for '{name}'"))
-            elif not path.endswith(".png"):
+            elif not path.endswith((".png", ".md", ".ttf", ".otf")):
                 raise ValueError(
                         f"Asset path for '{name}' is not a png")
         return Assets()
