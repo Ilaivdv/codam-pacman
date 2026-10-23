@@ -6,6 +6,7 @@ ASSET_LIST: dict[str, str] = {
         "tileset": "assets/tileset.png",
         "player": "assets/player.png",
         "pacgum": "assets/pacgum.png",
+        "super_pacgum": "assets/super_pacgum.png",
         "enemy": "assets/enemy.png",
         "enemy0": "assets/enemy_00.png",
         "enemy1": "assets/enemy_01.png",
@@ -27,6 +28,8 @@ class Assets:
                 ASSET_LIST["player"])
         self._pacgum: pg.Surface = pg.image.load(
                 ASSET_LIST["pacgum"])
+        self._super_pacgum: pg.Surface = pg.image.load(
+                ASSET_LIST["super_pacgum"])
         self._enemy: pg.Surface = pg.image.load(
                 ASSET_LIST["enemy"])
         self._pause: pg.Surface = pg.image.load(
@@ -56,6 +59,10 @@ class Assets:
     @property
     def pacgum(self) -> pg.Surface:
         return self._pacgum.convert_alpha()
+
+    @property
+    def super_pacgum(self) -> pg.Surface:
+        return self._super_pacgum.convert_alpha()
 
     @property
     def enemy(self) -> pg.Surface:

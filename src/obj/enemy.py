@@ -1,4 +1,4 @@
-from src.utils.colors import RED, PINK, CYAN, BLUE, PURPLE
+from src.utils.colors import RED, CYAN, BLUE, PURPLE, GREEN
 from src.obj.entity import Entity, Direction
 from src.utils import SpriteSheet, State
 from src.game import game
@@ -21,10 +21,10 @@ class Enemy(Entity):
         image: pg.Surface = game.assets.enemy
         color: tuple[int, int, int] = random.choice([
             RED,
-            PINK,
             CYAN,
             BLUE,
-            PURPLE
+            PURPLE,
+            GREEN
             ])
 
         image.fill(color, special_flags=pg.BLEND_MULT)
@@ -39,6 +39,7 @@ class Enemy(Entity):
                 "moving_vulnerable": [4, 5, 6, 7],
                 "dead": [8, 9, 10, 11, 12]
                 }
+        self.rotation: int = 0
         self.flipped: bool = False
 
         self.sprite_groups["enemy"].add(self)
@@ -52,26 +53,30 @@ class Enemy(Entity):
         self.current_path: list[Direction] = []
         self._path_update_time: int = 1000
         self._path_last_update: int = game.clock.get_time()
+        self.dead: bool = False
 
         self.current_state.on_enter()
         game.add_to_tree(self)
 
     def process(self) -> None:
         assert game is not None
+        if self.dead:
+            self.image = self.sprite.process_animation("dead",
+                                                       game.clock.get_time())
+            if self.sprite.animation_finished:
+                self.remove(self.sprite_groups["enemy"])
+                game.remove_from_tree(self)
+            return
 
-        if self.speed == 0:
-            self.speed = 1
-        self._slow_down_count += 1
-        if self._slow_down_count >= self._slow_down:
-            self._slow_down_count = 0
-            self.speed = 0
-        super().process()
-        self.current_state.state_process()
+        if game.is_paused:
+            return
 
-        curr_anim: str = "moving"
+        curr_anim: str = "moving_vulnerable" if game.player_is_super \
+            else "moving"
         match self.move_direction:
             case Direction.NONE:
-                curr_anim = "idle"
+                curr_anim = "idle_vulnerable" if game.player_is_super \
+                        else "idle"
             case Direction.UP:
                 self.rotation = 90
             case Direction.RIGHT:
@@ -87,9 +92,21 @@ class Enemy(Entity):
         self.image = pg.transform.rotate(self.image, self.rotation)
         self.image = pg.transform.flip(self.image, self.flipped, False)
 
+        if self.speed == 0:
+            self.speed = 1
+        self._slow_down_count += 1
+        if self._slow_down_count >= self._slow_down:
+            self._slow_down_count = 0
+            self.speed = 0
+        super().process()
+        self.current_state.state_process()
+
     def on_collide(self, group_name: str) -> None:
         assert game is not None
-        self.remove(self.sprite_groups["consumable"])
+        if self.dead:
+            return
+        if game.player_is_super:
+            self.dead = True
 
     def _get_path(self, reverse: bool = False) -> list[Direction]:
 
