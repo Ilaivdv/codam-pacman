@@ -45,6 +45,7 @@ class Game:
         self.is_paused: bool = False
         self.cheat: bool = False
         self.player_is_super: bool = False
+        self.super_elapsed_time: int = 0
 
     def start_process(self) -> None:
         self._running = True

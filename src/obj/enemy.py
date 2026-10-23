@@ -48,27 +48,41 @@ class Enemy(Entity):
         self.current_state: State = self.ChasingState(self)
 
         self._slow_down_count: int = 0
-        self._slow_down: int = 4
+        self._slow_down: int = random.randint(3, 5)
         self.player_pos: pg.Vector2 = player_pos
         self.current_path: list[Direction] = []
         self._path_update_time: int = 1000
         self._path_last_update: int = game.clock.get_time()
         self.dead: bool = False
+        self._respawn_time: int = 5000
+        self._elapsed_respawn_time: int = 0
 
         self.current_state.on_enter()
         game.add_to_tree(self)
 
     def process(self) -> None:
         assert game is not None
+        if game.is_paused:
+            return
+
         if self.dead:
             self.image = self.sprite.process_animation("dead",
                                                        game.clock.get_time())
             if self.sprite.animation_finished:
                 self.remove(self.sprite_groups["enemy"])
-                game.remove_from_tree(self)
+                self._elapsed_respawn_time = 1
+                self.dead = False
             return
 
-        if game.is_paused:
+        if self._elapsed_respawn_time:
+            self._elapsed_respawn_time += game.clock.get_time()
+            if self._elapsed_respawn_time >= self._respawn_time:
+                new_pos = self._to_global_pos(self.spawn_position)
+                self.rect.x = new_pos[0]
+                self.rect.y = new_pos[1]
+                self.target_position = pg.Vector2(new_pos)
+                self.add(self.sprite_groups["enemy"])
+                self._elapsed_respawn_time = 0
             return
 
         curr_anim: str = "moving_vulnerable" if game.player_is_super \
@@ -98,6 +112,12 @@ class Enemy(Entity):
         if self._slow_down_count >= self._slow_down:
             self._slow_down_count = 0
             self.speed = 0
+
+        if type(self.current_state) is not self.RunningState \
+                and game.player_is_super:
+            self.current_state = self.RunningState(self)
+        elif type(self.current_state) is not self.ChasingState:
+            self.current_state = self.ChasingState(self)
         super().process()
         self.current_state.state_process()
 
@@ -169,14 +189,6 @@ class Enemy(Entity):
         def state_process(self) -> None:
             assert game is not None
             self.parent._path_last_update += game.clock.get_time()
-
-            # if len(self.parent.current_path) < 3:
-            #     self.parent.current_path = self.parent._get_shortest_path()
-            # if self.parent.current_path and \
-            #         self.parent.current_path[0] == Direction.NONE and \
-            #         self.parent.target_reached():
-            #     self.parent.current_path.append(
-            #             random.choice(self.parent.get_neighbors()))
 
             if self.parent._path_last_update >= self.parent._path_update_time \
                     or len(self.parent.current_path) < 1:
