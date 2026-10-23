@@ -72,7 +72,7 @@ class Enemy(Entity):
             return
 
         curr_anim: str = "moving_vulnerable" if game.player_is_super \
-                else "moving"
+            else "moving"
         match self.move_direction:
             case Direction.NONE:
                 curr_anim = "idle_vulnerable" if game.player_is_super \

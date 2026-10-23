@@ -18,7 +18,7 @@ class Consumable(Entity):
         self._elapsed_freeze_time: int = 0
 
         sprite: pg.Surface = game.assets.super_pacgum if self.is_super \
-                else game.assets.pacgum
+            else game.assets.pacgum
         super().__init__(sprite_groups, tile_size, sprite, maze, pos, speed)
 
         self.sprite_groups["consumable"].add(self)
