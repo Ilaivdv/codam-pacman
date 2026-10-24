@@ -1,12 +1,12 @@
-import pygame as pg
-from src.game import game, settings
-import sys
-from src.obj import GameObject
-from src.ui import Text, add_gap, Image
 from src.ui.ui_constant import (GAP_LIFE, GAP_SCORE, SIZE_LIFE,
                                 SIZE_PAUSE, FONT_RANK)
 from src.utils.colors import LIGHT_GRAY, PINK, RED
+from src.ui import Text, add_gap, Image
+from src.game import game, settings
+from src.utils import GameObject
 from typing import Any
+import pygame as pg
+import sys
 
 
 class Level_add(GameObject):

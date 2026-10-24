@@ -1,4 +1,4 @@
-from src.obj.entity import Entity, Direction
+from .entity import Entity, Direction
 from src.utils import SpriteSheet
 from src.game import game
 import pygame as pg

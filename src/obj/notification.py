@@ -1,6 +1,6 @@
 import pygame as pg
 from src.game import game, settings
-from src.obj import GameObject
+from src.utils import GameObject
 from src.ui.ui_constant import GAP_DEFAULT
 from src.ui import Noti, add_gap
 import textwrap

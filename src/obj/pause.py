@@ -1,7 +1,7 @@
 import pygame as pg
 from src.game import game
 import sys
-from src.obj import GameObject
+from src.utils import GameObject
 from src.ui.ui_constant import GAP_DEFAULT, GAP_BIG
 from src.ui import Button, add_gap, Overlay
 from typing import Callable

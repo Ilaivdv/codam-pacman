@@ -1,4 +1,4 @@
-from src.obj.entity import Entity
+from .entity import Entity
 from src.game import game
 import pygame as pg
 

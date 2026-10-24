@@ -1,8 +1,8 @@
+from .error import ConfigError
 from pydantic import BaseModel
 from typing import Any
 import json
 import os
-from .error import ConfigError
 
 
 class Config(BaseModel):
@@ -58,15 +58,15 @@ class Config(BaseModel):
             if key in config_dict.keys():
                 if ((key == "width" or key == "height")
                    and (config_dict[key] > 20 or config_dict[key] < 10)):
-                    notification.append("NOTICE: Using a default size(15"
-                                        f"x15), wrong {key} in config file"
-                                        f": {config_dict[key]}")
+                    notification.append(("NOTICE: Using a default size(15"
+                                         f"x15), wrong {key} in config file"
+                                         f": {config_dict[key]}"))
                     game_set[key] = 15
                 else:
                     game_set[key] = config_dict[key]
             else:
-                notification.append("NOTICE: Missing KEY in config file,"
-                                    f"using a default value: {key}")
+                notification.append(("NOTICE: Missing KEY in config file,"
+                                     f"using a default value: {key}"))
         if notification:
             game_set["notification"] = notification
         else:
@@ -84,12 +84,13 @@ class Config(BaseModel):
                     highscore_dict: Any = json.load(f)
             except ConfigError as e:
                 print(e)
-            if len(highscore_dict) == 1:
-                return highscore_dict
             else:
-                return (dict(sorted(highscore_dict.items(),
-                                    key=lambda x: x[1],
-                                    reverse=True)[:10]))
+                if len(highscore_dict) == 1:
+                    return highscore_dict
+                else:
+                    return (dict(sorted(highscore_dict.items(),
+                                        key=lambda x: x[1],
+                                        reverse=True)[:10]))
         else:
             with open(file_path, 'w') as f:
                 pass

@@ -1,7 +1,6 @@
+from src.utils import Assets, GameObject
 from pydantic import BaseModel, Field
-from src.obj import GameObject
 from src.config import Config
-from src.utils import Assets
 import pygame as pg
 from src.score import Score
 from typing import Any

@@ -1,7 +1,7 @@
 import pygame as pg
 from src.game import game, settings
 import sys
-from src.obj import GameObject
+from src.utils import GameObject
 from src.ui import Button, Image, add_gap, Overlay
 from src.ui.ui_constant import GAP_DEFAULT, GAP_BIG
 from src.utils.colors import DARK_GRAY
@@ -45,8 +45,8 @@ class Menu(GameObject):
 
     def start_game(self) -> None:
         assert game is not None
-        from src.obj.level import Level
-        from src.obj.level_add import Level_add
+        from src.level.level import Level
+        from src.level.level_overlay import Level_add
         level: Level = Level()
         game.add_to_tree(Level_add())
         game.add_to_tree(level)

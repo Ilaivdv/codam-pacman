@@ -1,6 +1,6 @@
 from src.utils.colors import RED, CYAN, BLUE, PURPLE, GREEN
-from src.obj.entity import Entity, Direction
 from src.utils import SpriteSheet, State
+from .entity import Entity, Direction
 from src.game import game
 import pygame as pg
 import random

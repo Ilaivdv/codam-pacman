@@ -1,6 +1,6 @@
 from src.game import game, settings  # noqa: F401
 from src.obj.level import Level
-from src.obj import GameObject
+from src.utils import GameObject
 # import pygame as pg
 
 
