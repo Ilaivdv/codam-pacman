@@ -1,5 +1,5 @@
-import pygame as pg
 from src.utils.load_assets import ASSET_LIST
+import pygame as pg
 
 GAP_DEFAULT = (0, 40)
 GAP_MID = (0, 100)
