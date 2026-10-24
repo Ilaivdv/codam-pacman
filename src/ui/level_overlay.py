@@ -1,8 +1,7 @@
-from src.ui.ui_constant import (GAP_LIFE, GAP_SCORE, SIZE_LIFE,
-                                SIZE_PAUSE, FONT_RANK)
+from .ui_constant import GAP_LIFE, GAP_SCORE, SIZE_LIFE, SIZE_PAUSE, FONT_RANK
 from src.utils.colors import LIGHT_GRAY, PINK, RED
-from src.ui import Text, add_gap, Image
 from src.game import game, settings
+from . import Text, add_gap, Image
 from src.utils import GameObject
 from typing import Any
 import pygame as pg
@@ -39,19 +38,19 @@ class LevelOverlay(GameObject):
 
     def pause(self) -> None:
         assert game is not None
-        from src.obj.pause import Pause
+        from .overlay.pause import Pause
         game.add_to_tree(Pause(), False)
         game.is_paused = True
 
     def win(self) -> None:
         assert game is not None
-        from src.obj.win import Win
+        from .overlay.win import Win
         game.add_to_tree(Win())
         game.is_paused = True
 
     def lose(self) -> None:
         assert game is not None
-        from src.ui.overlay.lose import Lose
+        from .overlay.lose import Lose
         game.add_to_tree(Lose())
         game.is_paused = True
 
