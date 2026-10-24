@@ -1,17 +1,17 @@
-import pygame as pg
-from src.game import game, settings
-import sys
-from src.utils import GameObject
-from src.ui import Button, Image, add_gap, Overlay
 from src.ui.ui_constant import GAP_DEFAULT, GAP_BIG
+from src.ui import Button, Image, add_gap, Overlay
 from src.utils.colors import DARK_GRAY
+from src.game import game, settings
 from typing import Callable, Any
+from src.utils import GameObject
+import pygame as pg
+import sys
 
 
 class Menu(GameObject):
     def __init__(self) -> None:
-        assert game is not None
-        assert settings is not None
+        assert game is not None and settings is not None
+
         area = game.display.get_rect()
         bg: Overlay = Overlay(add_gap(area.center, GAP_BIG), size=(600, 600))
         path = "assets/pacman-outfit-0.jpg"
@@ -34,7 +34,7 @@ class Menu(GameObject):
 
     def instructions(self) -> None:
         assert game is not None
-        from src.obj.instruction import Instruction
+        from ..panels.instruction import Instruction
         game.add_to_tree(Instruction())
         game.remove_from_tree(self)
 
@@ -46,7 +46,7 @@ class Menu(GameObject):
     def start_game(self) -> None:
         assert game is not None
         from src.level.level import Level
-        from src.level.level_overlay import LevelOverlay
+        from ..level_overlay import LevelOverlay
         level: Level = Level()
         game.add_to_tree(LevelOverlay())
         game.add_to_tree(level)
@@ -59,7 +59,7 @@ class Menu(GameObject):
     def show_rank(self) -> None:
         assert game is not None
         game.remove_from_tree(self)
-        from src.obj.rank import Rank
+        from .rank import Rank
         game.add_to_tree(Rank())
 
     def process(self) -> None:

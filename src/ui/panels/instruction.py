@@ -36,7 +36,7 @@ class Instruction(GameObject):
 
     def back_to_menu(self) -> None:
         assert game is not None
-        from src.obj.menu import Menu
+        from ..screens.menu import Menu
         game.remove_from_tree(self)
         game.add_to_tree(Menu())
 

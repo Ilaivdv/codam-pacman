@@ -14,7 +14,7 @@ class Lose(GameObject):
         area = game.display.get_rect()
         title: Text = Text("GAME OVER", area.center,
                            FONT_TITLE, gap=(0, -100), color=BLUE)
-        score: Text = Text(f"{game._score.current}", title.rect.midtop,
+        score: Text = Text(f"{game.score.current}", title.rect.midtop,
                            FONT_TITLE, "midbottom", gap=(0, -50), color=RED)
         self.input_box: InputBox = InputBox("Click to enter your name here",
                                             title.rect.midbottom, "midtop",
@@ -26,7 +26,7 @@ class Lose(GameObject):
 
     def back_to_menu(self) -> None:
         assert game is not None
-        from src.obj.menu import Menu
+        from ..screens.menu import Menu
         game.remove_from_tree(self)
         game.add_to_tree(Menu())
 

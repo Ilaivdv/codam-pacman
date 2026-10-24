@@ -45,7 +45,7 @@ class CheatOption(GameObject):
     def back_to_menu(self) -> None:
         assert game is not None
         game.remove_from_tree(self)
-        from src.obj.menu import Menu
+        from ..screens.menu import Menu
         game.add_to_tree(Menu())
 
     def process(self) -> None:

@@ -1,10 +1,10 @@
-import pygame as pg
-from src.game import game
-import sys
-from src.utils import GameObject
 from src.ui.ui_constant import GAP_DEFAULT, GAP_BIG
 from src.ui import Button, add_gap, Overlay
+from src.utils import GameObject
 from typing import Callable
+from src.game import game
+import pygame as pg
+import sys
 
 
 class Pause(GameObject):
@@ -13,9 +13,9 @@ class Pause(GameObject):
         area = game.display.get_rect()
         self.bg: Overlay = Overlay(add_gap(area.center, GAP_BIG))
         defs: list[tuple[str, Callable[[], None]]] = [
-            ("continue", self.continue_game),
-            ("cheat", self.cheat),
-            ("menu", self.back_to_menu)
+            ("Continue", self.continue_game),
+            ("Cheats", self.cheat),
+            ("Menu", self.back_to_menu)
         ]
         self.buttons: list[Button] = []
         x, y = add_gap(area.center, (0, 30))
@@ -51,6 +51,7 @@ class Pause(GameObject):
 
     def process(self) -> None:
         assert game is not None
+
         self.bg.draw(game.display)
         for bu in self.buttons:
             bu.draw(game.display)

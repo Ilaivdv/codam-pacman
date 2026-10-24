@@ -19,8 +19,8 @@ class Rank(GameObject):
                           align="center")
         self.elements: list[Any] = [title, hint]
         x, y = add_gap(hint.rect.midbottom, GAP_MID)
-        for index, name in enumerate(game._score.rank, 1):
-            score: int = game._score.current
+        for index, name in enumerate(game.score.rank, 1):
+            score: int = game.score.current
             text = Text(f"{index}. {name} - {score} pts", (x, y),
                         font=FONT_RANK)
             x, y = text.rect.midbottom
@@ -32,7 +32,7 @@ class Rank(GameObject):
 
     def back_to_menu(self) -> None:
         assert game is not None
-        from src.obj.menu import Menu
+        from .menu import Menu
         game.remove_from_tree(self)
         game.add_to_tree(Menu())
 
@@ -41,10 +41,10 @@ class Rank(GameObject):
         if game.is_paused is True:
             game.is_paused = False
         else:
-            from src.obj.level import Level
-            from src.obj.level_add import Level_add
+            from src.level.level import Level
+            from ..level_overlay import LevelOverlay
             level: Level = Level()
-            game.add_to_tree(Level_add())
+            game.add_to_tree(LevelOverlay())
             game.add_to_tree(level)
         game.remove_from_tree(self)
 
