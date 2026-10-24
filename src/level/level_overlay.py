@@ -12,16 +12,16 @@ import sys
 class Level_add(GameObject):
     def __init__(self) -> None:
         assert game is not None
-        self.area = game.display.get_rect()
+        self.area: pg.Rect = game.display.get_rect()
         path: str = "assets/pacgum.png"
         life: Image = Image(path, SIZE_LIFE,
                             add_gap(self.area.midtop, GAP_LIFE),
                             "midtop")
         self.elapsed: float = 0
-        score: Text = Text(f"{game._score.current}", add_gap(self.area.midtop,
+        score: Text = Text(f"{game.score.current}", add_gap(self.area.midtop,
                                                              GAP_SCORE),
                            font=FONT_RANK, align="midleft")
-        _, y = self.area.midbottom
+        y = self.area.bottom
         pause: Image = Image("assets/pause.png", SIZE_PAUSE,
                              (score.rect.x, y - 100),
                              align="midbottom", on_click=self.pause)
@@ -29,8 +29,8 @@ class Level_add(GameObject):
                            font=FONT_RANK, color=LIGHT_GRAY,
                            align="midleft")
         self.elements: list[Any] = [life, score, pause, level]
-        if game._life > 1:
-            for _ in range(game._life - 1):
+        if game.player_lives > 1:
+            for _ in range(game.player_lives - 1):
                 life = Image(path, SIZE_LIFE, add_gap(life.rect.midright,
                                                       (20, 0)),
                              "midleft")
@@ -80,8 +80,8 @@ class Level_add(GameObject):
                                self.area.midtop, FONT_RANK,
                                align="center", color=RED)
             time_remain.draw(game.display)
-            if game._life > 1:
-                game._life -= 1
+            if game.player_lives > 1:
+                game.player_lives -= 1
                 # if pacgum all eaten and life left win
             else:
                 self.lose()

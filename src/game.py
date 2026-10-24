@@ -40,7 +40,7 @@ class Game:
         self._clock: pg.time.Clock = pg.time.Clock()
         self._running: bool = False
         self._score: Score = Score()
-        self._life: int = 3
+        self._player_lives: int = 3
         self.is_paused: bool = False
         self.cheat: bool = False
         self.player_is_super: bool = False
@@ -98,6 +98,19 @@ class Game:
     @property
     def running(self) -> bool:
         return self._running
+
+    @property
+    def player_lives(self) -> int:
+        return self._player_lives
+
+    @player_lives.setter
+    def player_lives(self, value: int) -> None:
+        self._player_lives = value
+
+
+    @property
+    def score(self) -> Score:
+        return self._score
 
 
 class GameSettings(BaseModel):
