@@ -2,8 +2,8 @@ import pygame as pg
 from src.game import game, settings
 import sys
 from src.obj import GameObject
-from src.ui.uielement import Text, add_gap, Image
-from src.ui.uiconstant import (GAP_LIFE, GAP_SCORE, SIZE_LIFE,
+from src.ui import Text, add_gap, Image
+from src.ui.ui_constant import (GAP_LIFE, GAP_SCORE, SIZE_LIFE,
                                SIZE_PAUSE, FONT_RANK)
 from src.utils.colors import LIGHT_GRAY, PINK, RED
 from typing import Any
@@ -29,10 +29,11 @@ class Level_add(GameObject):
                            font=FONT_RANK, color=LIGHT_GRAY,
                            align="midleft")
         self.elements: list[Any] = [life, score, pause, level]
-        for _ in range(game._life - 1):
-            life = Image(path, SIZE_LIFE, add_gap(life.rect.midright, (20, 0)),
-                         "midleft")
-            self.elements.append(life)
+        if game._life > 1:
+            for _ in range(game._life - 1):
+                life = Image(path, SIZE_LIFE, add_gap(life.rect.midright, (20, 0)),
+                            "midleft")
+                self.elements.append(life)
         self.reactions: list[Any] = [pause]
 
     def pause(self) -> None:
@@ -41,12 +42,17 @@ class Level_add(GameObject):
         game.add_to_tree(Pause(), False)
         game.is_paused = True
 
-    # def win(self) -> None:
-    #     from src.obj.win import Win
-    #     game.add_to_tree(Win())
-    # def lose(self) -> None:
-    #     from src.obj.lose import Lose
-    #     game.add_to_tree(Lose())
+    def win(self) -> None:
+        assert game is not None
+        from src.obj.win import Win
+        game.add_to_tree(Win())
+        game.is_paused = True
+
+    def lose(self) -> None:
+        assert game is not None
+        from src.obj.lose import Lose
+        game.add_to_tree(Lose())
+        game.is_paused = True
 
     def __str__(self) -> str:
         return (self.__class__.__name__)
@@ -73,10 +79,11 @@ class Level_add(GameObject):
                                self.area.midtop, FONT_RANK,
                                align="center", color=RED)
             time_remain.draw(game.display)
-            # if pacgum all eaten and life left win
-            # else if life left, -1 life
-            # else lose
-            self.pause()
+            if game._life > 1:
+                game._life -= 1
+                # if pacgum all eaten and life left win
+            else:
+                self.lose()
         for element in self.elements:
             element.draw(game.display)
         for event in pg.event.get():

@@ -1,8 +1,8 @@
 import pygame as pg
 from src.game import game, settings
 from src.obj import GameObject
-from src.ui import GAP_DEFAULT
-from src.ui.uielement import Noti, add_gap
+from src.ui.ui_constant import GAP_DEFAULT
+from src.ui import Noti, add_gap
 import textwrap
 
 
@@ -24,9 +24,6 @@ class Notification(GameObject):
         self.alpha: int = 255
         self.elapsed: int = 0
 
-    def __str__(self) -> str:
-        return (self.__class__.__name__)
-
     def process(self) -> None:
         assert game is not None
         self.elapsed += pg.time.get_ticks()
@@ -36,4 +33,4 @@ class Notification(GameObject):
         if self.alpha <= 0:
             assert game is not None
             game.remove_from_tree(self)
-        self.noti.draw()
+        self.noti.draw(game.display)

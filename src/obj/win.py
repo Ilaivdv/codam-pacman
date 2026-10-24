@@ -2,8 +2,8 @@ import pygame as pg
 from src.game import game
 import sys
 from src.obj import GameObject
-from src.ui.uielement import Button, Text, InputBox
-from src.ui import FONT_TITLE, GAP_BIG, GAP_DEFAULT
+from src.ui import Button, Text, InputBox
+from src.ui.ui_constant import FONT_TITLE, GAP_BIG, GAP_DEFAULT
 from src.utils.colors import LIGHT_GRAY, RED, PINK, BLACK
 from typing import Any
 
@@ -30,9 +30,7 @@ class Win(GameObject):
         assert game is not None
         game.remove_from_tree(self)
         game.is_paused = False
-
-    def __str__(self) -> str:
-        return (self.__class__.__name__)
+        #start new level
 
     def back_to_menu(self) -> None:
         assert game is not None
