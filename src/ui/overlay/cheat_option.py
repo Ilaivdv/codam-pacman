@@ -1,6 +1,6 @@
-from src.ui import Button, add_gap, Overlay, CheckBox
+from .. import Button, add_gap, Overlay, CheckBox
 from src.utils.colors import BLUE, LIGHT_GRAY
-from src.ui.ui_constant import GAP_BIG
+from ..ui_constant import GAP_BIG
 from src.utils import GameObject
 from src.game import game
 from typing import Any

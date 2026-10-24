@@ -1,10 +1,10 @@
-import pygame as pg
-from typing import Any
-from src.game import game
-from src.utils import GameObject
-from src.ui.ui_constant import GAP_DEFAULT, FONT_RANK_S, FONT_DEFAULT
+from ..ui_constant import GAP_DEFAULT, FONT_RANK_S, FONT_DEFAULT
 from src.utils.colors import LIGHT_GRAY, PURPLE
-from src.ui import Text, Button, Overlay, add_gap
+from .. import Text, Button, Overlay, add_gap
+from src.utils import GameObject
+from src.game import game
+from typing import Any
+import pygame as pg
 
 
 class Instruction(GameObject):

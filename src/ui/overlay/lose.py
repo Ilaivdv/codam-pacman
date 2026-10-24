@@ -1,11 +1,11 @@
-import pygame as pg
-from src.game import game
-import sys
-from src.utils import GameObject
-from src.ui import Button, Text, InputBox
-from src.ui.ui_constant import FONT_TITLE, GAP_BIG
 from src.utils.colors import LIGHT_GRAY, BLUE, RED, BLACK
+from src.ui.ui_constant import FONT_TITLE, GAP_BIG
+from .. import Button, Text, InputBox
+from src.utils import GameObject
+from src.game import game
 from typing import Any
+import pygame as pg
+import sys
 
 
 class Lose(GameObject):

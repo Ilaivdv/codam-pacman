@@ -1,5 +1,5 @@
-from src.ui.ui_constant import GAP_DEFAULT, GAP_BIG
-from src.ui import Button, add_gap, Overlay
+from ..ui_constant import GAP_DEFAULT, GAP_BIG
+from .. import Button, add_gap, Overlay
 from src.utils import GameObject
 from typing import Callable
 from src.game import game
@@ -46,7 +46,7 @@ class Pause(GameObject):
     def back_to_menu(self) -> None:
         assert game is not None
         game.remove_from_tree(self)
-        from .menu import Menu
+        from ..screens.menu import Menu
         game.add_to_tree(Menu())
 
     def process(self) -> None:
