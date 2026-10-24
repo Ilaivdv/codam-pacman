@@ -2,8 +2,8 @@ import pygame as pg
 from src.game import game
 import sys
 from src.obj import GameObject
-from src.ui.uielement import Button, Text, InputBox
-from src.ui import FONT_TITLE, GAP_BIG
+from src.ui import Button, Text, InputBox
+from src.ui.ui_constant import FONT_TITLE, GAP_BIG
 from src.utils.colors import LIGHT_GRAY, BLUE, RED, BLACK
 from typing import Any
 
@@ -29,9 +29,6 @@ class Lose(GameObject):
         from src.obj.menu import Menu
         game.remove_from_tree(self)
         game.add_to_tree(Menu())
-
-    def __str__(self) -> str:
-        return (self.__class__.__name__)
 
     def process(self) -> None:
         assert game is not None
