@@ -12,6 +12,7 @@ class UiElement(ABC):
     def handle_event(self, event: pg.event.Event) -> None:
         pass
 
+
 def add_gap(pos: tuple[int, int], gap: tuple[int, int]) -> tuple[int, int]:
     """Add a gap to the refer pos
 

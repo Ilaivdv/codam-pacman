@@ -5,6 +5,7 @@ import pygame as pg
 from src.utils.colors import YELLOW, DARK_GRAY, LIGHT_GRAY, GRAY, BLACK
 from .ui_constant import (FONT_DEFAULT, FONT_RANK, SIZE_LIFE)
 
+
 class Clickable(UiElement):
     on_click: Callable[[], None] | None = None
 
@@ -15,6 +16,7 @@ class Clickable(UiElement):
                 self.rect.collidepoint(event.pos) and self.on_click
                 ):
             self.on_click()
+
 
 class Button(Clickable):
     def __init__(self, text: str, pos: tuple[int, int],
@@ -44,6 +46,7 @@ class Button(Clickable):
         pg.draw.rect(screen, GRAY if hovered else BLACK, outter)
         self.text.draw(screen)
 
+
 class Image(Clickable):
     def __init__(self, path: str, size: tuple[int, int] | None,
                  pos: tuple[int, int], align: str = "center",
@@ -58,6 +61,7 @@ class Image(Clickable):
         hovered = self.rect.collidepoint(pg.mouse.get_pos())
         pg.draw.rect(screen, LIGHT_GRAY if hovered else DARK_GRAY, self.rect)
         screen.blit(self.surface, self.rect)
+
 
 class CheckBox(Clickable):
     def __init__(self, text: str, pos: tuple[int, int], align: str = "center",
@@ -91,6 +95,7 @@ class CheckBox(Clickable):
                          inner.topleft, inner.bottomright, 3)
             pg.draw.line(screen, self.color,
                          inner.topright, inner.bottomleft, 3)
+
 
 class InputBox(UiElement):
     def __init__(self, text: str, pos: tuple[int, int], align: str = "center",

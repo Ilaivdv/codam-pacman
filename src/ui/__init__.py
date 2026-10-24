@@ -1,4 +1,4 @@
-from .clickable import Button, Text, Image, InputBox, CheckBox
+from .clickable import Button, Image, InputBox, CheckBox
 from .non_clickable import Overlay, Text, Noti
 from .ui_element import add_gap
 

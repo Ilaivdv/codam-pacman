@@ -4,7 +4,7 @@ import sys
 from src.obj import GameObject
 from src.ui import Text, add_gap, Image
 from src.ui.ui_constant import (GAP_LIFE, GAP_SCORE, SIZE_LIFE,
-                               SIZE_PAUSE, FONT_RANK)
+                                SIZE_PAUSE, FONT_RANK)
 from src.utils.colors import LIGHT_GRAY, PINK, RED
 from typing import Any
 
@@ -31,8 +31,9 @@ class Level_add(GameObject):
         self.elements: list[Any] = [life, score, pause, level]
         if game._life > 1:
             for _ in range(game._life - 1):
-                life = Image(path, SIZE_LIFE, add_gap(life.rect.midright, (20, 0)),
-                            "midleft")
+                life = Image(path, SIZE_LIFE, add_gap(life.rect.midright,
+                                                      (20, 0)),
+                             "midleft")
                 self.elements.append(life)
         self.reactions: list[Any] = [pause]
 

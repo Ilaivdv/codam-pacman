@@ -36,7 +36,6 @@ class Rank(GameObject):
         game.remove_from_tree(self)
         game.add_to_tree(Menu())
 
-
     def play(self) -> None:
         assert game is not None
         if game.is_paused is True:

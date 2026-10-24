@@ -3,7 +3,8 @@ from typing import Any
 from .ui_element import UiElement, add_gap
 from src.utils.colors import YELLOW, BLACK
 from .ui_constant import (FONT_NOTI, GAP_NOTI,
-                         FONT_DEFAULT, SIZE_MENU)
+                          FONT_DEFAULT, SIZE_MENU)
+
 
 class Overlay(UiElement):
     def __init__(self,
