@@ -51,7 +51,7 @@ class LevelOverlay(GameObject):
 
     def lose(self) -> None:
         assert game is not None
-        from src.ui.panels.lose import Lose
+        from src.ui.overlay.lose import Lose
         game.add_to_tree(Lose())
         game.is_paused = True
 
