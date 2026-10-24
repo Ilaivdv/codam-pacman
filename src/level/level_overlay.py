@@ -9,7 +9,7 @@ import pygame as pg
 import sys
 
 
-class Level_add(GameObject):
+class LevelOverlay(GameObject):
     def __init__(self) -> None:
         assert game is not None
         self.area: pg.Rect = game.display.get_rect()
@@ -59,8 +59,7 @@ class Level_add(GameObject):
         return (self.__class__.__name__)
 
     def process(self) -> None:
-        assert game is not None
-        assert settings is not None
+        assert game is not None and settings is not None
         self.elapsed += pg.time.get_ticks()
         time_left: int = settings.level_max_time - int(self.elapsed / 100000)
         if time_left >= 0:

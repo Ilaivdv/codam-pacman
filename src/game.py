@@ -19,12 +19,12 @@ def start_game(config_file: str) -> None:
         print(e)
     else:
         game = Game(assets=loaded_assets)
-        if settings.notification is not []:
-            from src.obj.notification import Notification
+        if settings.notification:
+            from src.ui.notification import Notification
             game.add_to_tree(Notification())
         # from src.obj.cheat_option import CheatOption
         # game.add_to_tree(CheatOption())
-        from src.obj.menu import Menu
+        from src.ui.panels.menu import Menu
         game.add_to_tree(Menu())
         # from src.obj.instruction import Instruction
         # game.add_to_tree(Instruction())

@@ -46,9 +46,9 @@ class Menu(GameObject):
     def start_game(self) -> None:
         assert game is not None
         from src.level.level import Level
-        from src.level.level_overlay import Level_add
+        from src.level.level_overlay import LevelOverlay
         level: Level = Level()
-        game.add_to_tree(Level_add())
+        game.add_to_tree(LevelOverlay())
         game.add_to_tree(level)
         game.remove_from_tree(self)
 

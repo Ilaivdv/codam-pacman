@@ -13,9 +13,9 @@ class Pause(GameObject):
         area = game.display.get_rect()
         self.bg: Overlay = Overlay(add_gap(area.center, GAP_BIG))
         defs: list[tuple[str, Callable[[], None]]] = [
-            ("Continue", self.continue_game),
-            ("Cheat mode", self.cheat),
-            ("Menu", self.back_to_menu)
+            ("continue", self.continue_game),
+            ("cheat", self.cheat),
+            ("menu", self.back_to_menu)
         ]
         self.buttons: list[Button] = []
         x, y = add_gap(area.center, (0, 30))
@@ -30,7 +30,7 @@ class Pause(GameObject):
     def cheat(self) -> None:
         assert game is not None
         game.cheat = True
-        from src.obj.cheat_option import CheatOption
+        from .cheat_option import CheatOption
         game.add_to_tree(CheatOption())
         game.remove_from_tree(self)
 
@@ -46,7 +46,7 @@ class Pause(GameObject):
     def back_to_menu(self) -> None:
         assert game is not None
         game.remove_from_tree(self)
-        from src.obj.menu import Menu
+        from .menu import Menu
         game.add_to_tree(Menu())
 
     def process(self) -> None:
