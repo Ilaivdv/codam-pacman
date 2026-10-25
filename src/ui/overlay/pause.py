@@ -23,8 +23,8 @@ class Pause(GameObject):
         x, y = add_gap(area.center, (0, 30))
         for label, method in defs:
             bu = Button(label, (x, y), "midbottom", on_click=method)
-            self.buttons.append(bu)
             x, y = add_gap(bu.rect.midbottom, GAP_DEFAULT)
+            self.buttons.append(bu)
 
     def __str__(self) -> str:
         return (self.__class__.__name__)
@@ -57,8 +57,7 @@ class Pause(GameObject):
         self.bg.draw(game.display)
         for bu in self.buttons:
             bu.draw(game.display)
-        for event in pg.event.get():
-            if event.type == pg.QUIT:
-                self.quit_game()
-            for bu in self.buttons:
-                bu.handle_event(event)
+
+    def handle_event(self, event: pg.event.Event) -> None:
+        for bu in self.buttons:
+            bu.handle_event(event)

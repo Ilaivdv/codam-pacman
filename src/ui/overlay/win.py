@@ -6,7 +6,6 @@ from src.utils import GameObject
 from src.game import game
 from typing import Any
 import pygame as pg
-import sys
 
 
 class Win(GameObject):
@@ -44,10 +43,8 @@ class Win(GameObject):
         game.display.fill(BLACK)
         for element in self.elements:
             element.draw(game.display)
-        for event in pg.event.get():
-            if event.type == pg.QUIT:
-                pg.quit()
-                sys.exit()
-            for bu in self.buttons:
-                bu.handle_event(event)
-            self.input_box.handle_event(event)
+
+    def handle_event(self, event: pg.event.Event) -> None:
+        for bu in self.buttons:
+            bu.handle_event(event)
+        self.input_box.handle_event(event)

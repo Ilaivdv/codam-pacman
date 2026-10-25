@@ -60,6 +60,8 @@ class Game:
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     self._running = False
+                for p in self._process_tree:
+                    p.handle_event(event)
 
             pg.display.update()
             self._clock.tick(60)
