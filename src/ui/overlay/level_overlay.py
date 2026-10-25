@@ -81,11 +81,7 @@ class LevelOverlay(GameObject):
                                self.area.midtop, FONT_RANK,
                                align="center", color=RED)
             time_remain.draw(game.display)
-            if game.player_lives > 1:
-                game.player_lives -= 1
-                # if pacgum all eaten and life left win
-            else:
-                self.lose()
+            self.lose()
         for element in self.elements:
             element.draw(game.display)
 
