@@ -6,7 +6,6 @@ from src.utils import GameObject
 from src.game import game
 from typing import Any
 import pygame as pg
-import sys
 
 
 class Win(GameObject):

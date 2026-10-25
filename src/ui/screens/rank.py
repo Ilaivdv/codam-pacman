@@ -7,7 +7,6 @@ from ..clickable import Button
 from src.game import game
 from typing import Any
 import pygame as pg
-import sys
 
 
 class Rank(GameObject):

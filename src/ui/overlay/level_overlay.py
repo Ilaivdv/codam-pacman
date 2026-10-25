@@ -7,7 +7,6 @@ from ..non_clickable import Text
 from ..clickable import Image
 from typing import Any
 import pygame as pg
-import sys
 
 
 class LevelOverlay(GameObject):
