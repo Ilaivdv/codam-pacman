@@ -33,7 +33,7 @@ class Pause(GameObject):
         assert game is not None
         game.cheat = True
         from .cheat_option import CheatOption
-        game.add_to_tree(CheatOption())
+        game.add_to_tree(CheatOption(), False)
         game.remove_from_tree(self)
 
     def continue_game(self) -> None:
