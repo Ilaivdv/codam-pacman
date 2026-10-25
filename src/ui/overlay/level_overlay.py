@@ -39,6 +39,8 @@ class LevelOverlay(GameObject):
 
     def pause(self) -> None:
         assert game is not None
+        if game.is_paused:
+            return
         from .pause import Pause
         game.add_to_tree(Pause(), False)
         game.is_paused = True
