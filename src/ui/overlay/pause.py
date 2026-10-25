@@ -1,10 +1,12 @@
-import pygame as pg
-from src.game import game
-import sys
-from src.obj import GameObject
-from src.ui.ui_constant import GAP_DEFAULT, GAP_BIG
-from src.ui import Button, add_gap, Overlay
+from ..ui_constant import GAP_DEFAULT, GAP_BIG
+from ..non_clickable import Overlay
+from src.utils import GameObject
+from ..ui_element import add_gap
+from ..clickable import Button
 from typing import Callable
+from src.game import game
+import pygame as pg
+import sys
 
 
 class Pause(GameObject):
@@ -14,7 +16,7 @@ class Pause(GameObject):
         self.bg: Overlay = Overlay(add_gap(area.center, GAP_BIG))
         defs: list[tuple[str, Callable[[], None]]] = [
             ("Continue", self.continue_game),
-            ("Cheat mode", self.cheat),
+            ("Cheats", self.cheat),
             ("Menu", self.back_to_menu)
         ]
         self.buttons: list[Button] = []
@@ -30,14 +32,14 @@ class Pause(GameObject):
     def cheat(self) -> None:
         assert game is not None
         game.cheat = True
-        from src.obj.cheat_option import CheatOption
+        from .cheat_option import CheatOption
         game.add_to_tree(CheatOption())
         game.remove_from_tree(self)
 
     def continue_game(self) -> None:
         assert game is not None
-        game.remove_from_tree(self)
         game.is_paused = False
+        game.remove_from_tree(self)
 
     def quit_game(self) -> None:
         pg.quit()
@@ -46,11 +48,12 @@ class Pause(GameObject):
     def back_to_menu(self) -> None:
         assert game is not None
         game.remove_from_tree(self)
-        from src.obj.menu import Menu
+        from ..screens.menu import Menu
         game.add_to_tree(Menu())
 
     def process(self) -> None:
         assert game is not None
+
         self.bg.draw(game.display)
         for bu in self.buttons:
             bu.draw(game.display)

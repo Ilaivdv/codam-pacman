@@ -1,17 +1,19 @@
-import pygame as pg
-from src.game import game, settings
-import sys
-from src.obj import GameObject
-from src.ui import Button, Image, add_gap, Overlay
-from src.ui.ui_constant import GAP_DEFAULT, GAP_BIG
+from ..ui_constant import GAP_DEFAULT, GAP_BIG
+from ..clickable import Button, Image
 from src.utils.colors import DARK_GRAY
+from ..non_clickable import Overlay
+from src.game import game, settings
+from ..ui_element import add_gap
 from typing import Callable, Any
+from src.utils import GameObject
+import pygame as pg
+import sys
 
 
 class Menu(GameObject):
     def __init__(self) -> None:
-        assert game is not None
-        assert settings is not None
+        assert game is not None and settings is not None
+
         area = game.display.get_rect()
         bg: Overlay = Overlay(add_gap(area.center, GAP_BIG), size=(600, 600))
         path = "assets/pacman-outfit-0.jpg"
@@ -20,7 +22,6 @@ class Menu(GameObject):
             ("Play", self.start_game),
             ("Rank", self.show_rank),
             ("How to play", self.instructions),
-            ("Cheat", self.cheat),
             ("Quit", self.quit_game)
         ]
         self.elements: list[Any] = [start_im, bg]
@@ -34,7 +35,7 @@ class Menu(GameObject):
 
     def instructions(self) -> None:
         assert game is not None
-        from src.obj.instruction import Instruction
+        from ..overlay.instruction import Instruction
         game.add_to_tree(Instruction())
         game.remove_from_tree(self)
 
@@ -45,10 +46,10 @@ class Menu(GameObject):
 
     def start_game(self) -> None:
         assert game is not None
-        from src.obj.level import Level
-        from src.obj.level_add import Level_add
+        from src.level.level import Level
+        from ..overlay.level_overlay import LevelOverlay
         level: Level = Level()
-        game.add_to_tree(Level_add())
+        game.add_to_tree(LevelOverlay())
         game.add_to_tree(level)
         game.remove_from_tree(self)
 
@@ -59,7 +60,7 @@ class Menu(GameObject):
     def show_rank(self) -> None:
         assert game is not None
         game.remove_from_tree(self)
-        from src.obj.rank import Rank
+        from .rank import Rank
         game.add_to_tree(Rank())
 
     def process(self) -> None:

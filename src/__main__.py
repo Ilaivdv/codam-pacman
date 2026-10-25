@@ -1,5 +1,5 @@
-import os
 from src import start_game
+import os
 
 
 if __name__ == "__main__":

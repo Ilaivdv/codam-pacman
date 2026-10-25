@@ -1,5 +1,5 @@
 from abc import abstractmethod, ABC
-from src.obj import GameObject
+from src.utils import GameObject
 from enum import IntEnum
 import pygame as pg
 

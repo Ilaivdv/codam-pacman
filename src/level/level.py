@@ -1,12 +1,8 @@
-from src.obj.consumables import Consumable
+from .entities import Entity, Consumable, Player, Enemy
+from src.utils import SpriteSheet, GameObject
 from mazegenerator import MazeGenerator  # type: ignore[import-untyped]
 from src.game import game, settings  # noqa: F401
 from src.utils.colors import BLACK
-from src.obj.player import Player
-from src.obj.entity import Entity
-from src.utils import SpriteSheet
-from src.obj.enemy import Enemy
-from src.obj import GameObject
 from random import randint
 import pygame as pg
 

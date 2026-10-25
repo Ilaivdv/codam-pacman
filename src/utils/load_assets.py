@@ -45,7 +45,7 @@ class Assets:
                                          f"asset path for '{name}'"))
             elif not path.endswith((".png", ".md", ".ttf", ".otf")):
                 raise ValueError(
-                        f"Asset path for '{name}' is not a png")
+                        f"Invalid asset path at '{name}'")
         return Assets()
 
     @property

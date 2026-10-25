@@ -1,10 +1,9 @@
+from src.utils import Assets, GameObject
 from pydantic import BaseModel, Field
-from src.obj import GameObject
 from src.config import Config
-from src.utils import Assets
-import pygame as pg
 from src.score import Score
 from typing import Any
+import pygame as pg
 
 
 def start_game(config_file: str) -> None:
@@ -20,12 +19,12 @@ def start_game(config_file: str) -> None:
         print(e)
     else:
         game = Game(assets=loaded_assets)
-        if settings.notification is not []:
-            from src.obj.notification import Notification
+        if settings.notification:
+            from src.ui import Notification
             game.add_to_tree(Notification())
         # from src.obj.cheat_option import CheatOption
         # game.add_to_tree(CheatOption())
-        from src.obj.menu import Menu
+        from src.ui import Menu
         game.add_to_tree(Menu())
         # from src.obj.instruction import Instruction
         # game.add_to_tree(Instruction())
@@ -41,7 +40,7 @@ class Game:
         self._clock: pg.time.Clock = pg.time.Clock()
         self._running: bool = False
         self._score: Score = Score()
-        self._life: int = 3
+        self._player_lives: int = 3
         self.is_paused: bool = False
         self.cheat: bool = False
         self.player_is_super: bool = False
@@ -99,6 +98,18 @@ class Game:
     @property
     def running(self) -> bool:
         return self._running
+
+    @property
+    def player_lives(self) -> int:
+        return self._player_lives
+
+    @player_lives.setter
+    def player_lives(self, value: int) -> None:
+        self._player_lives = value
+
+    @property
+    def score(self) -> Score:
+        return self._score
 
 
 class GameSettings(BaseModel):

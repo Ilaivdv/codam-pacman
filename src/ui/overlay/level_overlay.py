@@ -1,27 +1,28 @@
-import pygame as pg
-from src.game import game, settings
-import sys
-from src.obj import GameObject
-from src.ui import Text, add_gap, Image
-from src.ui.ui_constant import (GAP_LIFE, GAP_SCORE, SIZE_LIFE,
-                                SIZE_PAUSE, FONT_RANK)
+from ..ui_constant import GAP_LIFE, GAP_SCORE, SIZE_LIFE, SIZE_PAUSE, FONT_RANK
 from src.utils.colors import LIGHT_GRAY, PINK, RED
+from src.game import game, settings
+from ..ui_element import add_gap
+from src.utils import GameObject
+from ..non_clickable import Text
+from ..clickable import Image
 from typing import Any
+import pygame as pg
+import sys
 
 
-class Level_add(GameObject):
+class LevelOverlay(GameObject):
     def __init__(self) -> None:
         assert game is not None
-        self.area = game.display.get_rect()
+        self.area: pg.Rect = game.display.get_rect()
         path: str = "assets/pacgum.png"
         life: Image = Image(path, SIZE_LIFE,
                             add_gap(self.area.midtop, GAP_LIFE),
                             "midtop")
         self.elapsed: float = 0
-        score: Text = Text(f"{game._score.current}", add_gap(self.area.midtop,
-                                                             GAP_SCORE),
+        score: Text = Text(f"{game.score.current}", add_gap(
+            self.area.midtop, GAP_SCORE),
                            font=FONT_RANK, align="midleft")
-        _, y = self.area.midbottom
+        y = self.area.bottom
         pause: Image = Image("assets/pause.png", SIZE_PAUSE,
                              (score.rect.x, y - 100),
                              align="midbottom", on_click=self.pause)
@@ -29,8 +30,8 @@ class Level_add(GameObject):
                            font=FONT_RANK, color=LIGHT_GRAY,
                            align="midleft")
         self.elements: list[Any] = [life, score, pause, level]
-        if game._life > 1:
-            for _ in range(game._life - 1):
+        if game.player_lives > 1:
+            for _ in range(game.player_lives - 1):
                 life = Image(path, SIZE_LIFE, add_gap(life.rect.midright,
                                                       (20, 0)),
                              "midleft")
@@ -39,19 +40,19 @@ class Level_add(GameObject):
 
     def pause(self) -> None:
         assert game is not None
-        from src.obj.pause import Pause
+        from .pause import Pause
         game.add_to_tree(Pause(), False)
         game.is_paused = True
 
     def win(self) -> None:
         assert game is not None
-        from src.obj.win import Win
+        from .win import Win
         game.add_to_tree(Win())
         game.is_paused = True
 
     def lose(self) -> None:
         assert game is not None
-        from src.obj.lose import Lose
+        from .lose import Lose
         game.add_to_tree(Lose())
         game.is_paused = True
 
@@ -59,8 +60,7 @@ class Level_add(GameObject):
         return (self.__class__.__name__)
 
     def process(self) -> None:
-        assert game is not None
-        assert settings is not None
+        assert game is not None and settings is not None
         self.elapsed += pg.time.get_ticks()
         time_left: int = settings.level_max_time - int(self.elapsed / 100000)
         if time_left >= 0:
@@ -80,8 +80,8 @@ class Level_add(GameObject):
                                self.area.midtop, FONT_RANK,
                                align="center", color=RED)
             time_remain.draw(game.display)
-            if game._life > 1:
-                game._life -= 1
+            if game.player_lives > 1:
+                game.player_lives -= 1
                 # if pacgum all eaten and life left win
             else:
                 self.lose()

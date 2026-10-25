@@ -1,11 +1,13 @@
-import pygame as pg
-from src.game import game
-import sys
-from src.obj import GameObject
-from src.ui.ui_constant import GAP_BIG
-from src.ui import Button, add_gap, Overlay, CheckBox
 from src.utils.colors import BLUE, LIGHT_GRAY
+from ..clickable import Button, CheckBox
+from ..non_clickable import Overlay
+from ..ui_constant import GAP_BIG
+from ..ui_element import add_gap
+from src.utils import GameObject
+from src.game import game
 from typing import Any
+import pygame as pg
+import sys
 
 
 class CheatOption(GameObject):
@@ -45,7 +47,7 @@ class CheatOption(GameObject):
     def back_to_menu(self) -> None:
         assert game is not None
         game.remove_from_tree(self)
-        from src.obj.menu import Menu
+        from ..screens.menu import Menu
         game.add_to_tree(Menu())
 
     def process(self) -> None:
