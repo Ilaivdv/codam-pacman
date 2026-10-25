@@ -1,7 +1,8 @@
 from .ui_constant import GAP_DEFAULT
 from src.game import game, settings
 from src.utils import GameObject
-from . import Noti, add_gap
+from .non_clickable import Noti
+from .ui_element import add_gap
 import pygame as pg
 import textwrap
 

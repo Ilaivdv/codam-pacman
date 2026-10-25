@@ -41,8 +41,8 @@ class Button(Clickable):
                                    font=font, gap=(0, 3),
                                    color=color_bu)
         else:
-            self.text: Text = Text(text, self.rect.center,
-                                   font=font, gap=(0, 3))
+            self.text = Text(text, self.rect.center,
+                             font=font, gap=(0, 3))
         self.on_click = on_click
 
     def draw(self, screen: pg.Surface) -> None:

@@ -44,7 +44,8 @@ class Noti(UiElement):
                  gap: tuple[int, int] | None = GAP_NOTI):
         lines = text.split("\n")
         x, y = FONT_NOTI.size(lines[0])
-        self.surface: pg.Surface = pg.Surface((x + 20, y * len(lines)), pg.SRCALPHA)
+        self.surface: pg.Surface = pg.Surface(
+                (x + 20, y * len(lines)), pg.SRCALPHA)
         pg.draw.rect(self.surface, (40, 40, 40, 220),
                      self.surface.get_rect())
         if gap is not None:

@@ -1,8 +1,10 @@
 from ..ui_constant import GAP_LIFE, GAP_SCORE, SIZE_LIFE, SIZE_PAUSE, FONT_RANK
 from src.utils.colors import LIGHT_GRAY, PINK, RED
-from .. import Text, add_gap, Image
 from src.game import game, settings
+from ..ui_element import add_gap
 from src.utils import GameObject
+from ..non_clickable import Text
+from ..clickable import Image
 from typing import Any
 import pygame as pg
 import sys
@@ -17,8 +19,8 @@ class LevelOverlay(GameObject):
                             add_gap(self.area.midtop, GAP_LIFE),
                             "midtop")
         self.elapsed: float = 0
-        score: Text = Text(f"{game.score.current}", add_gap(self.area.midtop,
-                                                             GAP_SCORE),
+        score: Text = Text(f"{game.score.current}", add_gap(
+            self.area.midtop, GAP_SCORE),
                            font=FONT_RANK, align="midleft")
         y = self.area.bottom
         pause: Image = Image("assets/pause.png", SIZE_PAUSE,

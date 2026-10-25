@@ -1,7 +1,9 @@
 from ..ui_constant import GAP_DEFAULT, FONT_RANK_S, FONT_DEFAULT
 from src.utils.colors import LIGHT_GRAY, PURPLE
-from .. import Text, Button, Overlay, add_gap
+from ..non_clickable import Text, Overlay
+from ..ui_element import add_gap
 from src.utils import GameObject
+from ..clickable import Button
 from src.game import game
 from typing import Any
 import pygame as pg

@@ -1,11 +1,13 @@
-import pygame as pg
-from src.game import game
-import sys
-from src.utils import GameObject
-from src.ui import Button, Text, add_gap
 from src.ui.ui_constant import FONT_TITLE, GAP_BIG, FONT_RANK, GAP_MID
 from src.utils.colors import DARK_GRAY, YELLOW
+from src.utils import GameObject
+from ..non_clickable import Text
+from ..ui_element import add_gap
+from ..clickable import Button
+from src.game import game
 from typing import Any
+import pygame as pg
+import sys
 
 
 class Rank(GameObject):
@@ -42,7 +44,7 @@ class Rank(GameObject):
             game.is_paused = False
         else:
             from src.level.level import Level
-            from ..level_overlay import LevelOverlay
+            from ..overlay.level_overlay import LevelOverlay
             level: Level = Level()
             game.add_to_tree(LevelOverlay())
             game.add_to_tree(level)

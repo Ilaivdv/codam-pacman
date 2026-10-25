@@ -107,7 +107,6 @@ class Game:
     def player_lives(self, value: int) -> None:
         self._player_lives = value
 
-
     @property
     def score(self) -> Score:
         return self._score

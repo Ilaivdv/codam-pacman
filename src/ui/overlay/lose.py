@@ -1,6 +1,7 @@
 from src.utils.colors import LIGHT_GRAY, BLUE, RED, BLACK
 from src.ui.ui_constant import FONT_TITLE, GAP_BIG
-from .. import Button, Text, InputBox
+from ..clickable import Button, InputBox
+from ..non_clickable import Text
 from src.utils import GameObject
 from src.game import game
 from typing import Any

@@ -1,6 +1,8 @@
 from ..ui_constant import GAP_DEFAULT, GAP_BIG
-from .. import Button, add_gap, Overlay
+from ..non_clickable import Overlay
 from src.utils import GameObject
+from ..ui_element import add_gap
+from ..clickable import Button
 from typing import Callable
 from src.game import game
 import pygame as pg

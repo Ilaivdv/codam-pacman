@@ -1,7 +1,9 @@
-from src.ui.ui_constant import GAP_DEFAULT, GAP_BIG
-from src.ui import Button, Image, add_gap, Overlay
+from ..ui_constant import GAP_DEFAULT, GAP_BIG
+from ..clickable import Button, Image
 from src.utils.colors import DARK_GRAY
+from ..non_clickable import Overlay
 from src.game import game, settings
+from ..ui_element import add_gap
 from typing import Callable, Any
 from src.utils import GameObject
 import pygame as pg
@@ -34,7 +36,7 @@ class Menu(GameObject):
 
     def instructions(self) -> None:
         assert game is not None
-        from ..panels.instruction import Instruction
+        from ..overlay.instruction import Instruction
         game.add_to_tree(Instruction())
         game.remove_from_tree(self)
 
@@ -46,7 +48,7 @@ class Menu(GameObject):
     def start_game(self) -> None:
         assert game is not None
         from src.level.level import Level
-        from ..level_overlay import LevelOverlay
+        from ..overlay.level_overlay import LevelOverlay
         level: Level = Level()
         game.add_to_tree(LevelOverlay())
         game.add_to_tree(level)
