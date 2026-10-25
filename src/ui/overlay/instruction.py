@@ -50,5 +50,6 @@ class Instruction(GameObject):
         self.bg.draw(game.display)
         for i in self.elements:
             i.draw(game.display)
-        for event in pg.event.get():
-            self.bu.handle_event(event)
+
+    def handle_event(self, event: pg.event.Event) -> None:
+        self.bu.handle_event(event)

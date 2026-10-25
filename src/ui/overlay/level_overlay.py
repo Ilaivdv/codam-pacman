@@ -87,12 +87,10 @@ class LevelOverlay(GameObject):
                 self.lose()
         for element in self.elements:
             element.draw(game.display)
-        for event in pg.event.get():
-            if event.type == pg.QUIT:
-                pg.quit()
-                sys.exit()
-            elif event.type == pg.KEYDOWN:
-                if event.key == pg.K_SPACE:
-                    self.pause()
-            for reaction in self.reactions:
-                reaction.handle_event(event)
+
+    def handle_event(self, event: pg.event.Event) -> None:
+        if event.type == pg.KEYDOWN:
+            if event.key == pg.K_SPACE:
+                self.pause()
+        for reaction in self.reactions:
+            reaction.handle_event(event)

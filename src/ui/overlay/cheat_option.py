@@ -55,8 +55,7 @@ class CheatOption(GameObject):
         self.bg.draw(game.display)
         for bu in self.elements:
             bu.draw(game.display)
-        for event in pg.event.get():
-            if event.type == pg.QUIT:
-                self.quit_game()
-            for bu in self.elements:
-                bu.handle_event(event)
+
+    def handle_event(self, event: pg.event.Event) -> None:
+        for bu in self.elements:
+            bu.handle_event(event)

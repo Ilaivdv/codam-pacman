@@ -55,12 +55,10 @@ class Rank(GameObject):
         game.display.fill(DARK_GRAY)
         for element in self.elements:
             element.draw(game.display)
-        for event in pg.event.get():
-            if event.type == pg.QUIT:
-                pg.quit()
-                sys.exit()
-            for bu in self.buttons:
-                bu.handle_event(event)
-            if event.type == pg.KEYDOWN:
-                if event.key == pg.K_SPACE:
-                    self.play()
+
+    def handle_event(self, event: pg.event.Event) -> None:
+        for bu in self.buttons:
+            bu.handle_event(event)
+        if event.type == pg.KEYDOWN:
+            if event.key == pg.K_SPACE:
+                self.play()
