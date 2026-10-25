@@ -49,8 +49,8 @@ class Player(Entity):
                                                        game.clock.get_time())
             self.move_direction = Direction.NONE
             if self.sprite.animation_finished:
-                game.remove_from_tree(self)
-                self.remove(self.sprite_groups["player"])
+                if game.player_lives > 0:
+                    game.player_lives -= 1
             return
 
         key_pressed = pg.key.get_just_pressed()

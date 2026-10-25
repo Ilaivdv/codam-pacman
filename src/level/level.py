@@ -39,6 +39,7 @@ class Level(GameObject):
                                      self.tileset.frame_size,
                                      self.maze,
                                      self.player_spawn_pos, 1)
+        self._current_player_lives: int = game.player_lives
         self.pacgums: list[Consumable] = []
         self._spawn_pacgums(30, 4)
         self._super_pacgum_duration: int = 7000
@@ -116,6 +117,18 @@ class Level(GameObject):
                                           pg.Vector2(self.player_spawn_pos),
                                           1))
 
+    def _on_player_death(self) -> None:
+        assert game is not None
+
+        for enemy in self.enemies:
+            enemy.remove(self.sprite_groups["enemy"])
+            game.remove_from_tree(enemy)
+        self.enemies.clear()
+
+        game.remove_from_tree(self.player)
+        self.player.remove(self.sprite_groups["player"])
+
+
     def process(self) -> None:
         assert game is not None
 
@@ -142,3 +155,14 @@ class Level(GameObject):
         elif game.player_is_super:
             game.super_elapsed_time = 0
             game.player_is_super = False
+
+        if self._current_player_lives > game.player_lives:
+            self._current_player_lives = game.player_lives
+            self._on_player_death()
+
+            if self._current_player_lives > 0:
+                self._spawn_enemies()
+                self.player = Player(self.sprite_groups,
+                                     self.tileset.frame_size,
+                                     self.maze,
+                                     self.player_spawn_pos, 1)
