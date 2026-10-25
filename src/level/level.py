@@ -128,7 +128,6 @@ class Level(GameObject):
         game.remove_from_tree(self.player)
         self.player.remove(self.sprite_groups["player"])
 
-
     def process(self) -> None:
         assert game is not None
 
