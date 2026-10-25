@@ -38,8 +38,8 @@ class Pause(GameObject):
 
     def continue_game(self) -> None:
         assert game is not None
-        game.remove_from_tree(self)
         game.is_paused = False
+        game.remove_from_tree(self)
 
     def quit_game(self) -> None:
         pg.quit()

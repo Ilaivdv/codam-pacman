@@ -15,10 +15,8 @@ if __name__ == "__main__":
     except ValueError as e:
         print(e)
     else:
-        start_game(config_path)
         try:
-            # start_game(config_path)
-            ...
+            start_game(config_path)
         except ModuleNotFoundError:
             print(("ERROR: missing dependencies! "
                    "install them using make install "

@@ -10,11 +10,8 @@ class Clickable(UiElement):
     on_click: Callable[[], None] | None = None
 
     def handle_event(self, event: pg.event.Event) -> None:
-        if (
-                event.type == pg.MOUSEBUTTONDOWN
-                and event.button == 1 and
-                self.rect.collidepoint(event.pos) and self.on_click
-                ):
+        if (event.type == pg.MOUSEBUTTONDOWN and event.button == 1 and
+                self.rect.collidepoint(event.pos) and self.on_click):
             self.on_click()
 
     def draw(self, screen: pg.Surface) -> None:
@@ -47,8 +44,8 @@ class Button(Clickable):
 
     def draw(self, screen: pg.Surface) -> None:
         hovered = self.rect.collidepoint(pg.mouse.get_pos())
-        outter = self.rect.inflate(20, 15)
-        pg.draw.rect(screen, GRAY if hovered else BLACK, outter)
+        outer = self.rect.inflate(20, 15)
+        pg.draw.rect(screen, GRAY if hovered else BLACK, outer)
         self.text.draw(screen)
 
 

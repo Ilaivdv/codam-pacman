@@ -8,8 +8,8 @@ from .error import HighscoreError
 class Score():
     def __init__(self) -> None:
         self._rank: dict[str, int | Any] = Config.parse_highscore()
-        self._current = 0
-        self._username = "UnknownUser"
+        self._current: int = 0
+        self._username: str = "UnknownUser"
 
     @property
     def current(self) -> int:

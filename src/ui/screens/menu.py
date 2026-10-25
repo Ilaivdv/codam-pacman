@@ -22,7 +22,6 @@ class Menu(GameObject):
             ("Play", self.start_game),
             ("Rank", self.show_rank),
             ("How to play", self.instructions),
-            ("Cheat", self.cheat),
             ("Quit", self.quit_game)
         ]
         self.elements: list[Any] = [start_im, bg]
