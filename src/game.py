@@ -33,6 +33,8 @@ def start_game(config_file: str) -> None:
 
 class Game:
     def __init__(self, assets: Assets) -> None:
+        assert settings is not None
+
         self._process_tree: list[GameObject] = []
         self._assets: Assets = assets
         self._display: pg.Surface = pg.display.set_mode()
@@ -40,7 +42,7 @@ class Game:
         self._clock: pg.time.Clock = pg.time.Clock()
         self._running: bool = False
         self._score: Score = Score()
-        self._player_lives: int = 3
+        self._player_lives: int = settings.lives
         self.is_paused: bool = False
         self.cheat: bool = False
         self.player_is_super: bool = False

@@ -28,13 +28,14 @@ class LevelOverlay(GameObject):
         level: Text = Text("Lv 1", (life.rect.x, pause.rect.y - 30),
                            font=FONT_RANK, color=LIGHT_GRAY,
                            align="midleft")
-        self.elements: list[Any] = [life, score, pause, level]
+        self.elements: list[Any] = [score, pause, level]
+        self.lives: list[Image] = [life]
         if game.player_lives > 1:
             for _ in range(game.player_lives - 1):
                 life = Image(path, SIZE_LIFE, add_gap(life.rect.midright,
                                                       (20, 0)),
                              "midleft")
-                self.elements.append(life)
+                self.lives.append(life)
         self.reactions: list[Any] = [pause]
 
     def pause(self) -> None:
@@ -81,13 +82,17 @@ class LevelOverlay(GameObject):
                                self.area.midtop, FONT_RANK,
                                align="center", color=RED)
             time_remain.draw(game.display)
-            if game.player_lives > 1:
-                game.player_lives -= 1
-                # if pacgum all eaten and life left win
-            else:
-                self.lose()
+            self.lose()
+
+        if len(self.lives) > game.player_lives:
+            diff = len(self.lives) - game.player_lives
+            for _ in range(diff):
+                self.lives.pop()
+
         for element in self.elements:
             element.draw(game.display)
+        for life in self.lives:
+            life.draw(game.display)
 
     def handle_event(self, event: pg.event.Event) -> None:
         if event.type == pg.KEYDOWN:
