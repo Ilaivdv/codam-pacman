@@ -28,6 +28,8 @@ class CheatOption(GameObject):
         x, y = add_gap(self.bg.rect.topleft, (100, 70))
         for text in defs:
             checkb = CheckBox(text, (x, y), "topleft", gap=None, color=BLUE)
+            if game.cheat_options[text]:
+                checkb.checked = True
             self.elements.append(checkb)
             _, y = add_gap(checkb.rect.midbottom, (0, 50))
 

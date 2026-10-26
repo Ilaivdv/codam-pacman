@@ -51,15 +51,14 @@ class Menu(GameObject):
 
     def cheat(self) -> None:
         assert game is not None
-        game.cheat = True
         self.start_game()
 
     def start_game(self) -> None:
         assert game is not None
-        if game.is_paused is True:
+        from src.level import LevelManager
+        if game.is_paused:
             game.is_paused = False
         game.remove_from_tree(self)
-        from src.level import LevelManager
         game.add_to_tree(LevelManager())
 
     def quit_game(self) -> None:
