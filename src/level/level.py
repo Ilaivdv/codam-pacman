@@ -44,7 +44,8 @@ class Level(GameObject):
                                      self.player_spawn_pos, 1)
         self._current_player_lives: int = game.player_lives
         self.pacgums: list[Consumable] = []
-        self._spawn_pacgums(30, 4)
+        self.super_pacgums: list[Consumable] = []
+        self._spawn_pacgums(1, 4)
         self._super_pacgum_duration: int = 7000
 
         self.enemies: list[Enemy] = []
@@ -99,10 +100,10 @@ class Level(GameObject):
             while not is_available[spawn_pos[1]][spawn_pos[0]]:
                 spawn_pos = (randint(0, len(self.maze[0]) - 1),
                              randint(0, len(self.maze) - 1))
-            self.pacgums.append(Consumable(self.sprite_groups,
-                                           self.tileset.frame_size,
-                                           self.maze, spawn_pos, 1,
-                                           True))
+            self.super_pacgums.append(Consumable(self.sprite_groups,
+                                                 self.tileset.frame_size,
+                                                 self.maze, spawn_pos, 1,
+                                                 True))
             is_available[spawn_pos[1]][spawn_pos[0]] = False
 
     def _spawn_enemies(self) -> None:
@@ -175,6 +176,10 @@ class Level(GameObject):
                                      self.tileset.frame_size,
                                      self.maze,
                                      self.player_spawn_pos, 1)
+
+        if all([i.consumed for i in self.pacgums]):
+            game.level_cleared = True
+            return
 
         # Cheats
         if game.cheat_options["Increase speed"]:

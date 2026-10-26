@@ -45,7 +45,7 @@ class LevelOverlay(GameObject):
             from .pause import Pause
             game.add_to_tree(Pause(), False)
         else:
-            game._process_tree.pop()
+            game.process_tree.pop()
 
     def win(self) -> None:
         assert game is not None

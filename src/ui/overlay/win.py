@@ -30,7 +30,9 @@ class Win(GameObject):
         assert game is not None
         game.remove_from_tree(self)
         game.is_paused = False
-        # start new level
+        from src.level import LevelManager
+        level = LevelManager()
+        game.add_to_tree(level)
 
     def back_to_menu(self) -> None:
         assert game is not None
