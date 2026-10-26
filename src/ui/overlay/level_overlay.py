@@ -67,6 +67,7 @@ class LevelOverlay(GameObject):
 
     def process(self) -> None:
         assert game is not None
+        time_remain: Text | None = None
         if game.player_lives <= 0 or self.time_left <= 0:
             game.is_paused = True
             self.lose()
@@ -89,7 +90,8 @@ class LevelOverlay(GameObject):
             time_remain = Text(f"{self.minute}:{self.second}",
                                self.area.midtop, FONT_RANK,
                                align="center", color=RED)
-        time_remain.draw(game.display)
+        if time_remain:
+            time_remain.draw(game.display)
         self.score: Text = Text(f"{game.score.current}",
                                 add_gap(self.area.topleft, (20, 30)),
                                 font=FONT_RANK, align="topleft")
