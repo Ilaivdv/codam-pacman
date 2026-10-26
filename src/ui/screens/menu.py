@@ -1,6 +1,6 @@
-from ..ui_constant import GAP_DEFAULT, GAP_BIG, FONT_TITLE, FONT_NOTI
+from ..ui_constant import GAP_DEFAULT,FONT_TITLE, FONT_NOTI
 from ..clickable import Button, Image, Text
-from src.utils.colors import DARK_GRAY, YELLOW, BLUE, CYAN, LIGHT_GRAY, BLACK,PURPLE, PINK
+from src.utils.colors import DARK_GRAY, YELLOW, LIGHT_GRAY, BLACK
 from ..non_clickable import Overlay
 from src.game import game, settings
 from ..ui_element import add_gap

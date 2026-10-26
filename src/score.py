@@ -29,7 +29,7 @@ class Score:
         self._username = name
 
     def update_rank(self) -> None:
-        self._rank[self._username] = self._current
+        self._rank[self._username] = self.current
 
     def init_current(self) -> None:
         self.set_current(0)
@@ -37,6 +37,7 @@ class Score:
 
     def update_file(self) -> None:
         file_path: str = os.path.expanduser("~/.local/share/highscore.json")
+        print(self.rank)
         if not self.rank or len(self.rank) == 1:
             with open(file_path, "w") as f:
                 json.dump(self.rank, f)

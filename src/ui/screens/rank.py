@@ -13,7 +13,7 @@ class Rank(GameObject):
     def __init__(self) -> None:
         assert game is not None
         area = game.display.get_rect()
-        title: Text = Text("Pac-Man", area.center, FONT_TITLE, gap=(0, -500),
+        title: Text = Text("RANK", area.center, FONT_TITLE, gap=(0, -700),
                            color=YELLOW)
         hint: Text = Text("press SPACE to play", pos=title.rect.midbottom,
                           gap=GAP_MID,
@@ -21,7 +21,7 @@ class Rank(GameObject):
         self.elements: list[Any] = [title, hint]
         x, y = add_gap(hint.rect.midbottom, GAP_MID)
         for index, name in enumerate(game.score.rank, 1):
-            score: int = game.score.current
+            score: int = game.score.rank[name]
             text = Text(f"{index}. {name} - {score} pts", (x, y),
                         font=FONT_RANK)
             x, y = text.rect.midbottom

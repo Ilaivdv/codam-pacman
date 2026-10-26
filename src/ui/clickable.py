@@ -52,16 +52,18 @@ class Button(Clickable):
 class Image(Clickable):
     def __init__(self, path: str, size: tuple[int, int] | None,
                  pos: tuple[int, int], align: str = "center",
-                 on_click: Callable[[], None] | None = None):
+                 on_click: Callable[[], None] | None = None,
+                 hover: bool = False):
         self.surface = pg.image.load(path).convert_alpha()
         if size is not None:
             self.surface = pg.transform.scale(self.surface, size)
         self.rect = self.surface.get_rect(**{align: pos})
         self.on_click = on_click
+        self.hover = hover
 
-    def draw(self, screen: pg.Surface, hover: bool = False) -> None:
+    def draw(self, screen: pg.Surface) -> None:
         hovered = self.rect.collidepoint(pg.mouse.get_pos())
-        if hover is False:
+        if self.hover is False:
             pg.draw.rect(screen, DARK_GRAY, self.rect)
         else:
             pg.draw.rect(screen, LIGHT_GRAY if hovered else DARK_GRAY, self.rect)
