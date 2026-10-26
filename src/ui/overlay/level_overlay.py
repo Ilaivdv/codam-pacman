@@ -37,6 +37,7 @@ class LevelOverlay(GameObject):
         self.reactions: list[Any] = [pause]
         self.elapsed: int = 0
         self.level_max_time: int = settings.level_max_time
+        self.start: int = pg.time.get_ticks()
         self.time_left: int = self.level_max_time
         self.minute = str(int(self.time_left / 60)).zfill(2)
         self.second = str(int(self.time_left % 60)).zfill(2)
@@ -67,6 +68,8 @@ class LevelOverlay(GameObject):
 
     def process(self) -> None:
         assert game is not None
+        self.elapsed += pg.time.get_ticks() - self.start
+        print(self.elapsed)
         if game.player_lives <= 0 or self.time_left <= 0:
             game.is_paused = True
             self.lose()
@@ -75,21 +78,24 @@ class LevelOverlay(GameObject):
               and self.time_left >= 0 and self.elapsed >= 1000):
             self.elapsed = 0
             self.time_left -= 1
-            # if self.elapsed >= 1000:
+            # print(self.time_left)
             self.minute = str(int(self.time_left / 60)).zfill(2)
             self.second = str(int(self.time_left % 60)).zfill(2)
             time_remain = Text(f"{self.minute}:{self.second}",
                                self.area.midtop, FONT_RANK,
                                align="center", color=PINK)
+            time_remain.draw(game.display)
         elif game.is_paused and self.time_left >= 0:
             time_remain = Text(f"{self.minute}:{self.second}",
                                self.area.midtop, FONT_RANK,
                                align="center", color=PINK)
+            time_remain.draw(game.display)
         if self.time_left < 30:
             time_remain = Text(f"{self.minute}:{self.second}",
                                self.area.midtop, FONT_RANK,
                                align="center", color=RED)
-        time_remain.draw(game.display)
+            time_remain.draw(game.display)
+        
         self.score: Text = Text(f"{game.score.current}",
                                 add_gap(self.area.topleft, (20, 30)),
                                 font=FONT_RANK, align="topleft")
