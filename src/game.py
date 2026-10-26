@@ -39,6 +39,7 @@ class Game:
         self._running: bool = False
         self._score: Score = Score()
         self._player_lives: int = settings.lives
+        self.current_level: int = 0
         self.is_paused: bool = False
         self.player_is_super: bool = False
         self.super_elapsed_time: int = 0

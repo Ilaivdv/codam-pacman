@@ -61,23 +61,16 @@ class LevelOverlay(GameObject):
     def lose(self) -> None:
         assert game is not None
         from .lose import Lose
-        game.remove_from_tree(self)
-        game._process_tree.pop()
+        game.process_tree.clear()
+        game.current_level = 0
         game.add_to_tree(Lose(), False)
 
     def process(self) -> None:
         assert game is not None
-        if self.time_left <= 0:
-            if game.is_paused is False:
-                game.is_paused = True
-            time_remain = Text("00:00",
-                               self.area.midtop, FONT_RANK,
-                               align="center", color=PINK)
-            if (game.score.current >= self.win_score
-               and game.player_lives >= 1):
-                self.win()
-            else:
-                self.lose()
+        if game.player_lives <= 0 or self.time_left <= 0:
+            game.is_paused = True
+            self.lose()
+            return
         elif (game.is_paused is False
               and self.time_left >= 0):
             self.elapsed += pg.time.get_ticks()

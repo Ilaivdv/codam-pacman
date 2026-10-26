@@ -6,19 +6,18 @@ from .level import Level
 class LevelManager(GameObject):
     def __init__(self) -> None:
         assert settings is not None
-        self._current_level: int = 0
         self._level: Level | None = self.start_next()
 
     def start_next(self) -> Level:
         assert game is not None and settings is not None
-        if self._current_level > 0:
+        if game.current_level > 0:
             self.remove_current()
 
-        level = Level(seed=settings.seed + self._current_level)
+        level = Level(seed=settings.seed + game.current_level)
         game.add_to_tree(level)
-        self._current_level += 1
-        if self._current_level > settings.level:
-            self._current_level = 1
+        game.current_level += 1
+        if game.current_level > settings.level:
+            game.current_level = 1
         return level
 
     def remove_current(self) -> None:
