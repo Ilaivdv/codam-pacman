@@ -62,6 +62,7 @@ class LevelOverlay(GameObject):
         assert game is not None
         from .lose import Lose
         game.process_tree.clear()
+        game.current_level = 0
         game.add_to_tree(Lose(), False)
 
     def process(self) -> None:
