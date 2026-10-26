@@ -35,15 +35,8 @@ class LevelOverlay(GameObject):
                              "midleft")
                 self.lives.append(life)
         self.reactions: list[Any] = [pause]
+        self.time_left: int = settings.level_max_time
         self.elapsed: int = 0
-        self.level_max_time: int = settings.level_max_time
-        self.start: int = pg.time.get_ticks()
-        self.time_left: int = self.level_max_time
-        self.minute = str(int(self.time_left / 60)).zfill(2)
-        self.second = str(int(self.time_left % 60)).zfill(2)
-        self.win_score: int = settings.points_per_pacgum * settings.pacgum
-        self.timer_event = pg.USEREVENT+1
-        pg.time.set_timer(self.timer_event, 1000)
 
     def pause(self) -> None:
         assert game is not None
@@ -67,7 +60,7 @@ class LevelOverlay(GameObject):
         game.process_tree.clear()
         game.current_level = 0
         game.add_to_tree(Lose(), False)
-    
+
     def process(self) -> None:
         assert game is not None
         dt = game.clock.get_time()
@@ -79,22 +72,21 @@ class LevelOverlay(GameObject):
             game.is_paused = True
             self.lose()
             return
-        elif (game.is_paused is False
-              and self.time_left >= 0):
-                self.elapsed += dt
-                if self.elapsed >= 1000:
-                    self.elapsed = 0
-                    self.time_left -= 1
-                self.minute = str(int(self.time_left / 60)).zfill(2)
-                self.second = str(int(self.time_left % 60)).zfill(2)
+        elif game.is_paused is False and self.time_left >= 0:
+            self.elapsed += dt
+            if self.elapsed >= 1000:
+                self.elapsed = 0
+                self.time_left -= 1
+            minute = str(int(self.time_left / 60)).zfill(2)
+            second = str(int(self.time_left % 60)).zfill(2)
         if self.time_left < 30:
             color = RED
         else:
             color = PINK
-        time_remain = Text(f"{self.minute}:{self.second}",
-                            self.area.midtop, FONT_RANK,
-                            align="center", color=color)
-        time_remain.draw(game.display)    
+        time_remain = Text(f"{minute}:{second}",
+                           self.area.midtop, FONT_RANK,
+                           align="center", color=color)
+        time_remain.draw(game.display)
         self.score: Text = Text(f"{game.score.current}",
                                 add_gap(self.area.topleft, (20, 30)),
                                 font=FONT_RANK, align="topleft")
@@ -115,4 +107,3 @@ class LevelOverlay(GameObject):
                 self.pause()
         for reaction in self.reactions:
             reaction.handle_event(event)
-        

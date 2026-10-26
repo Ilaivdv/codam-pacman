@@ -48,6 +48,7 @@ class Game:
             "Skip level": False,
             "Increase speed": False
         }
+        self.level_cleared: bool = False
 
     def start_process(self) -> None:
         self._running = True
