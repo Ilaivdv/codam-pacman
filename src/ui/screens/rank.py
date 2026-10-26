@@ -43,9 +43,7 @@ class Rank(GameObject):
             game.is_paused = False
         else:
             from src.level.level import Level
-            from ..overlay.level_overlay import LevelOverlay
             level: Level = Level()
-            game.add_to_tree(LevelOverlay())
             game.add_to_tree(level)
         game.remove_from_tree(self)
 
