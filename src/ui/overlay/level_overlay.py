@@ -35,12 +35,8 @@ class LevelOverlay(GameObject):
                              "midleft")
                 self.lives.append(life)
         self.reactions: list[Any] = [pause]
+        self.time_left: int = settings.level_max_time
         self.elapsed: int = 0
-        self.level_max_time: int = settings.level_max_time
-        self.time_left: int = self.level_max_time
-        self.minute = str(int(self.time_left / 60)).zfill(2)
-        self.second = str(int(self.time_left % 60)).zfill(2)
-        self.win_score: int = settings.points_per_pacgum * settings.pacgum
 
     def pause(self) -> None:
         assert game is not None
@@ -67,35 +63,30 @@ class LevelOverlay(GameObject):
 
     def process(self) -> None:
         assert game is not None
+        dt = game.clock.get_time()
         if game.level_cleared:
             game.is_paused = True
             self.win()
             return
-        time_remain: Text | None = None
         if game.player_lives <= 0 or self.time_left <= 0:
             game.is_paused = True
             self.lose()
             return
-        elif (game.is_paused is False
-              and self.time_left >= 0 and self.elapsed >= 1000):
-            self.elapsed = 0
-            self.time_left -= 1
-            # if self.elapsed >= 1000:
-            self.minute = str(int(self.time_left / 60)).zfill(2)
-            self.second = str(int(self.time_left % 60)).zfill(2)
-            time_remain = Text(f"{self.minute}:{self.second}",
-                               self.area.midtop, FONT_RANK,
-                               align="center", color=PINK)
-        elif game.is_paused and self.time_left >= 0:
-            time_remain = Text(f"{self.minute}:{self.second}",
-                               self.area.midtop, FONT_RANK,
-                               align="center", color=PINK)
+        elif game.is_paused is False and self.time_left >= 0:
+            self.elapsed += dt
+            if self.elapsed >= 1000:
+                self.elapsed = 0
+                self.time_left -= 1
+            minute = str(int(self.time_left / 60)).zfill(2)
+            second = str(int(self.time_left % 60)).zfill(2)
         if self.time_left < 30:
-            time_remain = Text(f"{self.minute}:{self.second}",
-                               self.area.midtop, FONT_RANK,
-                               align="center", color=RED)
-        if time_remain:
-            time_remain.draw(game.display)
+            color = RED
+        else:
+            color = PINK
+        time_remain = Text(f"{minute}:{second}",
+                           self.area.midtop, FONT_RANK,
+                           align="center", color=color)
+        time_remain.draw(game.display)
         self.score: Text = Text(f"{game.score.current}",
                                 add_gap(self.area.topleft, (20, 30)),
                                 font=FONT_RANK, align="topleft")
