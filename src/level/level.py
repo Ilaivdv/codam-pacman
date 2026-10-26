@@ -16,7 +16,7 @@ class Level(GameObject):
                                                      settings.height))
         self.tileset: SpriteSheet = SpriteSheet(image=game.assets.tileset)
         self.overlay: LevelOverlay = LevelOverlay()
-        game.add_to_tree(self.overlay)
+        game.add_to_tree(self.overlay, False)
 
         self.mazegen.generate(seed)
         self.maze: list[list[int]] = self.mazegen.maze
@@ -131,6 +131,13 @@ class Level(GameObject):
         game.remove_from_tree(self.player)
         self.player.remove(self.sprite_groups["player"])
 
+    def exit(self) -> None:
+        assert game is not None
+        game.player_is_super = False
+        game.remove_from_tree(self.overlay)
+        del self.overlay
+        game.remove_from_tree(self)
+
     def process(self) -> None:
         assert game is not None
 
@@ -168,3 +175,9 @@ class Level(GameObject):
                                      self.tileset.frame_size,
                                      self.maze,
                                      self.player_spawn_pos, 1)
+
+        # Cheats
+        if game.cheat_options["Increase speed"]:
+            self.player.speed = 2
+        else:
+            self.player.speed = 1

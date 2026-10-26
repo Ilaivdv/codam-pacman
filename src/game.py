@@ -22,12 +22,8 @@ def start_game(config_file: str) -> None:
         if settings.notification:
             from src.ui import Notification
             game.add_to_tree(Notification())
-        # from src.obj.cheat_option import CheatOption
-        # game.add_to_tree(CheatOption())
         from src.ui import Menu
         game.add_to_tree(Menu())
-        # from src.obj.instruction import Instruction
-        # game.add_to_tree(Instruction())
         game.start_process()
 
 
@@ -44,7 +40,6 @@ class Game:
         self._score: Score = Score()
         self._player_lives: int = settings.lives
         self.is_paused: bool = False
-        self.cheat: bool = False
         self.player_is_super: bool = False
         self.super_elapsed_time: int = 0
         self.cheat_options: dict[str, bool] = {
