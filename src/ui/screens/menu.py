@@ -1,7 +1,7 @@
-from ..ui_constant import GAP_DEFAULT, GAP_BIG
+from ..ui_constant import GAP_DEFAULT, FONT_TITLE, FONT_AUTHOR
 from ..clickable import Button, Image
-from src.utils.colors import DARK_GRAY
-from ..non_clickable import Overlay
+from src.utils.colors import DARK_GRAY, YELLOW, LIGHT_GRAY, BLACK
+from ..non_clickable import Overlay, Text
 from src.game import game, settings
 from ..ui_element import add_gap
 from typing import Callable, Any
@@ -15,16 +15,26 @@ class Menu(GameObject):
         assert game is not None and settings is not None
 
         area = game.display.get_rect()
-        bg: Overlay = Overlay(add_gap(area.center, GAP_BIG), size=(600, 600))
-        path = "assets/pacman-outfit-0.jpg"
-        start_im = Image(path, None, area.midtop, "midtop")
+        bg: Overlay = Overlay(add_gap(area.center, (0, 120)), size=(600, 500))
+        path = "assets/player.png"
+        logo: Text = Text("Pac-Man", area.center, FONT_TITLE, gap=(0, -500),
+                          color=YELLOW)
+        logo2: Text = Text("Pac-Man", add_gap(logo.rect.center, (15, 15)),
+                           FONT_TITLE, gap=None,
+                           color=BLACK)
+        start_im: Image = Image(path, (2000, 120),
+                                add_gap(logo.rect.midbottom, (45, -20)),
+                                "midtop")
+        our_name: Text = Text("made by ilai & yawen",
+                              add_gap(logo.rect.midbottom, (0, 120)),
+                              FONT_AUTHOR, color=LIGHT_GRAY)
         defs: list[tuple[str, Callable[[], None]]] = [
             ("Play", self.start_game),
             ("Rank", self.show_rank),
             ("How to play", self.instructions),
             ("Quit", self.quit_game)
         ]
-        self.elements: list[Any] = [start_im, bg]
+        self.elements: list[Any] = [start_im, bg, logo2, logo, our_name]
         self.buttons: list[Button] = []
         x, y = add_gap(area.center, (0, -50))
         for label, method in defs:
@@ -36,7 +46,7 @@ class Menu(GameObject):
     def instructions(self) -> None:
         assert game is not None
         from ..overlay.instruction import Instruction
-        game.add_to_tree(Instruction())
+        game.add_to_tree(Instruction(), False)
         game.remove_from_tree(self)
 
     def cheat(self) -> None:

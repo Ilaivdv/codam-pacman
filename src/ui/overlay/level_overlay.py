@@ -1,4 +1,4 @@
-from ..ui_constant import GAP_LIFE, GAP_SCORE, SIZE_LIFE, SIZE_PAUSE, FONT_RANK
+from ..ui_constant import SIZE_LIFE, SIZE_PAUSE, FONT_RANK
 from src.utils.colors import LIGHT_GRAY, PINK, RED
 from src.game import game, settings
 from ..ui_element import add_gap
@@ -16,16 +16,16 @@ class LevelOverlay(GameObject):
         self.area: pg.Rect = game.display.get_rect()
         path: str = "assets/pacgum.png"
         life: Image = Image(path, SIZE_LIFE,
-                            add_gap(self.area.midtop, GAP_LIFE),
-                            "midtop")
-        x, _ = add_gap(self.area.midtop, GAP_SCORE)
-        y = self.area.bottom
+                            add_gap(self.area.topleft, (20, 20)),
+                            "topleft")
         pause: Image = Image("assets/pause.png", SIZE_PAUSE,
-                             (x, y - 100),
-                             align="midbottom", on_click=self.pause)
-        level: Text = Text("Lv 1", (life.rect.x, pause.rect.y - 30),
+                             add_gap(self.area.bottomright, (-20, -100)),
+                             align="bottomright", on_click=self.pause,
+                             hover=True)
+        level: Text = Text("LEVEL #TODO",
+                           add_gap(self.area.bottomleft, (20, -140)),
                            font=FONT_RANK, color=LIGHT_GRAY,
-                           align="midleft")
+                           align="bottomleft")
         self.elements: list[Any] = [pause, level]
         self.lives: list[Image] = [life]
         if game.player_lives > 1:
@@ -72,9 +72,10 @@ class LevelOverlay(GameObject):
             self.lose()
             return
         elif (game.is_paused is False
-              and self.time_left >= 0):
-            self.elapsed += pg.time.get_ticks()
-            self.time_left = self.level_max_time - int(self.elapsed / 100000)
+              and self.time_left >= 0 and self.elapsed >= 1000):
+            self.elapsed = 0
+            self.time_left -= 1
+            # if self.elapsed >= 1000:
             self.minute = str(int(self.time_left / 60)).zfill(2)
             self.second = str(int(self.time_left % 60)).zfill(2)
             time_remain = Text(f"{self.minute}:{self.second}",
@@ -90,8 +91,8 @@ class LevelOverlay(GameObject):
                                align="center", color=RED)
         time_remain.draw(game.display)
         self.score: Text = Text(f"{game.score.current}",
-                                add_gap(self.area.midtop, GAP_SCORE),
-                                font=FONT_RANK, align="midleft")
+                                add_gap(self.area.topleft, (20, 30)),
+                                font=FONT_RANK, align="topleft")
         self.score.draw(game.display)
 
         if len(self.lives) > game.player_lives:

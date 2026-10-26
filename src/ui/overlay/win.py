@@ -1,5 +1,5 @@
 from ..ui_constant import FONT_TITLE, GAP_BIG, GAP_DEFAULT
-from src.utils.colors import LIGHT_GRAY, RED, PINK, BLACK
+from src.utils.colors import LIGHT_GRAY, YELLOW, PINK, BLACK
 from ..clickable import Button, InputBox
 from ..non_clickable import Text
 from src.utils import GameObject
@@ -15,7 +15,7 @@ class Win(GameObject):
         title: Text = Text("YOU WIN!", area.center,
                            FONT_TITLE, gap=(0, -100), color=PINK)
         score: Text = Text(f"{game.score.current}", title.rect.midtop,
-                           FONT_TITLE, "midbottom", gap=(0, -50), color=RED)
+                           FONT_TITLE, "midbottom", gap=(0, -50), color=YELLOW)
         self.input_box: InputBox = InputBox("Click to enter your name here",
                                             title.rect.midbottom, "midtop",
                                             color=LIGHT_GRAY)

@@ -52,16 +52,22 @@ class Button(Clickable):
 class Image(Clickable):
     def __init__(self, path: str, size: tuple[int, int] | None,
                  pos: tuple[int, int], align: str = "center",
-                 on_click: Callable[[], None] | None = None):
+                 on_click: Callable[[], None] | None = None,
+                 hover: bool = False):
         self.surface = pg.image.load(path).convert_alpha()
         if size is not None:
             self.surface = pg.transform.scale(self.surface, size)
         self.rect = self.surface.get_rect(**{align: pos})
         self.on_click = on_click
+        self.hover = hover
 
     def draw(self, screen: pg.Surface) -> None:
         hovered = self.rect.collidepoint(pg.mouse.get_pos())
-        pg.draw.rect(screen, LIGHT_GRAY if hovered else DARK_GRAY, self.rect)
+        if self.hover is False:
+            pg.draw.rect(screen, DARK_GRAY, self.rect)
+        else:
+            pg.draw.rect(screen, LIGHT_GRAY if hovered else DARK_GRAY,
+                         self.rect)
         screen.blit(self.surface, self.rect)
 
 
@@ -113,7 +119,8 @@ class InputBox(UiElement):
         self.active: bool = False
         self.button: Button = Button("Enter", self.rect.midright,
                                      "midleft", gap=(10, 0),
-                                     on_click=self.name_check)
+                                     on_click=self.name_check,
+                                     color_bu=LIGHT_GRAY)
 
     def draw(self, screen: pg.Surface) -> None:
         screen.blit(self.text_surface, self.rect)
