@@ -28,7 +28,9 @@ class Text(UiElement):
                  align: str = "center",
                  gap: tuple[int, int] | None = (0, 50),
                  color: tuple[int, int, int] = YELLOW):
+        self.text = text
         self.font: pg.Font = font
+        self.color = color
         self.surface: pg.Surface = font.render(text, True, color)
         if gap is not None:
             pos = add_gap(pos, gap)

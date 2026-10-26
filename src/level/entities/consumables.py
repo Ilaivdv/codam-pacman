@@ -1,5 +1,5 @@
 from .entity import Entity
-from src.game import game
+from src.game import game, settings
 import pygame as pg
 
 
@@ -32,9 +32,11 @@ class Consumable(Entity):
 
     def on_collide(self, group_name: str) -> None:
         assert game is not None
+        assert settings is not None
         self.remove(self.sprite_groups["consumable"])
         if self.is_super:
             game.player_is_super = True
             game.super_elapsed_time = 0
-
+            game.score.add_score(settings.points_per_super_pacgum)
+        game.score.add_score(settings.points_per_pacgum)
         game.remove_from_tree(self)

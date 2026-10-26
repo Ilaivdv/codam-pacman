@@ -5,7 +5,7 @@ import json
 from .error import HighscoreError
 
 
-class Score():
+class Score:
     def __init__(self) -> None:
         self._rank: dict[str, int | Any] = Config.parse_highscore()
         self._current: int = 0

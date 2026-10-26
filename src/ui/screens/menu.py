@@ -49,9 +49,9 @@ class Menu(GameObject):
         from src.level.level import Level
         from ..overlay.level_overlay import LevelOverlay
         level: Level = Level()
-        game.add_to_tree(LevelOverlay())
-        game.add_to_tree(level)
         game.remove_from_tree(self)
+        game.add_to_tree(level, False)
+        game.add_to_tree(LevelOverlay(), False)
 
     def quit_game(self) -> None:
         pg.quit()
@@ -61,7 +61,7 @@ class Menu(GameObject):
         assert game is not None
         game.remove_from_tree(self)
         from .rank import Rank
-        game.add_to_tree(Rank())
+        game.add_to_tree(Rank(), False)
 
     def process(self) -> None:
         assert game is not None
