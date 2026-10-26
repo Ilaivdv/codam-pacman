@@ -16,7 +16,8 @@ ASSET_LIST: dict[str, str] = {
         "instruction": "assets/instruction.md",
         "font1": "assets/font/1.ttf",
         "font2": "assets/font/2.otf",
-        "font3": "assets/font/3.ttf"
+        "font3": "assets/font/3.ttf",
+        "font4": "assets/font/4.ttf"
         }
 
 
