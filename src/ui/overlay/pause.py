@@ -1,4 +1,4 @@
-from ..ui_constant import GAP_DEFAULT, GAP_BIG
+from ..ui_constant import GAP_DEFAULT
 from ..non_clickable import Overlay
 from src.utils import GameObject
 from ..ui_element import add_gap
@@ -13,14 +13,14 @@ class Pause(GameObject):
     def __init__(self) -> None:
         assert game is not None
         area = game.display.get_rect()
-        self.bg: Overlay = Overlay(add_gap(area.center, GAP_BIG))
+        self.bg: Overlay = Overlay(area.center)
         defs: list[tuple[str, Callable[[], None]]] = [
             ("Continue", self.continue_game),
             ("Cheats", self.cheat),
             ("Menu", self.back_to_menu)
         ]
         self.buttons: list[Button] = []
-        x, y = add_gap(area.center, (0, 30))
+        x, y = add_gap(area.center, (0, -120))
         for label, method in defs:
             bu = Button(label, (x, y), "midbottom", on_click=method)
             x, y = add_gap(bu.rect.midbottom, GAP_DEFAULT)
@@ -49,7 +49,8 @@ class Pause(GameObject):
         assert game is not None
         game.remove_from_tree(self)
         from ..screens.menu import Menu
-        game.add_to_tree(Menu())
+        game._process_tree.pop()
+        game.add_to_tree(Menu(), False)
 
     def process(self) -> None:
         assert game is not None

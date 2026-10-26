@@ -66,7 +66,8 @@ class Image(Clickable):
         if self.hover is False:
             pg.draw.rect(screen, DARK_GRAY, self.rect)
         else:
-            pg.draw.rect(screen, LIGHT_GRAY if hovered else DARK_GRAY, self.rect)
+            pg.draw.rect(screen, LIGHT_GRAY if hovered else DARK_GRAY,
+                         self.rect)
         screen.blit(self.surface, self.rect)
 
 
@@ -118,7 +119,8 @@ class InputBox(UiElement):
         self.active: bool = False
         self.button: Button = Button("Enter", self.rect.midright,
                                      "midleft", gap=(10, 0),
-                                     on_click=self.name_check)
+                                     on_click=self.name_check,
+                                     color_bu=LIGHT_GRAY)
 
     def draw(self, screen: pg.Surface) -> None:
         screen.blit(self.text_surface, self.rect)

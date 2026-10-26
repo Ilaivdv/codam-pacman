@@ -1,4 +1,4 @@
-from ..ui_constant import GAP_SCORE, SIZE_LIFE, SIZE_PAUSE, FONT_RANK
+from ..ui_constant import SIZE_LIFE, SIZE_PAUSE, FONT_RANK
 from src.utils.colors import LIGHT_GRAY, PINK, RED
 from src.game import game, settings
 from ..ui_element import add_gap
@@ -20,10 +20,10 @@ class LevelOverlay(GameObject):
                             "topleft")
         pause: Image = Image("assets/pause.png", SIZE_PAUSE,
                              add_gap(self.area.bottomright, (-20, -100)),
-                             align="bottomright", on_click=self.pause, hover=True)
-        x, _ = life.rect.topleft
-        _, y = pause.rect.center
-        level: Text = Text("LEVEL 1",add_gap(self.area.bottomleft, (20, -140)),
+                             align="bottomright", on_click=self.pause,
+                             hover=True)
+        level: Text = Text("LEVEL #TODO",
+                           add_gap(self.area.bottomleft, (20, -140)),
                            font=FONT_RANK, color=LIGHT_GRAY,
                            align="bottomleft")
         self.elements: list[Any] = [pause, level]
@@ -67,6 +67,7 @@ class LevelOverlay(GameObject):
 
     def process(self) -> None:
         assert game is not None
+        self.elapsed += pg.time.get_ticks()
         if self.time_left <= 0:
             if game.is_paused is False:
                 game.is_paused = True
@@ -79,9 +80,10 @@ class LevelOverlay(GameObject):
             else:
                 self.lose()
         elif (game.is_paused is False
-              and self.time_left >= 0):
-            self.elapsed += pg.time.get_ticks()
-            self.time_left = self.level_max_time - int(self.elapsed / 100000)
+              and self.time_left >= 0 and self.elapsed >= 1000):
+            self.elapsed = 0
+            self.time_left -= 1
+            # if self.elapsed >= 1000:
             self.minute = str(int(self.time_left / 60)).zfill(2)
             self.second = str(int(self.time_left % 60)).zfill(2)
             time_remain = Text(f"{self.minute}:{self.second}",

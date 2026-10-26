@@ -1,4 +1,4 @@
-from src.utils.colors import LIGHT_GRAY, BLUE, RED, BLACK
+from src.utils.colors import LIGHT_GRAY, BLUE, YELLOW, BLACK
 from src.ui.ui_constant import FONT_TITLE, GAP_BIG
 from ..clickable import Button, InputBox
 from ..non_clickable import Text
@@ -15,12 +15,13 @@ class Lose(GameObject):
         title: Text = Text("GAME OVER", area.center,
                            FONT_TITLE, gap=(0, -100), color=BLUE)
         score: Text = Text(f"{game.score.current}", title.rect.midtop,
-                           FONT_TITLE, "midbottom", gap=(0, -50), color=RED)
+                           FONT_TITLE, "midbottom", gap=(0, -50), color=YELLOW)
         self.input_box: InputBox = InputBox("Click to enter your name here",
                                             title.rect.midbottom, "midtop",
                                             color=LIGHT_GRAY)
         bu: Button = Button("Back to menu", title.rect.midbottom,
-                            "midtop", GAP_BIG, self.back_to_menu)
+                            "midtop", GAP_BIG, self.back_to_menu,
+                            color_bu=LIGHT_GRAY)
         self.buttons: list[Button] = [bu]
         self.elements: list[Any] = [bu, title, self.input_box, score]
 

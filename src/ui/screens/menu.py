@@ -1,7 +1,7 @@
-from ..ui_constant import GAP_DEFAULT,FONT_TITLE, FONT_NOTI
-from ..clickable import Button, Image, Text
+from ..ui_constant import GAP_DEFAULT, FONT_TITLE, FONT_AUTHOR
+from ..clickable import Button, Image
 from src.utils.colors import DARK_GRAY, YELLOW, LIGHT_GRAY, BLACK
-from ..non_clickable import Overlay
+from ..non_clickable import Overlay, Text
 from src.game import game, settings
 from ..ui_element import add_gap
 from typing import Callable, Any
@@ -19,10 +19,15 @@ class Menu(GameObject):
         path = "assets/player.png"
         logo: Text = Text("Pac-Man", area.center, FONT_TITLE, gap=(0, -500),
                           color=YELLOW)
-        logo2: Text = Text("Pac-Man", add_gap(logo.rect.center, (15, 15)), FONT_TITLE, gap=None,
-                          color=BLACK)
-        start_im = Image(path, (2000, 120), add_gap(logo.rect.midbottom, (45, -20)), "midtop")
-        our_name = Text("made by ilai & yawen", add_gap(logo.rect.midbottom, (0, 120)), FONT_NOTI, color=LIGHT_GRAY)
+        logo2: Text = Text("Pac-Man", add_gap(logo.rect.center, (15, 15)),
+                           FONT_TITLE, gap=None,
+                           color=BLACK)
+        start_im: Image = Image(path, (2000, 120),
+                                add_gap(logo.rect.midbottom, (45, -20)),
+                                "midtop")
+        our_name: Text = Text("made by ilai & yawen",
+                              add_gap(logo.rect.midbottom, (0, 120)),
+                              FONT_AUTHOR, color=LIGHT_GRAY)
         defs: list[tuple[str, Callable[[], None]]] = [
             ("Play", self.start_game),
             ("Rank", self.show_rank),
@@ -41,7 +46,7 @@ class Menu(GameObject):
     def instructions(self) -> None:
         assert game is not None
         from ..overlay.instruction import Instruction
-        game.add_to_tree(Instruction())
+        game.add_to_tree(Instruction(), False)
         game.remove_from_tree(self)
 
     def cheat(self) -> None:
@@ -51,8 +56,9 @@ class Menu(GameObject):
 
     def start_game(self) -> None:
         assert game is not None
+        if game.is_paused is True:
+            game.is_paused = False
         game.remove_from_tree(self)
-
         from src.level import LevelManager
         game.add_to_tree(LevelManager())
 
