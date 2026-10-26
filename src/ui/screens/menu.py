@@ -58,6 +58,7 @@ class Menu(GameObject):
         from src.level import LevelManager
         if game.is_paused:
             game.is_paused = False
+        game.current_level = 0
         game.remove_from_tree(self)
         game.add_to_tree(LevelManager())
 

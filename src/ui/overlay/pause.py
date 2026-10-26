@@ -46,9 +46,8 @@ class Pause(GameObject):
 
     def back_to_menu(self) -> None:
         assert game is not None
-        game.remove_from_tree(self)
         from ..screens.menu import Menu
-        game._process_tree.pop()
+        game.process_tree.clear()
         game.add_to_tree(Menu(), False)
 
     def process(self) -> None:
