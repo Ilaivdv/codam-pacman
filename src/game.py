@@ -44,7 +44,6 @@ class Game:
         self._score: Score = Score()
         self._player_lives: int = settings.lives
         self.is_paused: bool = False
-        self.cheat: bool = False
         self.player_is_super: bool = False
         self.super_elapsed_time: int = 0
         self.cheat_options: dict[str, bool] = {

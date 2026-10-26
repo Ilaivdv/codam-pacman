@@ -41,7 +41,6 @@ class Menu(GameObject):
 
     def cheat(self) -> None:
         assert game is not None
-        game.cheat = True
         self.start_game()
 
     def start_game(self) -> None:
