@@ -22,6 +22,7 @@ class Consumable(Entity):
         self.sprite_groups["consumable"].add(self)
         self.collides_with: dict[str, pg.sprite.Group[Entity]] = {
                 k: self.sprite_groups[k] for k in ["player"]}
+        self.consumed: bool = False
 
         game.add_to_tree(self)
 
@@ -31,8 +32,7 @@ class Consumable(Entity):
         super().process()
 
     def on_collide(self, group_name: str) -> None:
-        assert game is not None
-        assert settings is not None
+        assert game is not None and settings is not None
         self.remove(self.sprite_groups["consumable"])
         if self.is_super:
             game.player_is_super = True
@@ -40,3 +40,4 @@ class Consumable(Entity):
             game.score.add_score(settings.points_per_super_pacgum)
         game.score.add_score(settings.points_per_pacgum)
         game.remove_from_tree(self)
+        self.consumed = True

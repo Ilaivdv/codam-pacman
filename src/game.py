@@ -43,6 +43,7 @@ class Game:
         self.is_paused: bool = False
         self.player_is_super: bool = False
         self.super_elapsed_time: int = 0
+        self.level_cleared: bool = False
         self.cheat_options: dict[str, bool] = {
             "Invincibility": False,
             "Skip level": False,

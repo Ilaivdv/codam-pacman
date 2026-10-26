@@ -49,13 +49,13 @@ class LevelOverlay(GameObject):
             from .pause import Pause
             game.add_to_tree(Pause(), False)
         else:
-            game._process_tree.pop()
+            game.process_tree.pop()
 
     def win(self) -> None:
         assert game is not None
         from .win import Win
-        game.remove_from_tree(self)
-        game._process_tree.pop()
+        game.process_tree.clear()
+        game.level_cleared = False
         game.add_to_tree(Win(), False)
 
     def lose(self) -> None:
@@ -67,6 +67,10 @@ class LevelOverlay(GameObject):
 
     def process(self) -> None:
         assert game is not None
+        if game.level_cleared:
+            game.is_paused = True
+            self.win()
+            return
         time_remain: Text | None = None
         if game.player_lives <= 0 or self.time_left <= 0:
             game.is_paused = True
