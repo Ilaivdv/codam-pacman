@@ -34,7 +34,7 @@ class LevelManager(GameObject):
             return
 
         if game.cheat_options["Skip level"]:
-            self._level = self.start_next()
+            self.start_next()
             game.cheat_options["Skip level"] = False
 
     @property
