@@ -12,23 +12,21 @@ import pygame as pg
 class LevelOverlay(GameObject):
     def __init__(self) -> None:
         assert game is not None
+        assert settings is not None
         self.area: pg.Rect = game.display.get_rect()
         path: str = "assets/pacgum.png"
         life: Image = Image(path, SIZE_LIFE,
                             add_gap(self.area.midtop, GAP_LIFE),
                             "midtop")
-        self.elapsed: float = 0
-        score: Text = Text(f"{game.score.current}", add_gap(
-            self.area.midtop, GAP_SCORE),
-                           font=FONT_RANK, align="midleft")
+        x, _ = add_gap(self.area.midtop, GAP_SCORE)
         y = self.area.bottom
         pause: Image = Image("assets/pause.png", SIZE_PAUSE,
-                             (score.rect.x, y - 100),
+                             (x, y - 100),
                              align="midbottom", on_click=self.pause)
         level: Text = Text("Lv 1", (life.rect.x, pause.rect.y - 30),
                            font=FONT_RANK, color=LIGHT_GRAY,
                            align="midleft")
-        self.elements: list[Any] = [score, pause, level]
+        self.elements: list[Any] = [pause, level]
         self.lives: list[Image] = [life]
         if game.player_lives > 1:
             for _ in range(game.player_lives - 1):
@@ -37,58 +35,76 @@ class LevelOverlay(GameObject):
                              "midleft")
                 self.lives.append(life)
         self.reactions: list[Any] = [pause]
+        self.elapsed: int = 0
+        self.level_max_time: int = settings.level_max_time
+        self.time_left: int = self.level_max_time
+        self.minute = str(int(self.time_left / 60)).zfill(2)
+        self.second = str(int(self.time_left % 60)).zfill(2)
+        self.win_score: int = settings.points_per_pacgum * settings.pacgum
 
     def pause(self) -> None:
         assert game is not None
-        if game.is_paused:
-            return
-        from .pause import Pause
-        game.add_to_tree(Pause(), False)
-        game.is_paused = True
+        game.is_paused = not game.is_paused
+        if game.is_paused is True:
+            from .pause import Pause
+            game.add_to_tree(Pause(), False)
+        else:
+            game._process_tree.pop()
 
     def win(self) -> None:
         assert game is not None
         from .win import Win
-        game.add_to_tree(Win())
-        game.is_paused = True
+        game.remove_from_tree(self)
+        game._process_tree.pop()
+        game.add_to_tree(Win(), False)
 
     def lose(self) -> None:
         assert game is not None
         from .lose import Lose
-        game.add_to_tree(Lose())
-        game.is_paused = True
-
-    def __str__(self) -> str:
-        return (self.__class__.__name__)
+        game.remove_from_tree(self)
+        game._process_tree.pop()
+        game.add_to_tree(Lose(), False)
 
     def process(self) -> None:
-        assert game is not None and settings is not None
-        self.elapsed += pg.time.get_ticks()
-        time_left: int = settings.level_max_time - int(self.elapsed / 100000)
-        if time_left >= 0:
-            minute: str = str(int(time_left / 60)).zfill(2)
-            second: str = str(int(time_left % 60)).zfill(2)
-            if time_left < 30:
-                time_remain = Text(f"{minute}:{second}",
-                                   self.area.midtop, FONT_RANK,
-                                   align="center", color=RED)
-            else:
-                time_remain = Text(f"{minute}:{second}",
-                                   self.area.midtop, FONT_RANK,
-                                   align="center", color=PINK)
-            time_remain.draw(game.display)
-        else:
+        assert game is not None
+        if self.time_left <= 0:
+            if game.is_paused is False:
+                game.is_paused = True
             time_remain = Text("00:00",
                                self.area.midtop, FONT_RANK,
+                               align="center", color=PINK)
+            if (game.score.current >= self.win_score
+               and game.player_lives >= 1):
+                self.win()
+            else:
+                self.lose()
+        elif (game.is_paused is False
+              and self.time_left >= 0):
+            self.elapsed += pg.time.get_ticks()
+            self.time_left = self.level_max_time - int(self.elapsed / 100000)
+            self.minute = str(int(self.time_left / 60)).zfill(2)
+            self.second = str(int(self.time_left % 60)).zfill(2)
+            time_remain = Text(f"{self.minute}:{self.second}",
+                               self.area.midtop, FONT_RANK,
+                               align="center", color=PINK)
+        elif game.is_paused and self.time_left >= 0:
+            time_remain = Text(f"{self.minute}:{self.second}",
+                               self.area.midtop, FONT_RANK,
+                               align="center", color=PINK)
+        if self.time_left < 30:
+            time_remain = Text(f"{self.minute}:{self.second}",
+                               self.area.midtop, FONT_RANK,
                                align="center", color=RED)
-            time_remain.draw(game.display)
-            self.lose()
+        time_remain.draw(game.display)
+        self.score: Text = Text(f"{game.score.current}",
+                                add_gap(self.area.midtop, GAP_SCORE),
+                                font=FONT_RANK, align="midleft")
+        self.score.draw(game.display)
 
         if len(self.lives) > game.player_lives:
             diff = len(self.lives) - game.player_lives
             for _ in range(diff):
                 self.lives.pop()
-
         for element in self.elements:
             element.draw(game.display)
         for life in self.lives:

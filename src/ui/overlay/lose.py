@@ -28,7 +28,7 @@ class Lose(GameObject):
         assert game is not None
         from ..screens.menu import Menu
         game.remove_from_tree(self)
-        game.add_to_tree(Menu())
+        game.add_to_tree(Menu(), False)
 
     def process(self) -> None:
         assert game is not None
