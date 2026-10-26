@@ -59,9 +59,12 @@ class Image(Clickable):
         self.rect = self.surface.get_rect(**{align: pos})
         self.on_click = on_click
 
-    def draw(self, screen: pg.Surface) -> None:
+    def draw(self, screen: pg.Surface, hover: bool = False) -> None:
         hovered = self.rect.collidepoint(pg.mouse.get_pos())
-        pg.draw.rect(screen, LIGHT_GRAY if hovered else DARK_GRAY, self.rect)
+        if hover is False:
+            pg.draw.rect(screen, DARK_GRAY, self.rect)
+        else:
+            pg.draw.rect(screen, LIGHT_GRAY if hovered else DARK_GRAY, self.rect)
         screen.blit(self.surface, self.rect)
 
 
