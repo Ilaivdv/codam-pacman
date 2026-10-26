@@ -51,12 +51,10 @@ class Menu(GameObject):
 
     def start_game(self) -> None:
         assert game is not None
-        from src.level.level import Level
-        from ..overlay.level_overlay import LevelOverlay
-        level: Level = Level()
         game.remove_from_tree(self)
-        game.add_to_tree(level, False)
-        game.add_to_tree(LevelOverlay(), False)
+
+        from src.level import LevelManager
+        game.add_to_tree(LevelManager())
 
     def quit_game(self) -> None:
         pg.quit()
