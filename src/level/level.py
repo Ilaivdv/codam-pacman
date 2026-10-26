@@ -1,4 +1,5 @@
 from .entities import Entity, Consumable, Player, Enemy
+from src.ui.overlay.level_overlay import LevelOverlay
 from src.utils import SpriteSheet, GameObject
 from mazegenerator import MazeGenerator  # type: ignore[import-untyped]
 from src.game import game, settings  # noqa: F401
@@ -14,6 +15,8 @@ class Level(GameObject):
         self.mazegen: MazeGenerator = MazeGenerator((settings.width,
                                                      settings.height))
         self.tileset: SpriteSheet = SpriteSheet(image=game.assets.tileset)
+        self.overlay: LevelOverlay = LevelOverlay()
+        game.add_to_tree(self.overlay)
 
         self.mazegen.generate(seed)
         self.maze: list[list[int]] = self.mazegen.maze
