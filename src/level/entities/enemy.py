@@ -14,18 +14,12 @@ class Enemy(Entity):
                  maze: list[list[int]],
                  pos: tuple[int, int],
                  player_pos: pg.Vector2,
+                 color: tuple[int, int, int],
                  speed: int = 1,
                  ) -> None:
         assert game is not None
 
         image: pg.Surface = game.assets.enemy
-        color: tuple[int, int, int] = random.choice([
-            RED,
-            CYAN,
-            BLUE,
-            PURPLE,
-            GREEN
-            ])
 
         image.fill(color, special_flags=pg.BLEND_MULT)
         self.sprite: SpriteSheet = SpriteSheet(image=image,
