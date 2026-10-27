@@ -135,6 +135,7 @@ class Level(GameObject):
     def exit(self) -> None:
         assert game is not None
         game.player_is_super = False
+        game.remove_from_tree(self.player)
         game.remove_from_tree(self.overlay)
         del self.overlay
         game.remove_from_tree(self)
@@ -171,6 +172,9 @@ class Level(GameObject):
             self._on_player_death()
 
             if self._current_player_lives > 0:
+                for e in self.enemies:
+                    game.remove_from_tree(e)
+                    del e
                 self._spawn_enemies()
                 self.player = Player(self.sprite_groups,
                                      self.tileset.frame_size,

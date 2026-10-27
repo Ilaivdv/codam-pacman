@@ -65,9 +65,9 @@ class LevelOverlay(GameObject):
         assert game is not None and settings is not None
         dt = game.clock.get_time()
         if game.level_cleared:
-            game.is_paused = True
             self.time_left = settings.level_max_time
-            self.win()
+            if game.current_level == settings.level:
+                self.win()
             return
         if game.player_lives <= 0 or self.time_left <= 0:
             game.is_paused = True

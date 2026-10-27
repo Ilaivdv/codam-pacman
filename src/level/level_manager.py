@@ -29,13 +29,16 @@ class LevelManager(GameObject):
         self._level = None
 
     def process(self) -> None:
-        assert game is not None
+        assert game is not None and settings is not None
         if game.is_paused:
             return
 
-        if game.cheat_options["Skip level"]:
+        if game.current_level >= settings.level:
+            return
+        if game.cheat_options["Skip level"] or game.level_cleared:
             self.start_next()
             game.cheat_options["Skip level"] = False
+            game.level_cleared = False
 
     @property
     def current_level(self) -> int:
