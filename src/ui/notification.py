@@ -16,7 +16,7 @@ class Notification(GameObject):
     def __init__(self) -> None:
         assert game is not None
         assert settings is not None
-        self.hold: int = 2000
+        self.hold: int = 100000
         self.fade: int = 2000
         area = game.display.get_rect()
         all_text: str = ""
