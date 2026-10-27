@@ -55,7 +55,7 @@ class Level(GameObject):
         self._current_player_lives: int = game.player_lives
         self.pacgums: list[Consumable] = []
         self.super_pacgums: list[Consumable] = []
-        self._spawn_pacgums(1, 4)
+        self._spawn_pacgums((len(self.maze) * len(self.maze[0])) // 4, 4)
         self._super_pacgum_duration: int = 7000
 
         self.enemy_colors: list[tuple[int, int, int]] = [
