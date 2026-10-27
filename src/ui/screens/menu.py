@@ -11,6 +11,10 @@ import sys
 
 
 class Menu(GameObject):
+    """
+    A Menu screen showing start page of game.
+    """
+
     def __init__(self) -> None:
         assert game is not None and settings is not None
 
@@ -48,10 +52,6 @@ class Menu(GameObject):
         from ..overlay.instruction import Instruction
         game.add_to_tree(Instruction(), False)
         game.remove_from_tree(self)
-
-    def cheat(self) -> None:
-        assert game is not None
-        self.start_game()
 
     def start_game(self) -> None:
         assert game is not None

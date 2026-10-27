@@ -10,6 +10,11 @@ import pygame as pg
 
 
 class Instruction(GameObject):
+    """
+    An Intruction class for displaying messages relate with config choices.
+    (if one input from config is bad and is filled with default value.)
+    """
+
     def __init__(self) -> None:
         assert game is not None
         area = game.display.get_rect()
@@ -41,9 +46,6 @@ class Instruction(GameObject):
         from ..screens.menu import Menu
         game.remove_from_tree(self)
         game.add_to_tree(Menu())
-
-    def __str__(self) -> str:
-        return (self.__class__.__name__)
 
     def process(self) -> None:
         assert game is not None

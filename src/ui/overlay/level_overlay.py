@@ -10,6 +10,10 @@ import pygame as pg
 
 
 class LevelOverlay(GameObject):
+    """
+    A Overlay class making the UI on the Level screen.
+    """
+
     def __init__(self) -> None:
         assert game is not None
         assert settings is not None
@@ -62,6 +66,11 @@ class LevelOverlay(GameObject):
         game.add_to_tree(Lose(), False)
 
     def process(self) -> None:
+        """
+        Makes remaining time counting down each second, 
+        shows the current score, defines the win/lose senarios
+
+        """
         assert game is not None and settings is not None
         dt = game.clock.get_time()
         if game.level_cleared:
