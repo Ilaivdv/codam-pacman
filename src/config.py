@@ -57,7 +57,7 @@ class Config(BaseModel):
                     "points_per_super_pacgum": 50,
                     "points_per_ghost": 200,
                     "seed": 42,
-                    "level_max_time": 90
+                    "level_max_time": 120
                 }
         for key in game_set.keys():
             if key in config_dict.keys():
@@ -70,7 +70,7 @@ class Config(BaseModel):
                     game_set[key] = 15
                 elif (key in ["lives", "level", "pacgum"] or "points" in key
                       or "time" in key):
-                    if config_dict[key] <= 0:
+                    if config_dict[key] <= 0 or config_dict[key] >= 500:
                         notification.append(("NOTICE: Invalid VALUE in config "
                                              "file, using a default value:"
                                              f" {key}({config_dict[key]} -> "
