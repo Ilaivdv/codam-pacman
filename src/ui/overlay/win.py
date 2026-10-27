@@ -1,4 +1,4 @@
-from ..ui_constant import FONT_TITLE, GAP_BIG, GAP_DEFAULT
+from ..ui_constant import FONT_TITLE, GAP_BIG
 from src.utils.colors import LIGHT_GRAY, YELLOW, PINK, BLACK
 from ..clickable import Button, InputBox
 from ..non_clickable import Text
@@ -19,14 +19,10 @@ class Win(GameObject):
         self.input_box: InputBox = InputBox("Click to enter your name here",
                                             title.rect.midbottom, "midtop",
                                             color=LIGHT_GRAY)
-        bu2: Button = Button("Continue", title.rect.midbottom,
-                             "midtop", GAP_BIG, on_click=self.continue_game,
-                             color_bu=LIGHT_GRAY)
-        bu: Button = Button("Back to menu", bu2.rect.midbottom,
-                            "midtop", GAP_DEFAULT, self.back_to_menu,
-                            color_bu=LIGHT_GRAY)
-        self.buttons: list[Button] = [bu, bu2]
-        self.elements: list[Any] = [bu, bu2, title, self.input_box, score]
+        bu: Button = Button("Back to menu", title.rect.midbottom,
+                            "midtop", GAP_BIG, self.back_to_menu)
+        self.buttons: list[Button] = [bu]
+        self.elements: list[Any] = [bu, title, self.input_box, score]
 
     def continue_game(self) -> None:
         assert game is not None
