@@ -1,11 +1,11 @@
 {
   "highscore_filename": "hello.json",
-  "level": 2,
-  "width": 25,
-  "height": 25,
+  "level": 3,
+  "width": 19,
+  "height": 19,
   "pacgum": 42,
   "points_per_pacgum": 10,
   "points_per_ghost": 200,
-  "seed": 42,
-  "level_max_time": 90
+  "seed": 400,
+  "level_max_time": 120
 }
