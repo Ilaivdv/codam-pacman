@@ -30,7 +30,7 @@ def start_game(config_file: str) -> None:
 
 class Game:
     """
-    Game class for holding and handling the game's process tree and shared 
+    Game class for holding and handling the game's process tree and shared
     variables.
     """
 
