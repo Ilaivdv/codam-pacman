@@ -47,7 +47,7 @@ class Pause(GameObject):
         assert game is not None
         from ..screens.menu import Menu
         game.process_tree.clear()
-        game.add_to_tree(Menu(), False)
+        game.add_to_tree(Menu())
 
     def process(self) -> None:
         assert game is not None

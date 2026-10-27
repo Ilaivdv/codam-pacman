@@ -89,15 +89,23 @@ class Game:
         pg.quit()
 
     def add_to_tree(self, obj: GameObject, front: bool = True) -> None:
+        """
+        Adds given GameObject to the tree either to front layer or back.
+        """
+
         if front:
             self._process_tree.insert(0, obj)
         else:
             self._process_tree.append(obj)
 
     def remove_from_tree(self, obj: GameObject) -> None:
+        """ Removes given GameObject from tree and returns if not in tree. """
+        if obj not in self._process_tree:
+            return
         self._process_tree.remove(obj)
 
     def reset_stats(self) -> None:
+        """ Resets all variables. """
         assert settings is not None
         self._player_lives = settings.lives
         self._score = Score()
