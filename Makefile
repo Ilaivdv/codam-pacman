@@ -18,6 +18,9 @@ debug: install
 install:
 	@ uv sync
 
+build:
+	@ uv run pyinstaller pac-man.py
+
 lint:
 	-@ $(FLAKE8)
 	-@ $(MYPY) $(MYPYFLAGS)
