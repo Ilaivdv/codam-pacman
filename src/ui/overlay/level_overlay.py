@@ -73,6 +73,10 @@ class LevelOverlay(GameObject):
         """
         assert game is not None and settings is not None
         dt = game.clock.get_time()
+        if game.cheat_options["Skip level"] and \
+                game.current_level == settings.level:
+            game.cheat_options["Skip level"] = False
+            self.win()
         if game.level_cleared:
             self.time_left = settings.level_max_time
             if game.current_level == settings.level:
