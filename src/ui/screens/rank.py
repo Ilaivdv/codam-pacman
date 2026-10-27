@@ -41,11 +41,9 @@ class Rank(GameObject):
         assert game is not None
         if game.is_paused is True:
             game.is_paused = False
-        else:
-            from src.level.level import Level
-            level: Level = Level()
-            game.add_to_tree(level)
         game.remove_from_tree(self)
+        from src.level import LevelManager
+        game.add_to_tree(LevelManager())
 
     def process(self) -> None:
         assert game is not None
