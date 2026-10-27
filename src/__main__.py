@@ -1,3 +1,8 @@
+"""
+Entry point for the game.
+Validates config, falls back to default values on invalid keys.
+"""
+
 from src import start_game
 import os
 
