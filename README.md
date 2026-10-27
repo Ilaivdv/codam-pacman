@@ -41,6 +41,11 @@ Key features include:
    uv run pac-man.py
    ```
 
+   **Build to standalone executable:**
+   ```bash
+   make build
+   ```
+
 ---
 
 ## Configuration
