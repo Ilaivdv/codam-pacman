@@ -52,26 +52,35 @@ class Config(BaseModel):
                     "level": 10,
                     "width": 15,
                     "height": 15,
-                    'lives': 3, 'pacgum': 42,
-                    'points_per_pacgum': 10,
-                    'points_per_super_pacgum': 50,
-                    'points_per_ghost': 200,
-                    'seed': 42,
-                    'level_max_time': 90
+                    "lives": 3, "pacgum": 42,
+                    "points_per_pacgum": 10,
+                    "points_per_super_pacgum": 50,
+                    "points_per_ghost": 200,
+                    "seed": 42,
+                    "level_max_time": 90
                 }
         for key in game_set.keys():
             if key in config_dict.keys():
                 if ((key == "width" or key == "height")
-                   and (config_dict[key] > 20 or config_dict[key] < 10)):
+                   and (config_dict[key] > 20 or config_dict[key] <= 10)):
                     notification.append(("NOTICE: Using a default size(15"
-                                         f"x15), wrong {key} in config file"
-                                         f": {config_dict[key]}"))
+                                         f"x15), wrong {key} value in config "
+                                         f"file: {config_dict[key]} -> "
+                                         f"{game_set[key]}"))
                     game_set[key] = 15
+                elif (key in ["lives", "level", "pacgum"] or "points" in key
+                      or "time" in key):
+                    if config_dict[key] <= 0:
+                        notification.append(("NOTICE: Invalid VALUE in config "
+                                             "file, using a default value:"
+                                             f" {key}({config_dict[key]} -> "
+                                             f"{game_set[key]})"))
                 else:
                     game_set[key] = config_dict[key]
             else:
                 notification.append(("NOTICE: Missing KEY in config file,"
-                                     f"using a default value: {key}"))
+                                     "using a default value: "
+                                     f"{key}({game_set[key]})"))
         if notification:
             game_set["notification"] = notification
         else:
