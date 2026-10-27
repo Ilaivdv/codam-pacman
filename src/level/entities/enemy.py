@@ -232,11 +232,12 @@ class Enemy(Entity):
                 if len(self.parent.current_path) < 4:
                     self.parent.current_path = self.parent._get_path()
 
-            if self.parent.get_maze_cell(self.parent.current_path[-1]) \
-                    in game.enemies_pos:
-                return
-            if self.parent.target_reached() and self.parent.current_path:
-                self.parent.move_to_pos(self.parent.current_path.pop())
+            if self.parent.target_reached():
+                avoid = random.randint(0, 10)
+                if avoid == 7:
+                    self.parent.move_to_pos(self.parent.get_neighbors()[0])
+                if self.parent.current_path:
+                    self.parent.move_to_pos(self.parent.current_path.pop())
 
     class RunningState(State):
         """ The state the enemy is in when vulnerable. """
