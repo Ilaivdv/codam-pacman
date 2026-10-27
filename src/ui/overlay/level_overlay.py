@@ -62,31 +62,32 @@ class LevelOverlay(GameObject):
         game.add_to_tree(Lose(), False)
 
     def process(self) -> None:
-        assert game is not None
+        assert game is not None and settings is not None
         dt = game.clock.get_time()
         if game.level_cleared:
             game.is_paused = True
+            self.time_left = settings.level_max_time
             self.win()
             return
         if game.player_lives <= 0 or self.time_left <= 0:
             game.is_paused = True
             self.lose()
             return
-        elif game.is_paused is False and self.time_left >= 0:
+        if self.time_left < 30:
+            color = RED
+        else:
+            color = PINK
+        if not game.is_paused and self.time_left >= 0:
             self.elapsed += dt
             if self.elapsed >= 1000:
                 self.elapsed = 0
                 self.time_left -= 1
             minute = str(int(self.time_left / 60)).zfill(2)
             second = str(int(self.time_left % 60)).zfill(2)
-        if self.time_left < 30:
-            color = RED
-        else:
-            color = PINK
-        time_remain = Text(f"{minute}:{second}",
-                           self.area.midtop, FONT_RANK,
-                           align="center", color=color)
-        time_remain.draw(game.display)
+            time_remain = Text(f"{minute}:{second}",
+                               self.area.midtop, FONT_RANK,
+                               align="center", color=color)
+            time_remain.draw(game.display)
         self.score: Text = Text(f"{game.score.current}",
                                 add_gap(self.area.topleft, (20, 30)),
                                 font=FONT_RANK, align="topleft")
