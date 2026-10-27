@@ -25,8 +25,8 @@ class Notification(GameObject):
             all_text += "\n".join(textwrap.wrap(i, width=50))
             all_text += "\n"
         self.noti: Noti = Noti(all_text,
-                               add_gap(area.midright, GAP_DEFAULT),
-                               "midright")
+                               add_gap(area.topright, GAP_DEFAULT),
+                               "topright")
         self.alpha: int = 255
         self.elapsed: int = 0
 

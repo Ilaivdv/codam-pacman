@@ -50,7 +50,6 @@ class Score:
         """ Updates user's local highscore.json with new score. """
 
         file_path: str = os.path.expanduser("~/.local/share/highscore.json")
-        print(self.rank)
         if not self.rank or len(self.rank) == 1:
             with open(file_path, "w") as f:
                 json.dump(self.rank, f)
