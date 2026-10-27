@@ -107,6 +107,7 @@ class Level(GameObject):
             is_available[spawn_pos[1]][spawn_pos[0]] = False
 
     def _spawn_enemies(self) -> None:
+        assert game is not None
         spawn_positions: list[tuple[int, int]] = [
                 (0, 0),
                 (len(self.maze) - 1, 0),
@@ -115,11 +116,14 @@ class Level(GameObject):
                 ]
         if not self.enemies:
             for pos in spawn_positions:
-                self.enemies.append(Enemy(self.sprite_groups,
-                                          self.tileset.frame_size,
-                                          self.maze, pos,
-                                          pg.Vector2(self.player_spawn_pos),
-                                          1))
+                enemy: Enemy = Enemy(self.sprite_groups,
+                                     self.tileset.frame_size,
+                                     self.maze, pos,
+                                     pg.Vector2(self.player_spawn_pos),
+                                     1)
+                game.enemies_pos.append(pos)
+                self.enemies.append(enemy)
+
 
     def _on_player_death(self) -> None:
         assert game is not None
@@ -144,8 +148,9 @@ class Level(GameObject):
         assert game is not None
 
         game.display.fill(BLACK)
-        for e in self.enemies:
+        for n, e in enumerate(self.enemies):
             e.player_pos = pg.Vector2(self.player.current_maze_position)
+            game.enemies_pos[n] = e.current_maze_position
 
         # Draw the maze
         for y in range(0, len(self.maze)):

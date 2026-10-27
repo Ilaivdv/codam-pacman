@@ -59,9 +59,9 @@ class Entity(GameObject, pg.sprite.Sprite, ABC):
                 res.append(i)
         return res
 
-    def _get_maze_cell(self, direction: Direction,
-                       from_pos: tuple[int, int] | None = None
-                       ) -> tuple[int, int]:
+    def get_maze_cell(self, direction: Direction,
+                      from_pos: tuple[int, int] | None = None
+                      ) -> tuple[int, int]:
         if from_pos is None:
             from_pos = self.current_maze_position
         if not self._validate_direction(direction, from_pos):

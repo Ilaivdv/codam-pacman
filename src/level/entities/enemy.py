@@ -152,7 +152,7 @@ class Enemy(Entity):
 
         if reverse:
             for dir in self.get_neighbors():
-                if get_heuristic(self._get_maze_cell(dir)
+                if get_heuristic(self.get_maze_cell(dir)
                                  ) > get_heuristic(pos):
                     return [dir]
 
@@ -169,7 +169,7 @@ class Enemy(Entity):
             curr = heapq.heappop(open_cells)
             heapq.heappush(closed_cells, curr)
             for dir in self.get_neighbors(curr[1:]):
-                x, y = self._get_maze_cell(dir, curr[1:])
+                x, y = self.get_maze_cell(dir, curr[1:])
                 h = get_heuristic((x, y))
                 if (h, x, y) not in closed_cells:
                     if (h, x, y) not in open_cells:
@@ -198,6 +198,9 @@ class Enemy(Entity):
                 if len(self.parent.current_path) < 4:
                     self.parent.current_path = self.parent._get_path()
 
+            if self.parent.get_maze_cell(self.parent.current_path[-1]) \
+                    in game.enemies_pos:
+                return
             if self.parent.target_reached() and self.parent.current_path:
                 self.parent.move_to_pos(self.parent.current_path.pop())
 
