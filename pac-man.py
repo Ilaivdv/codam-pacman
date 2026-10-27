@@ -6,7 +6,7 @@ try:
     from src import start_game
     import os
 except ModuleNotFoundError as e:
-    print("Missing modules! Please run the program through uv.")
+    print(f"Missing modules! Please run the program through uv.\nError: {e}")
 else:
     if __name__ == "__main__":
         config_path: str = "config.json"
