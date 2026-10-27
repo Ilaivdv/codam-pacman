@@ -24,7 +24,9 @@ class Rank(GameObject):
                           align="center")
         self.elements: list[Any] = [title, hint]
         x, y = add_gap(hint.rect.midbottom, GAP_MID)
-        for index, name in enumerate(game.score.rank, 1):
+        for index, name in enumerate(dict(sorted(game.score.rank.items(),
+                                                 key=lambda x: x[1],
+                                                 reverse=True)[:10]), 1):
             score: int = game.score.rank[name]
             text = Text(f"{index}. {name} - {score} pts", (x, y),
                         font=FONT_RANK)
