@@ -6,6 +6,8 @@ import pygame as pg
 
 
 class Overlay(UiElement):
+    """ A filled rectangle on the screen. """
+
     def __init__(self,
                  pos: tuple[int, int],
                  align: str = "center",
@@ -23,6 +25,8 @@ class Overlay(UiElement):
 
 
 class Text(UiElement):
+    """ Create a text element on the screen. """
+
     def __init__(self, text: str,  pos: tuple[int, int],
                  font: pg.font.Font = FONT_DEFAULT,
                  align: str = "center",
@@ -41,6 +45,8 @@ class Text(UiElement):
 
 
 class Noti(UiElement):
+    """ Displays few sentences aligned. """
+
     def __init__(self, text: str, pos: tuple[int, int],
                  align: str = "center",
                  gap: tuple[int, int] | None = GAP_NOTI):

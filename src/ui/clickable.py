@@ -7,6 +7,8 @@ import pygame as pg
 
 
 class Clickable(UiElement):
+    """ Makes clickable ui elements that handle events. """
+
     on_click: Callable[[], None] | None = None
 
     def handle_event(self, event: pg.event.Event) -> None:
@@ -19,6 +21,8 @@ class Clickable(UiElement):
 
 
 class Button(Clickable):
+    """ Makes a button that allows click. """
+
     def __init__(self, text: str, pos: tuple[int, int],
                  align: str = "center",
                  gap: tuple[int, int] | None = (0, 50),
@@ -43,6 +47,11 @@ class Button(Clickable):
         self.on_click = on_click
 
     def draw(self, screen: pg.Surface) -> None:
+        """
+        Create the rectangle behind the text and make the
+        button change color when mouse on it.
+        """
+
         hovered = self.rect.collidepoint(pg.mouse.get_pos())
         outer = self.rect.inflate(20, 15)
         pg.draw.rect(screen, GRAY if hovered else BLACK, outer)
@@ -50,6 +59,8 @@ class Button(Clickable):
 
 
 class Image(Clickable):
+    """ Shows a image on the screen. """
+
     def __init__(self, path: str, size: tuple[int, int] | None,
                  pos: tuple[int, int], align: str = "center",
                  on_click: Callable[[], None] | None = None,
@@ -62,6 +73,11 @@ class Image(Clickable):
         self.hover = hover
 
     def draw(self, screen: pg.Surface) -> None:
+        """
+        Draw this image, if self.hover is True, change color
+        when mouse is on it.
+        """
+
         hovered = self.rect.collidepoint(pg.mouse.get_pos())
         if self.hover is False:
             pg.draw.rect(screen, DARK_GRAY, self.rect)
@@ -72,6 +88,8 @@ class Image(Clickable):
 
 
 class CheckBox(Clickable):
+    """ Allows you to check on the cheat option you want to select. """
+
     def __init__(self, text: str, pos: tuple[int, int], align: str = "center",
                  gap: tuple[int, int] | None = (0, 50),
                  color: tuple[int, int, int] = YELLOW):
@@ -86,6 +104,11 @@ class CheckBox(Clickable):
         self.on_click = self.cheat_option
 
     def cheat_option(self) -> None:
+        """
+        Updates game about which options are selected for the
+        cheat mode.
+        """
+
         self.checked = not self.checked
         from src.game import game
         assert game is not None
@@ -93,6 +116,13 @@ class CheckBox(Clickable):
         game.cheat_options[self.text] = not bool_option
 
     def draw(self, screen: pg.Surface) -> None:
+        """
+        Draws the checkbox and draw a cross if the box is checked.
+
+        Args:
+            screen (pg.Surface): surface to draw
+        """
+
         pg.draw.rect(screen, self.color, self.rect, 3)
         pos: tuple[int, int] = add_gap(self.rect.midright, (10, 2))
         text_rect = self.text_surface.get_rect(midleft=pos)
@@ -106,6 +136,10 @@ class CheckBox(Clickable):
 
 
 class InputBox(UiElement):
+    """
+    An Input box allows user to input their names and update the rank.
+    """
+
     def __init__(self, text: str, pos: tuple[int, int], align: str = "center",
                  gap: tuple[int, int] | None = (0, 50),
                  color: tuple[int, int, int] = GRAY):
@@ -128,6 +162,8 @@ class InputBox(UiElement):
         pg.draw.rect(screen, self.color, self.rect, 2)
 
     def create_new_score(self) -> None:
+        """ Update the local highscore file about the new record. """
+
         from src.game import game
         assert game is not None
         game.score.set_username(self.text)
@@ -135,6 +171,8 @@ class InputBox(UiElement):
         game.score.update_file()
 
     def name_check(self) -> None:
+        """ Check if the name is valide. """
+
         name = self.text.strip()
         if not name:
             self.text = "Please enter at least 1 character"
@@ -148,6 +186,11 @@ class InputBox(UiElement):
         self.active = False
 
     def handle_event(self, event: pg.event.Event) -> None:
+        """
+        Active the inputbox when click on it, and display input
+        from keyboard.
+        """
+
         if (event.type == pg.MOUSEBUTTONDOWN and event.button == 1):
             if self.button.rect.collidepoint(event.pos):
                 self.button.handle_event(event)

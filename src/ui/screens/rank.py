@@ -10,6 +10,10 @@ import pygame as pg
 
 
 class Rank(GameObject):
+    """
+    A Rank screen displays the rank, read from the local file.
+    """
+
     def __init__(self) -> None:
         assert game is not None
         area = game.display.get_rect()

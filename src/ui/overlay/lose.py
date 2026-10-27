@@ -9,6 +9,11 @@ import pygame as pg
 
 
 class Lose(GameObject):
+    """
+    A Lose screen showing scores, "game over" message, menu button and an
+    inputbox to save the record.
+    """
+
     def __init__(self) -> None:
         assert game is not None
         area = game.display.get_rect()
@@ -39,6 +44,12 @@ class Lose(GameObject):
             element.draw(game.display)
 
     def handle_event(self, event: pg.event.Event) -> None:
+        """
+        Handles events for the game's buttons and input box.
+
+            Args:
+                event (pg.event.Event): The event to handle.
+        """
         for bu in self.buttons:
             bu.handle_event(event)
         self.input_box.handle_event(event)

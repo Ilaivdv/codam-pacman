@@ -10,6 +10,8 @@ import sys
 
 
 class Pause(GameObject):
+    """ A pause menu for displaying buttons and pause the game. """
+
     def __init__(self) -> None:
         assert game is not None
         area = game.display.get_rect()
@@ -25,9 +27,6 @@ class Pause(GameObject):
             bu = Button(label, (x, y), "midbottom", on_click=method)
             x, y = add_gap(bu.rect.midbottom, GAP_DEFAULT)
             self.buttons.append(bu)
-
-    def __str__(self) -> str:
-        return (self.__class__.__name__)
 
     def cheat(self) -> None:
         assert game is not None
@@ -52,7 +51,6 @@ class Pause(GameObject):
 
     def process(self) -> None:
         assert game is not None
-
         self.bg.draw(game.display)
         for bu in self.buttons:
             bu.draw(game.display)

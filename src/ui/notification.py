@@ -8,6 +8,11 @@ import textwrap
 
 
 class Notification(GameObject):
+    """
+    A notification overlay class for displaying messages relate with config
+    choices. If one input from config is bad and is filled with default value.
+    """
+
     def __init__(self) -> None:
         assert game is not None
         assert settings is not None
@@ -26,6 +31,11 @@ class Notification(GameObject):
         self.elapsed: int = 0
 
     def process(self) -> None:
+        """
+        Notification displays for hold time and fade away in fade time.
+        After fade away, delete this class from game process tree.
+        """
+
         assert game is not None
         self.elapsed += pg.time.get_ticks()
         if self.elapsed >= self.hold:

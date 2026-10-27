@@ -9,6 +9,11 @@ import pygame as pg
 
 
 class Win(GameObject):
+    """
+    A Win screen appears if all the levels is cleared, shows scores, congrat
+    message, menu button and an inputbox to save the record.
+    """
+
     def __init__(self) -> None:
         assert game is not None
         area = game.display.get_rect()

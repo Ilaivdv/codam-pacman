@@ -10,6 +10,10 @@ import sys
 
 
 class CheatOption(GameObject):
+    """
+    An Overlay menu that displays the cheat options for player to select.
+    """
+
     def __init__(self) -> None:
         assert game is not None
         area = game.display.get_rect()
@@ -32,9 +36,6 @@ class CheatOption(GameObject):
                 checkb.checked = True
             self.elements.append(checkb)
             _, y = add_gap(checkb.rect.midbottom, (0, 50))
-
-    def __str__(self) -> str:
-        return (self.__class__.__name__)
 
     def continue_game(self) -> None:
         assert game is not None
