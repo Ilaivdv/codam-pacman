@@ -39,6 +39,7 @@ class Game:
         self._running: bool = False
         self._score: Score = Score()
         self._player_lives: int = settings.lives
+        self.enemies_pos: list[tuple[int, int]] = []
         self.current_level: int = 0
         self.is_paused: bool = False
         self.player_is_super: bool = False
@@ -75,6 +76,20 @@ class Game:
 
     def remove_from_tree(self, obj: GameObject) -> None:
         self._process_tree.remove(obj)
+
+    def reset_stats(self) -> None:
+        assert settings is not None
+        self._player_lives = settings.lives
+        self._score = Score()
+        self.enemies_pos.clear()
+        self.current_level = 0
+        self.level_cleared = False
+        self.player_is_super = False
+        self.cheat_options = {
+                "Invincibility": False,
+                "Skip level": False,
+                "Increase speed": False
+                }
 
     @property
     def process_tree(self) -> list[GameObject]:

@@ -1,10 +1,11 @@
+from src.utils.colors import RED, CYAN, BLUE, PURPLE, GREEN
 from .entities import Entity, Consumable, Player, Enemy
 from src.ui.overlay.level_overlay import LevelOverlay
 from src.utils import SpriteSheet, GameObject
+from random import randint, shuffle, choice
 from mazegenerator import MazeGenerator  # type: ignore[import-untyped]
 from src.game import game, settings  # noqa: F401
 from src.utils.colors import BLACK
-from random import randint
 import pygame as pg
 
 
@@ -48,6 +49,13 @@ class Level(GameObject):
         self._spawn_pacgums(1, 4)
         self._super_pacgum_duration: int = 7000
 
+        self.enemy_colors: list[tuple[int, int, int]] = [
+                RED,
+                CYAN,
+                BLUE,
+                PURPLE,
+                GREEN
+                ]
         self.enemies: list[Enemy] = []
         self._spawn_enemies()
 
@@ -107,6 +115,7 @@ class Level(GameObject):
             is_available[spawn_pos[1]][spawn_pos[0]] = False
 
     def _spawn_enemies(self) -> None:
+        assert game is not None
         spawn_positions: list[tuple[int, int]] = [
                 (0, 0),
                 (len(self.maze) - 1, 0),
@@ -114,12 +123,17 @@ class Level(GameObject):
                 (len(self.maze) - 1, len(self.maze[0]) - 1),
                 ]
         if not self.enemies:
+            colors: list[tuple[int, int, int]] = self.enemy_colors.copy()
+            shuffle(colors)
             for pos in spawn_positions:
-                self.enemies.append(Enemy(self.sprite_groups,
-                                          self.tileset.frame_size,
-                                          self.maze, pos,
-                                          pg.Vector2(self.player_spawn_pos),
-                                          1))
+                enemy: Enemy = Enemy(self.sprite_groups,
+                                     self.tileset.frame_size,
+                                     self.maze, pos,
+                                     pg.Vector2(self.player_spawn_pos),
+                                     colors.pop(colors.index(choice(colors))),
+                                     1)
+                game.enemies_pos.append(pos)
+                self.enemies.append(enemy)
 
     def _on_player_death(self) -> None:
         assert game is not None
@@ -144,8 +158,9 @@ class Level(GameObject):
         assert game is not None
 
         game.display.fill(BLACK)
-        for e in self.enemies:
+        for n, e in enumerate(self.enemies):
             e.player_pos = pg.Vector2(self.player.current_maze_position)
+            game.enemies_pos[n] = e.current_maze_position
 
         # Draw the maze
         for y in range(0, len(self.maze)):

@@ -28,6 +28,7 @@ class Lose(GameObject):
     def back_to_menu(self) -> None:
         assert game is not None
         from ..screens.menu import Menu
+        game.reset_stats()
         game.remove_from_tree(self)
         game.add_to_tree(Menu(), False)
 
