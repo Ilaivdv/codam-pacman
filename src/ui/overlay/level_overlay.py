@@ -26,7 +26,7 @@ class LevelOverlay(GameObject):
                              add_gap(self.area.bottomright, (-20, -100)),
                              align="bottomright", on_click=self.pause,
                              hover=True)
-        level: Text = Text("LEVEL #TODO",
+        level: Text = Text(f"LEVEL {game.current_level + 1}",
                            add_gap(self.area.bottomleft, (20, -140)),
                            font=FONT_RANK, color=LIGHT_GRAY,
                            align="bottomleft")
