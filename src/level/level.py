@@ -135,7 +135,6 @@ class Level(GameObject):
                 game.enemies_pos.append(pos)
                 self.enemies.append(enemy)
 
-
     def _on_player_death(self) -> None:
         assert game is not None
 
