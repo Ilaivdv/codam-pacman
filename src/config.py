@@ -79,7 +79,7 @@ class Config(BaseModel):
                     game_set[key] = config_dict[key]
             else:
                 notification.append(("NOTICE: Missing KEY in config file,"
-                                     "using a default value: "
+                                     " using a default value: "
                                      f"{key}({game_set[key]})"))
         if notification:
             game_set["notification"] = notification

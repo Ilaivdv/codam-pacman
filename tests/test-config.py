@@ -31,7 +31,7 @@ def test_missing_lives() -> None:
                     'seed': 42,
                     'level_max_time': 90,
                     'notification': [
-                        'NOTICE: Missing KEY in config file,using a default'
+                        'NOTICE: Missing KEY in config file, using a default'
                         ' value: lives(3)',
                     ],
                 }
@@ -66,7 +66,7 @@ def test_level_minus() -> None:
                     'seed': 42,
                     'level_max_time': 90,
                     'notification': [
-                        'NOTICE: Invalid VALUE in config file,using a default'
+                        'NOTICE: Invalid VALUE in config file, using a default'
                         ' value: level(-1 -> 10)',
                     ]
                 }
@@ -127,7 +127,7 @@ def test_pacgum_minus() -> None:
                     'seed': 42,
                     'level_max_time': 90,
                     'notification': [
-                        'NOTICE: Invalid VALUE in config file,using a '
+                        'NOTICE: Invalid VALUE in config file, using a '
                         'default value: pacgum(-42 -> 42)',
                     ]
                 }
