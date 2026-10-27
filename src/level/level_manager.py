@@ -4,12 +4,18 @@ from .level import Level
 
 
 class LevelManager(GameObject):
+    """ Manages levels according to config and level amount. """
+
     def __init__(self) -> None:
+        """ Initializes manager and starts first level. """
+
         assert settings is not None
         self._level: Level | None = None
         self.start_next()
 
     def start_next(self) -> None:
+        """ Advances level deleting and exiting the previous if loaded. """
+
         assert game is not None and settings is not None
         if game.current_level > 0:
             self.remove_current()
@@ -21,6 +27,8 @@ class LevelManager(GameObject):
             game.current_level = 1
 
     def remove_current(self) -> None:
+        """ Removes and exits the current level if it's loaded in. """
+
         if self._level is None:
             return
         assert game is not None
@@ -29,6 +37,8 @@ class LevelManager(GameObject):
         self._level = None
 
     def process(self) -> None:
+        """ Checks for cheats enabled and game paused. """
+
         assert game is not None and settings is not None
         if game.is_paused:
             return
@@ -39,7 +49,3 @@ class LevelManager(GameObject):
             self.start_next()
             game.cheat_options["Skip level"] = False
             game.level_cleared = False
-
-    @property
-    def current_level(self) -> int:
-        return self.current_level

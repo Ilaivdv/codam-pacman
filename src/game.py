@@ -7,8 +7,9 @@ import pygame as pg
 
 
 def start_game(config_file: str) -> None:
-    global settings, game
+    """ Validates required assets and config before initializing the menu. """
 
+    global settings, game
     if game is not None and game.running:
         return
     try:
@@ -28,7 +29,20 @@ def start_game(config_file: str) -> None:
 
 
 class Game:
+    """
+    Game class for holding and handling the game's process tree and shared
+    variables.
+    """
+
     def __init__(self, assets: Assets) -> None:
+        """
+        Initializes Game along with all needed variables that get shared
+        across objects.
+
+        Args:
+            assets - The validated assets used by the game.
+        """
+
         assert settings is not None
 
         self._process_tree: list[GameObject] = []
@@ -52,6 +66,12 @@ class Game:
         }
 
     def start_process(self) -> None:
+        """
+        Starts the game's process tree, calling process handlers for each
+        GameObject in the tree list.
+        Also the exit point of the program.
+        """
+
         self._running = True
         while self._running:
             for p in self._process_tree:
@@ -93,42 +113,77 @@ class Game:
 
     @property
     def process_tree(self) -> list[GameObject]:
+        """
+        Returns the protected `_process_tree` from Game to avoid
+        reassigning.
+        """
         return self._process_tree
 
     @property
     def assets(self) -> Assets:
+        """
+        Returns the protected `_assets` from Game to avoid
+        reassigning.
+        """
         return self._assets
 
     @property
     def display(self) -> pg.Surface:
+        """
+        Returns the protected `_display` from Game to avoid
+        reassigning.
+        """
         return self._display
 
     @property
     def resolution(self) -> tuple[int, int]:
+        """
+        Returns the protected `_resolution` from Game to avoid
+        reassigning.
+        """
         return self._resolution
 
     @property
     def clock(self) -> pg.Clock:
+        """
+        Returns the protected `_clock` from Game to avoid
+        reassigning.
+        """
         return self._clock
 
     @property
     def running(self) -> bool:
+        """
+        Returns the protected `_running` from Game to avoid
+        reassigning.
+        """
         return self._running
 
     @property
     def player_lives(self) -> int:
+        """
+        Returns the protected `_player_lives` from Game to avoid
+        reassigning.
+        """
         return self._player_lives
 
     @player_lives.setter
     def player_lives(self, value: int) -> None:
+        """ Setter for Game's `_player_lives` """
         self._player_lives = value
 
     @property
     def score(self) -> Score:
+        """
+        Returns the protected `_score` from Game to avoid
+        reassigning.
+        """
         return self._score
 
 
 class GameSettings(BaseModel):
+    """ GameSettings holds all of the validated config for Game's runtime. """
+
     highscore_filename: str = Field(frozen=True)
     level: int = Field(frozen=True)
     width: int = Field(frozen=True)

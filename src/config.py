@@ -6,6 +6,11 @@ import os
 
 
 class Config(BaseModel):
+    """
+    This is the config validator class, reads required files
+    for configuration and score saving and falls back to defaults on any
+    missing/invalid keys
+    """
 
     @staticmethod
     def parse(filename: str) -> dict[str, Any]:
@@ -75,6 +80,13 @@ class Config(BaseModel):
 
     @staticmethod
     def parse_highscore() -> Any:
+        """
+        Parses/creates highscore json file in user's directory.
+
+        Returns:
+            Any - Parsed json file or empty dict
+        """
+
         file_path: str = os.path.expanduser("~/.local/share/highscore.json")
         if os.path.isfile(file_path):
             if os.stat(file_path).st_size == 0:

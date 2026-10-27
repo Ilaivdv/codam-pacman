@@ -4,6 +4,10 @@ import pygame as pg
 
 
 class SpriteSheet(BaseModel):
+    """
+    Cuts up given sprite to frames of size `frame_size` and handles animation.
+    """
+
     model_config = ConfigDict(arbitrary_types_allowed=True)
     image: pg.Surface = Field()
     frame_size: tuple[int, int] = Field(gt=(0, 0), default=(16, 16))
@@ -18,6 +22,8 @@ class SpriteSheet(BaseModel):
 
     @model_validator(mode="after")
     def _load_frames(self) -> Self:
+        """ Validates all frames and returns self. """
+
         w, h = self.image.get_rect().size
 
         for y in range(0, h, self.frame_size[0]):
@@ -31,6 +37,17 @@ class SpriteSheet(BaseModel):
 
     def process_animation(self, animation: str,
                           current_time: int) -> pg.Surface:
+        """
+        Animation handler, checks for time before advancing frames.
+
+        Args:
+            animation - Key of animation to play
+            current_time - Checked time to see if frame should be advanced
+
+        Returns:
+            pg.Surface - The frame to show
+        """
+
         self.last_frame_update += current_time
         if animation != self.current_animation:
             self.animation_finished = False

@@ -17,7 +17,10 @@ ASSET_LIST: dict[str, str] = {
 
 
 class Assets:
+    """ Asset validator, ensures all required assets are there. """
+
     def __init__(self) -> None:
+        """ Initializes protected assets to prevent reassigning. """
         self._tileset: pg.Surface = pg.image.load(
                 ASSET_LIST["tileset"])
         self._player: pg.Surface = pg.image.load(
@@ -33,6 +36,11 @@ class Assets:
 
     @classmethod
     def validate_assets(cls) -> Assets:
+        """
+        Parses through all assets and ensures they all exist and are all
+        readable.
+        """
+
         for name, path in ASSET_LIST.items():
             if not os.path.exists(path):
                 raise FileNotFoundError(f"Invalid asset path for '{name}'")
@@ -46,20 +54,25 @@ class Assets:
 
     @property
     def tileset(self) -> pg.Surface:
+        """ Returns protected `_tileset` variable. """
         return self._tileset.convert_alpha()
 
     @property
     def player(self) -> pg.Surface:
+        """ Returns protected `_player` variable. """
         return self._player.convert_alpha()
 
     @property
     def pacgum(self) -> pg.Surface:
+        """ Returns protected `_pacgum` variable. """
         return self._pacgum.convert_alpha()
 
     @property
     def super_pacgum(self) -> pg.Surface:
+        """ Returns protected `_super_pacgum` variable. """
         return self._super_pacgum.convert_alpha()
 
     @property
     def enemy(self) -> pg.Surface:
+        """ Returns protected `_enemy` variable. """
         return self._enemy.convert_alpha()

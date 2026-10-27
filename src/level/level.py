@@ -10,7 +10,16 @@ import pygame as pg
 
 
 class Level(GameObject):
+    """ Level class holding everything needed for gameplay. """
+
     def __init__(self, seed: int = 42) -> None:
+        """
+        Initializes the level along with the overlaying UI.
+
+        Args:
+            seed - Seed to use for level generation.
+        """
+
         assert game is not None and settings is not None
 
         self.mazegen: MazeGenerator = MazeGenerator((settings.width,
@@ -60,6 +69,8 @@ class Level(GameObject):
         self._spawn_enemies()
 
     def _get_display_maze_scale(self) -> int:
+        """ Returns max scale to display the level at. """
+
         assert game is not None
         screen_size: tuple[int, int] = self.screen.get_rect().size
         scale: int = 0
@@ -70,6 +81,7 @@ class Level(GameObject):
         return scale - 1
 
     def _get_maze_center(self) -> tuple[int, int]:
+        """ Returns a tuple containing the center of the maze. """
         pos: tuple[int, int] = (
                 (len(self.maze[0]) - 1) // 2, (len(self.maze) - 1) // 2)
         while self.maze[pos[1]][pos[0]] == 15:
@@ -78,10 +90,16 @@ class Level(GameObject):
 
     def _spawn_pacgums(self, pacgum_amount: int,
                        super_pacgum_amount: int) -> None:
+        """
+        Randomly spawns (super_)pacgums around the maze ensuring no overlap.
+
+        Args:
+            pacgum_amount - How many regular pacgums to spawn
+            super_pacgum_amount - How many super pacgums to spawn
+        """
+
         if pacgum_amount + super_pacgum_amount >= \
                 len(self.maze[0]) * len(self.maze):
-            # TODO Add warning log here
-            print("Too many pacgums! Falling back to defaults")
             max_capacity: int = len(self.maze[0]) * len(self.maze)
             pacgum_amount = max_capacity // 4
             super_pacgum_amount = 4
@@ -115,12 +133,15 @@ class Level(GameObject):
             is_available[spawn_pos[1]][spawn_pos[0]] = False
 
     def _spawn_enemies(self) -> None:
+        """ Spawns in 4 enemies at each corner of the maze. """
+
         assert game is not None
+        game.player_is_super = False
         spawn_positions: list[tuple[int, int]] = [
                 (0, 0),
-                (len(self.maze) - 1, 0),
-                (0, len(self.maze[0]) - 1),
-                (len(self.maze) - 1, len(self.maze[0]) - 1),
+                (len(self.maze[0]) - 1, 0),
+                (0, len(self.maze) - 1),
+                (len(self.maze[0]) - 1, len(self.maze) - 1),
                 ]
         if not self.enemies:
             colors: list[tuple[int, int, int]] = self.enemy_colors.copy()
@@ -136,6 +157,11 @@ class Level(GameObject):
                 self.enemies.append(enemy)
 
     def _on_player_death(self) -> None:
+        """
+        Handles player life loss and semi-resets the level
+        so that pacgums don't reset.
+        """
+
         assert game is not None
 
         for enemy in self.enemies:
@@ -147,14 +173,22 @@ class Level(GameObject):
         self.player.remove(self.sprite_groups["player"])
 
     def exit(self) -> None:
+        """ Exits the level clearing objects from process tree. """
         assert game is not None
         game.player_is_super = False
         game.remove_from_tree(self.player)
+        for e in self.enemies:
+            game.remove_from_tree(e)
         game.remove_from_tree(self.overlay)
         del self.overlay
         game.remove_from_tree(self)
 
     def process(self) -> None:
+        """
+        Handles level's process, drawing the maze and checking for game
+        states.
+        """
+
         assert game is not None
 
         game.display.fill(BLACK)

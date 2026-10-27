@@ -7,6 +7,10 @@ import heapq
 
 
 class Enemy(Entity):
+    """
+    Enemy class handling pathfinding and states that react on player's state.
+    """
+
     def __init__(self,
                  sprite_groups: dict[str, pg.sprite.Group[Entity]],
                  tile_size: tuple[int, int],
@@ -16,6 +20,10 @@ class Enemy(Entity):
                  color: tuple[int, int, int],
                  speed: int = 1,
                  ) -> None:
+        """
+        Initializes enemy along with animations and required variables.
+        """
+
         assert game is not None
 
         image: pg.Surface = game.assets.enemy
@@ -54,6 +62,7 @@ class Enemy(Entity):
         game.add_to_tree(self)
 
     def process(self) -> None:
+        """ Handles movement and enemy's state. """
         assert game is not None
         if game.is_paused:
             return
@@ -124,10 +133,24 @@ class Enemy(Entity):
             self.dead = True
 
     def _get_path(self, reverse: bool = False) -> list[Direction]:
+        """
+        Uses a dumbed down Astar algorithm and returns list of directions
+        to player position.
+
+        Args:
+            reverse: If true, returns oppisite direction from player
+
+        Returns:
+            list[Direction]: Path to/away from player
+        """
 
         res: list[Direction] = []
 
         def get_heuristic(pos: tuple[int, int]) -> int:
+            """
+            Returns the hueristic from `pos` to player
+            using the manhattan distance.
+            """
             return abs(pos[0] - int(self.player_pos.x)) + abs(
                     pos[1] - int(self.player_pos.y))
 
@@ -135,6 +158,16 @@ class Enemy(Entity):
                                     tuple[Direction, int, int] | None],
                          current: tuple[Direction, int, int] | None
                          ) -> list[Direction]:
+            """
+            Retraces path from current position to player position
+
+            Args:
+                path: A dictionary containing cell and it's parent
+                current: A tuple containing direction and position
+
+            Returns:
+                list[Direction]: The path of directions to the player
+            """
             assert current is not None
             res.append(current[0])
             if path[current[1:]] is None:
@@ -174,14 +207,22 @@ class Enemy(Entity):
         return [Direction.NONE]
 
     class ChasingState(State):
+        """ The state enemy is in when not vulnerable. """
+
         def __init__(self, parent: Enemy) -> None:
             super().__init__(parent)
             self.parent: Enemy = parent
 
         def on_enter(self) -> None:
+            """ Gets path to player. """
             self.parent.current_path = self.parent._get_path()
 
         def state_process(self) -> None:
+            """
+            Handles chasing behaviours, updating path every 5 seconds and
+            avoiding collision with other ghosts.
+            """
+
             assert game is not None
             self.parent._path_last_update += game.clock.get_time()
 
@@ -198,6 +239,8 @@ class Enemy(Entity):
                 self.parent.move_to_pos(self.parent.current_path.pop())
 
     class RunningState(State):
+        """ The state the enemy is in when vulnerable. """
+
         def __init__(self, parent: Enemy) -> None:
             super().__init__(parent)
             self.parent: Enemy = parent
@@ -206,6 +249,8 @@ class Enemy(Entity):
             self.parent.current_path = self.parent._get_path(True)
 
         def state_process(self) -> None:
+            """ Handles running behaviour, gets reverse path from player. """
+
             self.parent.current_path = self.parent._get_path(True)
 
             if self.parent.target_reached() and self.parent.current_path:
