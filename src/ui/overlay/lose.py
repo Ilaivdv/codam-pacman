@@ -10,8 +10,8 @@ import pygame as pg
 
 class Lose(GameObject):
     """
-    A Lose screen showing scores, "game over" message, menu button and an inputbox
-    to save the record.
+    A Lose screen showing scores, "game over" message, menu button and an
+    inputbox to save the record.
     """
 
     def __init__(self) -> None:
@@ -43,8 +43,9 @@ class Lose(GameObject):
             element.draw(game.display)
 
     def handle_event(self, event: pg.event.Event) -> None:
-        """Handles events for the game's buttons and input box.
-        
+        """
+        Handles events for the game's buttons and input box.
+
             Args:
                 event (pg.event.Event): The event to handle.
         """

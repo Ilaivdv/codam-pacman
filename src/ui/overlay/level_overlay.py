@@ -67,7 +67,7 @@ class LevelOverlay(GameObject):
 
     def process(self) -> None:
         """
-        Makes remaining time counting down each second, 
+        Makes remaining time counting down each second,
         shows the current score, defines the win/lose senarios
 
         """

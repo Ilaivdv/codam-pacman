@@ -10,8 +10,8 @@ import pygame as pg
 
 class Win(GameObject):
     """
-    A Win screen appears if all the levels is cleared, shows scores, congrat message,
-    menu button and an inputbox to save the record.
+    A Win screen appears if all the levels is cleared, shows scores, congrat
+    message, menu button and an inputbox to save the record.
     """
 
     def __init__(self) -> None:
@@ -51,7 +51,7 @@ class Win(GameObject):
         for element in self.elements:
             element.draw(game.display)
 
-    def handle_event(self, event: pg.event.Event) -> None: 
+    def handle_event(self, event: pg.event.Event) -> None:
         for bu in self.buttons:
             bu.handle_event(event)
         self.input_box.handle_event(event)

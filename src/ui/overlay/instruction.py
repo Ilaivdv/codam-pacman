@@ -11,8 +11,7 @@ import pygame as pg
 
 class Instruction(GameObject):
     """
-    An Intruction class for displaying messages relate with config choices.
-    (if one input from config is bad and is filled with default value.)
+    An Intruction class displays how to play the game.
     """
 
     def __init__(self) -> None:
