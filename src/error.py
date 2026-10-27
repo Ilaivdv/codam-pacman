@@ -1,23 +1,10 @@
-
 class PacmanError(Exception):
-    """Base exception for the Pac-Man project."""
-
-
-class AssetLoadError(PacmanError):
-    """An asset is missing or invalid."""
+    """ Base exception for the Pac-Man project. """
 
 
 class ConfigError(PacmanError):
-    """An error occurred while loading or validating config."""
-
-
-class GameError(PacmanError):
-    """An error occurred in game logic."""
-
-
-class UiError(PacmanError):
-    """An error occurred in the UI."""
+    """ Exception for loading or validation of config. """
 
 
 class HighscoreError(PacmanError):
-    """An error occurred while handling high scores."""
+    """ Exception for handling high scores. """
