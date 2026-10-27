@@ -1,3 +1,6 @@
+""" Sub-module for the game's entities. """
+
+
 from .consumables import Consumable
 from .player import Player
 from .entity import Entity

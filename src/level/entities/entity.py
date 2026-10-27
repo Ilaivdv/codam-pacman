@@ -5,6 +5,7 @@ import pygame as pg
 
 
 class Direction(IntEnum):
+    """ Enum holding binary directions. """
     NONE = 0
     UP = 1
     RIGHT = 2
@@ -13,6 +14,10 @@ class Direction(IntEnum):
 
 
 class Entity(GameObject, pg.sprite.Sprite, ABC):
+    """
+    Abstract entity class holding a lot of base logic for entities in-game.
+    """
+
     def __init__(self,
                  sprite_groups: dict[str, pg.sprite.Group[Entity]],
                  tile_size: tuple[int, int],
@@ -21,6 +26,18 @@ class Entity(GameObject, pg.sprite.Sprite, ABC):
                  pos: tuple[int, int],
                  speed: int = 1
                  ) -> None:
+        """
+        Initializes entity with all needed base logic.
+
+        Args:
+             sprite_groups - Dictionary of all sprite groups from game
+             tile_size - Tile size of maze cells
+             image - Sprite to use for the entity
+             maze - The loaded maze from Game class
+             pos - Starting position
+             speed - Movement speed of the entity
+        """
+
         super().__init__()
 
         self.maze: list[list[int]] = maze
@@ -41,12 +58,18 @@ class Entity(GameObject, pg.sprite.Sprite, ABC):
         self.stop_at_target: bool = True
 
     def _to_global_pos(self, pos: tuple[int, int]) -> tuple[int, int]:
+        """ Returns `pos` (maze position) as global screen position. """
         offset_x, offset_y = self.tile_size
         return ((pos[0] * offset_x) + (offset_x - self.rect.width) // 2,
                 (pos[1] * offset_y) + (offset_y - self.rect.height) // 2)
 
     def get_neighbors(self,
                       pos: tuple[int, int] | None = None) -> list[Direction]:
+        """
+        Returns a list of all available directions from given position,
+        defaults to entities current position.
+        """
+
         if not pos:
             pos = self.current_maze_position
 
@@ -62,6 +85,15 @@ class Entity(GameObject, pg.sprite.Sprite, ABC):
     def get_maze_cell(self, direction: Direction,
                       from_pos: tuple[int, int] | None = None
                       ) -> tuple[int, int]:
+        """
+        Gets the maze cell direction is goint to from given position.
+
+        Args:
+            direction: Direction to go in
+            from_pos: Position to check from, defaults to current position if
+                none is given
+        """
+
         if from_pos is None:
             from_pos = self.current_maze_position
         if not self._validate_direction(direction, from_pos):
@@ -86,6 +118,8 @@ class Entity(GameObject, pg.sprite.Sprite, ABC):
         return res
 
     def target_reached(self) -> bool:
+        """ Returns True if entity reached its target cell. """
+
         if pg.Vector2(self.rect.topleft) == self.target_position:
             self.current_maze_position = (int(self.target_position.x //
                                               self.tile_size[0]),
@@ -98,6 +132,8 @@ class Entity(GameObject, pg.sprite.Sprite, ABC):
     def _validate_direction(self, direction: Direction,
                             from_pos: tuple[int, int] | None = None
                             ) -> bool:
+        """ Returns True if cell to direction from given position is open. """
+
         if from_pos is None:
             from_pos = self.current_maze_position
         if self.maze[from_pos[1]][
@@ -107,6 +143,11 @@ class Entity(GameObject, pg.sprite.Sprite, ABC):
             return True
 
     def move_to_pos(self, direction: Direction) -> bool:
+        """
+        Sets the target position of entity to cell in direction, returns
+        True on success.
+        """
+
         if not self.target_reached() or \
                 not self._validate_direction(direction):
             return False
@@ -127,6 +168,8 @@ class Entity(GameObject, pg.sprite.Sprite, ABC):
 
     @abstractmethod
     def process(self) -> None:
+        """ Handles collision checks, and movement if target is set. """
+
         for name, group in self.collides_with.items():
             if pg.sprite.spritecollide(
                     self, group, False, pg.sprite.collide_rect_ratio(0.5)):
@@ -148,6 +191,10 @@ class Entity(GameObject, pg.sprite.Sprite, ABC):
 
     @abstractmethod
     def on_collide(self, group_name: str) -> None:
+        """
+        Gets called when entity collides with any value from
+        `collides_with`.
+        """
         ...
 
     def __str__(self) -> str:

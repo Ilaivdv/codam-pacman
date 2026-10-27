@@ -12,6 +12,10 @@ class Player(Entity):
                  pos: tuple[int, int],
                  speed: int = 1
                  ) -> None:
+        """
+        Initializes player along with animations and required variables.
+        """
+
         assert game is not None
 
         self.sprite: SpriteSheet = SpriteSheet(image=game.assets.player)
@@ -37,6 +41,12 @@ class Player(Entity):
         game.add_to_tree(self)
 
     def process(self) -> None:
+        """
+        Handles player behaviours.
+        Getting input for movement, updating animations on input and state and
+        flipping and rotating sprite based on direction.
+        """
+
         assert game is not None
 
         if game.is_paused:
@@ -94,6 +104,8 @@ class Player(Entity):
         self.image = pg.transform.flip(self.image, self.flipped, False)
 
     def on_collide(self, group_name: str) -> None:
+        """ Kills player when invincibility cheat is not activated. """
+
         assert game is not None
         if game.cheat_options["Invincibility"]:
             return
