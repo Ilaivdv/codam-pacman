@@ -235,7 +235,10 @@ class Level(GameObject):
             return
 
         # Cheats
-        if game.cheat_options["Increase speed"]:
+        if game.cheat_options["Increase speed"] and \
+                self.player.target_reached():
             self.player.speed = 2
-        else:
+        elif not game.cheat_options["Increase speed"] and \
+                self.player.speed != 1 and \
+                self.player.target_reached():
             self.player.speed = 1
