@@ -19,7 +19,7 @@ install:
 	@ uv sync
 
 build:
-	@ uv run pyinstaller --onefile pac-man.py
+	@ uv run pyinstaller --onefile pac-man.py config.json
 
 lint:
 	-@ $(FLAKE8)
