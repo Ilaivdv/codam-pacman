@@ -55,7 +55,7 @@ class Level(GameObject):
         self._current_player_lives: int = game.player_lives
         self.pacgums: list[Consumable] = []
         self.super_pacgums: list[Consumable] = []
-        self._spawn_pacgums(settings.pacgum, 4)
+        self._spawn_pacgums(settings.pacgum)
         self._super_pacgum_duration: int = 7000
 
         self.enemy_colors: list[tuple[int, int, int]] = [
@@ -88,8 +88,7 @@ class Level(GameObject):
             pos = (pos[0] + 1, pos[1])
         return pos
 
-    def _spawn_pacgums(self, pacgum_amount: int,
-                       super_pacgum_amount: int) -> None:
+    def _spawn_pacgums(self, pacgum_amount: int) -> None:
         """
         Randomly spawns (super_)pacgums around the maze ensuring no overlap.
 
@@ -98,11 +97,10 @@ class Level(GameObject):
             super_pacgum_amount - How many super pacgums to spawn
         """
 
-        if pacgum_amount + super_pacgum_amount >= \
+        if pacgum_amount + 4 >= \
                 len(self.maze[0]) * len(self.maze):
             max_capacity: int = len(self.maze[0]) * len(self.maze)
             pacgum_amount = max_capacity // 4
-            super_pacgum_amount = 4
 
         is_available: list[list[bool]] = [
                 [True if self.maze[y][x] != 15 else False
@@ -110,6 +108,19 @@ class Level(GameObject):
                 for y in range(len(self.maze))]
         is_available[self.player_spawn_pos[1]][
                 self.player_spawn_pos[0]] = False
+
+        super_spawn_positions: list[tuple[int, int]] = [
+                (0, 0),
+                (len(self.maze[0]) - 1, 0),
+                (0, len(self.maze) - 1),
+                (len(self.maze[0]) - 1, len(self.maze) - 1),
+                ]
+        for pos in super_spawn_positions:
+            self.super_pacgums.append(Consumable(self.sprite_groups,
+                                                 self.tileset.frame_size,
+                                                 self.maze, pos, 1,
+                                                 True))
+            is_available[pos[1]][pos[0]] = False
 
         spawn_pos: tuple[int, int] = (
                 randint(0, len(self.maze[0]) - 1),
@@ -121,15 +132,6 @@ class Level(GameObject):
             self.pacgums.append(Consumable(self.sprite_groups,
                                            self.tileset.frame_size,
                                            self.maze, spawn_pos, 1))
-            is_available[spawn_pos[1]][spawn_pos[0]] = False
-        for _ in range(super_pacgum_amount):
-            while not is_available[spawn_pos[1]][spawn_pos[0]]:
-                spawn_pos = (randint(0, len(self.maze[0]) - 1),
-                             randint(0, len(self.maze) - 1))
-            self.super_pacgums.append(Consumable(self.sprite_groups,
-                                                 self.tileset.frame_size,
-                                                 self.maze, spawn_pos, 1,
-                                                 True))
             is_available[spawn_pos[1]][spawn_pos[0]] = False
 
     def _spawn_enemies(self) -> None:
