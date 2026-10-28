@@ -13,7 +13,7 @@ def test_normal() -> None:
                     'points_per_super_pacgum': 50,
                     'points_per_ghost': 200,
                     'seed': 42,
-                    'level_max_time': 90,
+                    'level_max_time': 120,
                     'notification': []
                 }
 
@@ -29,7 +29,7 @@ def test_missing_lives() -> None:
                     'points_per_super_pacgum': 50,
                     'points_per_ghost': 200,
                     'seed': 42,
-                    'level_max_time': 90,
+                    'level_max_time': 120,
                     'notification': [
                         'NOTICE: Missing KEY in config file, using a default'
                         ' value: lives(3)',
@@ -48,7 +48,7 @@ def test_file_not_exist() -> None:
                     'points_per_super_pacgum': 50,
                     'points_per_ghost': 200,
                     'seed': 42,
-                    'level_max_time': 90,
+                    'level_max_time': 120,
                     'notification': []
                 }
 
@@ -64,9 +64,9 @@ def test_level_minus() -> None:
                     'points_per_super_pacgum': 50,
                     'points_per_ghost': 200,
                     'seed': 42,
-                    'level_max_time': 90,
+                    'level_max_time': 120,
                     'notification': [
-                        'NOTICE: Invalid VALUE in config file, using a default'
+                        'NOTICE: Game need at least 10 levels, using a default'
                         ' value: level(-1 -> 10)',
                     ]
                 }
@@ -83,7 +83,7 @@ def test_size_not_good() -> None:
                     'points_per_super_pacgum': 50,
                     'points_per_ghost': 200,
                     'seed': 42,
-                    'level_max_time': 90,
+                    'level_max_time': 120,
                     'notification': [
                         'NOTICE: Using a default size(15x15), wrong width'
                         ' value in config file: 10 -> 15',
@@ -104,7 +104,7 @@ def test_size_minus() -> None:
                     'points_per_super_pacgum': 50,
                     'points_per_ghost': 200,
                     'seed': 42,
-                    'level_max_time': 90,
+                    'level_max_time': 120,
                     'notification': [
                         'NOTICE: Using a default size(15x15), wrong width '
                         'value in config file: -10 -> 15',
@@ -125,7 +125,7 @@ def test_pacgum_minus() -> None:
                     'points_per_super_pacgum': 50,
                     'points_per_ghost': 200,
                     'seed': 42,
-                    'level_max_time': 90,
+                    'level_max_time': 120,
                     'notification': [
                         'NOTICE: Invalid VALUE in config file, using a '
                         'default value: pacgum(-42 -> 42)',
@@ -144,6 +144,25 @@ def test_json_with_comments() -> None:
                     'points_per_super_pacgum': 50,
                     'points_per_ghost': 200,
                     'seed': 42,
-                    'level_max_time': 90,
+                    'level_max_time': 120,
                     'notification': []
+                }
+
+
+def test_level_minus_ten() -> None:
+    assert Config.parse("tests/level_minus_ten.json") == {
+                    'highscore_filename': "highscore.json",
+                    "level": 10,
+                    "width": 15,
+                    "height": 15,
+                    'lives': 3, 'pacgum': 42,
+                    'points_per_pacgum': 10,
+                    'points_per_super_pacgum': 50,
+                    'points_per_ghost': 200,
+                    'seed': 42,
+                    'level_max_time': 120,
+                    'notification': [
+                        'NOTICE: Game need at least 10 levels, using a default'
+                        ' value: level(3 -> 10)'
+                    ]
                 }
