@@ -111,15 +111,18 @@ Objects inheriting from `Entity` are the player, ghosts and consumables like pac
 Here is a look at our games structure:
 ```text
 src/
-├── level/              # Everything needed for gameplay
-      └── entities/     # Holds player, ghosts and consumables as well as entity template
-├── ui/                 # UI elements, clickable, non-clickable
-    ├── overlay/        # UI interface that overlay on current screen
-    └── screens/        # UI interface that occupies the whole screen
-└── utils/              # General utilities used around the whole module
-    ├── sprite_sheet.py # Holding sprites rendered and handles the animation player
-    ├── state.py        # Template used for states to seperate behavior states
-    ├── game_object.py  # Main template used for every element game has to render
+├── docs/                        # Project management documentations
+      └──process_track.md        # Github issues log
+      └──team_organization.md    # Explanation of Teamwork
+├── level/                       # Everything needed for gameplay
+      └── entities/              # Holds player, ghosts and consumables as well as entity template
+├── ui/                          # UI elements, clickable, non-clickable
+    ├── overlay/                 # UI interface that overlay on current screen
+    └── screens/                 # UI interface that occupies the whole screen
+└── utils/                       # General utilities used around the whole module
+    ├── sprite_sheet.py          # Holding sprites rendered and handles the animation player
+    ├── state.py                 # Template used for states to seperate behavior states
+    ├── game_object.py           # Main template used for every element game has to render
     └── ...
 ```
 
@@ -129,7 +132,7 @@ src/
 
 This project was developed iteratively using GitHub Projects:
 - **Task Tracking & Roadmap:** Tasks were organized into feature branches, code reviews, and issue tracking.
-- **Documentation:** Project management artifacts, gantt charts, and sprint logs are located in the root directory [`process_track.md`].
+- **Documentation:** Project process track ['process_track.md'] are extracted from all the issues we created on github. And a ['team_organization.md'] to explain how we work as a team.
 
 ---
 
