@@ -85,8 +85,10 @@ class Config(BaseModel):
                                              "file, using a default value:"
                                              f" {key}({config_dict[key]} -> "
                                              f"{game_set[key]})"))
+                    else:
+                        game_set.update({key: config_dict[key]})
                 else:
-                    game_set[key] = config_dict[key]
+                    game_set.update({key: config_dict[key]})
             else:
                 notification.append(("NOTICE: Missing KEY in config file,"
                                      " using a default value: "
