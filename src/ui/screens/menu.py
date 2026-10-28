@@ -48,12 +48,16 @@ class Menu(GameObject):
             x, y = add_gap(bu.rect.midbottom, GAP_DEFAULT)
 
     def instructions(self) -> None:
+        """ Displays intruction overlay. """
+
         assert game is not None
         from ..overlay.instruction import Instruction
         game.add_to_tree(Instruction(), False)
         game.remove_from_tree(self)
 
     def start_game(self) -> None:
+        """ Starts the new game(always). """
+
         assert game is not None
         from src.level import LevelManager
         if game.is_paused:
@@ -67,6 +71,8 @@ class Menu(GameObject):
         sys.exit()
 
     def show_rank(self) -> None:
+        """ Displays the rank screen. """
+
         assert game is not None
         game.remove_from_tree(self)
         from .rank import Rank

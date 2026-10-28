@@ -44,6 +44,8 @@ class Rank(GameObject):
         game.add_to_tree(Menu())
 
     def play(self) -> None:
+        """ Goes to the current paused game if any. """
+
         assert game is not None
         if game.is_paused is True:
             game.is_paused = False
@@ -58,6 +60,8 @@ class Rank(GameObject):
             element.draw(game.display)
 
     def handle_event(self, event: pg.event.Event) -> None:
+        """ Displays the game when press SPACE and handles button events. """
+
         for bu in self.buttons:
             bu.handle_event(event)
         if event.type == pg.KEYDOWN:

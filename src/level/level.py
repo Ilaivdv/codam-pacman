@@ -174,6 +174,7 @@ class Level(GameObject):
 
     def exit(self) -> None:
         """ Exits the level clearing objects from process tree. """
+
         assert game is not None
         game.player_is_super = False
         game.remove_from_tree(self.player)

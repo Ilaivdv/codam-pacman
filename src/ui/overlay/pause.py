@@ -29,6 +29,8 @@ class Pause(GameObject):
             self.buttons.append(bu)
 
     def cheat(self) -> None:
+        """ Displays cheat menu. """
+
         assert game is not None
         from .cheat_option import CheatOption
         game.add_to_tree(CheatOption(), False)
