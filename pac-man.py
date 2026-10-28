@@ -5,11 +5,18 @@ Validates config, falls back to default values on invalid keys.
 try:
     from src import start_game
     import os
+    import sys
 except ModuleNotFoundError as e:
     print(f"Missing modules! Please run the program through uv.\nError: {e}")
 else:
     if __name__ == "__main__":
-        config_path: str = "config.json"
+        try:
+            assert len(sys.argv) == 2
+        except AssertionError:
+            print(("Error: Invalid arguments given, "
+                   "please give a name ending in .json"))
+            sys.exit(1)
+        config_path: str = sys.argv[1]
         try:
             if not os.path.exists(config_path):
                 raise ValueError(
