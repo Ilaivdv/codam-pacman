@@ -56,9 +56,9 @@ The project reads settings from `config.json`. If the file is missing or invalid
 ```json
   {
     'highscore_filename': "highscore.json",
-    "level": 10,
-    "width": 15,
-    "height": 15,
+    'level': 10,
+    'width': 15,
+    'height': 15,
     'lives': 3, 'pacgum': 42,
     'points_per_pacgum': 10,
     'points_per_super_pacgum': 50,

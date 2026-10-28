@@ -87,4 +87,12 @@
 | **ivan-der** | Finish enemies | 2026-10-25 | 2026-10-27 |
 | **yafu** | fix rank after press space bug | 2026-10-27 | 2026-10-27 |
 | **yafu** | Add team docs | 2026-10-27 | 2026-10-27 |
-
+| **ivan-der** | Add pyinstaller | 2026-10-27 | 2026-10-27 |
+| **ivan-der** | Fix skip level cheat not working on last level | 2026-10-27 | 2026-10-27 |
+| **ivan-der** | Fix menu button not working when in game | 2026-10-27 | 2026-10-27 |
+| **ivan-der** | Make pacgum amount read from config | 2026-10-27 | 2026-10-27 |
+| **ivan-der** | Test max/min maze sizes and change config limits accordingly | 2026-10-27 | 2026-10-27 |
+| **yafu** | Fix notification being on screen longer | 2026-10-27 | 2026-10-27 |
+| **BOTH** | Game related docstrings | 2026-10-27 | 2026-10-27 |
+| **yafu** | Update README | 2026-10-27 | 2026-10-27 |
+| **ivan-der** | Update README | 2026-10-27 | 2026-10-28 |
