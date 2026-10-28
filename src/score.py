@@ -52,7 +52,7 @@ class Score:
         from src.game import settings
         assert settings is not None
         filename: str = settings.highscore_filename
-        path: str = "".join([filename, "~/.local/share/"])
+        path: str = "".join(["~/.local/share/", filename])
         file_path: str = os.path.expanduser(path)
         if not self.rank or len(self.rank) == 1:
             with open(file_path, "w") as f:

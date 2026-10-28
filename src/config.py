@@ -111,7 +111,7 @@ class Config(BaseModel):
         from .game import settings
         assert settings is not None
         filename: str = settings.highscore_filename
-        path: str = "".join([filename, "~/.local/share/"])
+        path: str = "".join(["~/.local/share/", filename])
         file_path: str = os.path.expanduser(path)
         if os.path.isfile(file_path):
             if os.stat(file_path).st_size == 0:
