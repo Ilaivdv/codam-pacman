@@ -36,3 +36,6 @@ clean:
 
 fclean: clean
 	rm -rf build/ dist/ pac-man.spec
+
+test:install
+	uv run $(PY) -m pytest tests/*.py
