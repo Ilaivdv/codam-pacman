@@ -2,8 +2,6 @@
 
 ![Preview](assets/preview/pac-man-menu.png)
 
-# Pacman (42 Curriculum)
-
 ## Description
 A **Pac-Man** remake, built in Python using `pygame-ce`. The main goal of this project is to create dynamic game states, ghost behavior/pathfinding, 
 real-time input handling, and automated maze parsing within a modular, maintainable architecture.
