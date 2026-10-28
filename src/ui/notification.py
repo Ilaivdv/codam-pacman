@@ -22,7 +22,7 @@ class Notification(GameObject):
         all_text: str = ""
         messages = settings.notification
         for i in messages:
-            all_text += "\n".join(textwrap.wrap(i, width=50))
+            all_text += "\n".join(textwrap.wrap(i, width=40))
             all_text += "\n"
         self.noti: Noti = Noti(all_text,
                                add_gap(area.topright, GAP_DEFAULT),
