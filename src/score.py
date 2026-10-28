@@ -49,7 +49,11 @@ class Score:
     def update_file(self) -> None:
         """ Updates user's local highscore.json with new score. """
 
-        file_path: str = os.path.expanduser("~/.local/share/highscore.json")
+        from src.game import settings
+        assert settings is not None
+        filename: str = settings.highscore_filename
+        path: str = "".join(["~/.local/share/", filename])
+        file_path: str = os.path.expanduser(path)
         if not self.rank or len(self.rank) == 1:
             with open(file_path, "w") as f:
                 json.dump(self.rank, f)

@@ -108,7 +108,11 @@ class Config(BaseModel):
             Any - Parsed json file or empty dict
         """
 
-        file_path: str = os.path.expanduser("~/.local/share/highscore.json")
+        from .game import settings
+        assert settings is not None
+        filename: str = settings.highscore_filename
+        path: str = "".join(["~/.local/share/", filename])
+        file_path: str = os.path.expanduser(path)
         if os.path.isfile(file_path):
             if os.stat(file_path).st_size == 0:
                 return {}
