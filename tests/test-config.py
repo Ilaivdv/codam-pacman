@@ -166,3 +166,22 @@ def test_level_minus_ten() -> None:
                         ' value: level(3 -> 10)'
                     ]
                 }
+
+
+def test_too_many_lives() -> None:
+    assert Config.parse("tests/too_many_lives.json") == {
+                    'highscore_filename': "highscore.json",
+                    "level": 10,
+                    "width": 15,
+                    "height": 15,
+                    'lives': 3, 'pacgum': 42,
+                    'points_per_pacgum': 10,
+                    'points_per_super_pacgum': 50,
+                    'points_per_ghost': 200,
+                    'seed': 42,
+                    'level_max_time': 120,
+                    'notification': [
+                        'NOTICE: Game has too many lives, using a default'
+                        ' value: lives(100 -> 3)'
+                    ]
+                }

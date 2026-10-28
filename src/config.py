@@ -75,6 +75,11 @@ class Config(BaseModel):
                                              "levels, using a default value:"
                                              f" {key}({config_dict[key]} -> "
                                              f"{game_set[key]})"))
+                    elif key == "lives" and config_dict[key] > 10:
+                        notification.append(("NOTICE: Game has too many lives,"
+                                             " using a default value:"
+                                             f" {key}({config_dict[key]} -> "
+                                             f"{game_set[key]})"))
                     elif config_dict[key] <= 0 or config_dict[key] >= 500:
                         notification.append(("NOTICE: Invalid VALUE in config "
                                              "file, using a default value:"
