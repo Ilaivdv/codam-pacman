@@ -1,6 +1,6 @@
 from src.utils import SpriteSheet, State
 from .entity import Entity, Direction
-from src.game import game
+from src.game import game, settings
 import pygame as pg
 import random
 import heapq
@@ -124,13 +124,14 @@ class Enemy(Entity):
         self.current_state.state_process()
 
     def on_collide(self, group_name: str) -> None:
-        assert game is not None
+        assert game is not None and settings is not None
         if self.dead:
             return
         if game.player_is_super:
             self.add(self.sprite_groups["dead"])
             self.remove(self.sprite_groups["enemy"])
             self.dead = True
+            game.score.add_score(settings.points_per_ghost)
 
     def _get_path(self, reverse: bool = False) -> list[Direction]:
         """
