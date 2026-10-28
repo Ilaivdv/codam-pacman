@@ -38,15 +38,21 @@ class CheatOption(GameObject):
             _, y = add_gap(checkb.rect.midbottom, (0, 50))
 
     def continue_game(self) -> None:
+        """ Continues the game and removes pause menu from process tree. """
+
         assert game is not None
         game.remove_from_tree(self)
         game.is_paused = False
 
     def quit_game(self) -> None:
+        """ Quit game. """
+
         pg.quit()
         sys.exit()
 
     def back_to_menu(self) -> None:
+        """ Goes back to the main menu and removes current pause menu. """
+
         assert game is not None
         game.remove_from_tree(self)
         from ..screens.menu import Menu
